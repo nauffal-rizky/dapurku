@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Modul Manajemen Produk</title>
+    <link rel="stylesheet" href="styles.css" />
+    <!-- Tambahkan CSS jika diperlukan -->
+  </head>
+  <body>
+    <h2>Modul Manajemen Produk</h2>
+
+    <form id="productForm">
+      <label for="productName">Nama Produk:</label>
+      <input type="text" id="productName" name="productName" required />
+
+      <label for="productDescription">Deskripsi:</label>
+      <textarea
+        id="productDescription"
+        name="productDescription"
+        required
+      ></textarea>
+
+      <label for="productPrice">Harga:</label>
+      <input type="number" id="productPrice" name="productPrice" required />
+
+      <label for="productImage">Gambar Produk:</label>
+      <input
+        type="file"
+        id="productImage"
+        name="productImage"
+        accept="image/*"
+      />
+
+      <label for="productCategory">Kategori:</label>
+      <select id="productCategory" name="productCategory">
+        <option value="makanan">Makanan</option>
+        <option value="minuman">Minuman</option>
+        <option value="lainnya">Lainnya</option>
+      </select>
+
+      <label for="productStock">Stok:</label>
+      <input type="number" id="productStock" name="productStock" required />
+
+      <button type="submit">Tambah Produk</button>
+    </form>
+
+    <h3>Daftar Produk</h3>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>Nama Produk</th>
+          <th>Deskripsi</th>
+          <th>Harga</th>
+          <th>Gambar</th>
+          <th>Kategori</th>
+          <th>Stok</th>
+          <th>Aksi</th>
+        </tr>
+      </thead>
+      <tbody id="productList">
+        <!-- Produk akan ditampilkan di sini -->
+      </tbody>
+    </table>
+
+    <script src="script.js"></script>
+    <!-- Tambahkan JavaScript jika diperlukan -->
+  </body>
+</html>

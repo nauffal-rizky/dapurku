@@ -1,0 +1,19 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+shell = "*"
+django-compressor = "*"
+python-decouple = "*"
+mysqlclient = "*"
+pillow = "*"
+pymysql = "*"
+cryptography = "*"
+django = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.13"

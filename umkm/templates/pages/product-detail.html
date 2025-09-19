@@ -1,0 +1,241 @@
+{% extends '../layout/base.html' %} {% block content %}
+<section class="detail-product">
+  <div class="content">
+    <a href="{% url 'products' %}" class="back-btn"
+      ><i class="fa-solid fa-arrow-left"></i>Kembali ke halaman produk</a
+    >
+    <div class="detail-content">
+      <div class="product-information">
+        <div class="image-container">
+          <img src="{{ product.image.url }}" alt="{{ product.name }}" />
+          <div class="overlays">
+            <img
+              class="active"
+              src="{{ product.image.url }}"
+              alt="{{ product.name }}"
+            />
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" />
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" />
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" />
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" />
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" />
+          </div>
+        </div>
+        <div class="desc">
+          <div class="head">
+            <span
+              >{{ product.name }} |
+              <a href="{% url 'umkm_profile' product.umkm_user_id.id %}"
+                >{{ product.umkm_user_id.username }}</a
+              ></span
+            >
+            <p>
+              Terjual <span>250+</span> | <i class="fa-solid fa-star"></i>
+              <span>5</span><span>(166 Rating)</span>
+            </p>
+          </div>
+          <span class="category"
+            >Category: <span>{{ product.category }}</span></span
+          >
+          <span class="price">Rp{{ product.price }}</span>
+          <div class="line"></div>
+          <div class="variants">
+            <span>Pilih varian produk: <span>Pedas</span></span>
+            <div class="variant-container">
+              <span>Batagor1</span>
+              <span class="active">Batagor2</span>
+              <span>Batagor3</span>
+              <span>Batagor4</span>
+              <span>Batagor5</span>
+            </div>
+          </div>
+          <p class="description">{{ product.description }}</p>
+        </div>
+        <div class="checkout">
+          <span>Atur jumlah dan catatan</span>
+          <p>Batagor 1</p>
+          <div class="line"></div>
+          <div class="product-amount">
+            <div class="counter">
+              <button class="decrease-btn">-</button>
+              <input type="text" maxlength="3" value="0" required />
+              <button class="increase-btn">+</button>
+            </div>
+            <span class="stock">
+              Stok:
+              <span>Sisa {{ product.stock }}</span>
+            </span>
+          </div>
+          <div class="total">
+            <span>Subtotal</span>
+            <span>Rp0</span>
+          </div>
+          <div class="btns">
+            <a href="{% url 'order' %}">Beli</a>
+            <a href="{% url 'cart' %}" class="active">+ Keranjang</a>
+          </div>
+          <div class="tab-container">
+            <span><i class="fa-regular fa-comment-dots"></i>Chat</span>
+            <span><i class="fa-solid fa-share-nodes"></i>Share</span>
+          </div>
+        </div>
+      </div>
+      <div class="umkm-products">
+        <h2 class="underline-text">
+          Produk {{ product.umkm_user_id.username }}
+        </h2>
+        <div class="product-list">
+          {% for product in umkmProducts %}
+          <a href="{% url 'product_detail' product.pk %}" class="product-item">
+            <span class="category {{ product.category }}"
+              >{{ product.category }}</span
+            >
+            <div class="image">
+              <img src="{{ product.image.url }}" alt="{{ product.name }}" />
+              <div class="overlay">{{ product.description }}</div>
+            </div>
+            <div class="desc">
+              <span class="nama">{{ product.name }}</span>
+              <span class="harga">Rp{{ product.price }}</span>
+              <p>{{ product.umkm_user_id.username }}</p>
+              <span><i class="fa-solid fa-star"></i> 5 | 100+ terjual</span>
+            </div>
+          </a>
+          {% empty %}
+          <p class="no-products">Tidak ada produk UMKM yang tersedia.</p>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="other-products">
+        <h2 class="underline-text">Produk Lainnya</h2>
+        <div class="product-list">
+          {% for product in otherProducts %}
+          <a href="{% url 'product_detail' product.pk %}" class="product-item">
+            <span class="category {{ product.category }}"
+              >{{ product.category }}</span
+            >
+            <div class="image">
+              <img src="{{ product.image.url }}" alt="{{ product.name }}" />
+              <div class="overlay">{{ product.description }}</div>
+            </div>
+            <div class="desc">
+              <span class="nama">{{ product.name }}</span>
+              <span class="harga">Rp{{ product.price }}</span>
+              <p>{{ product.umkm_user_id.username }}</p>
+              <span><i class="fa-solid fa-star"></i> 5 | 100+ terjual</span>
+            </div>
+          </a>
+          {% empty %}
+          <p class="no-products">Tidak ada produk lainnya yang tersedia.</p>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %} {% block script %}
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    /* IMG THUMB */
+    const overlays = document.querySelectorAll(".overlays img");
+    const activeImage = document.querySelector(".overlays .active");
+
+    overlays.forEach((overlay) => {
+      overlay.addEventListener("click", () => {
+        activeImage.src = overlay.src;
+        activeImage.alt = overlay.alt;
+        overlays.forEach((img) => img.classList.remove("active"));
+        overlay.classList.add("active");
+      });
+    });
+
+    /* VARIANTS */
+    const variantContainer = document.querySelector(".variant-container");
+    const lblVariant =
+      variantContainer.previousElementSibling.querySelector("span");
+    let activeVariantValue = variantContainer
+      .querySelector(".active")
+      .textContent.trim();
+    lblVariant.textContent = activeVariantValue;
+
+    const variants = variantContainer.querySelectorAll("span");
+    variants.forEach((variant) => {
+      variant.addEventListener("click", () => {
+        variants.forEach((v) => v.classList.remove("active"));
+        variant.classList.add("active");
+
+        activeVariantValue = variantContainer
+          .querySelector(".active")
+          .textContent.trim();
+        lblVariant.textContent = activeVariantValue;
+      });
+    });
+
+    /* COUNTER */
+    const price = document.querySelector(".price");
+    const counterInput = document.querySelector(".counter input");
+    const increaseBtn = document.querySelector(".increase-btn");
+    const decreaseBtn = document.querySelector(".decrease-btn");
+    const product = {
+      price: price.textContent,
+      stock: parseInt(
+        document
+          .querySelector(".stock span:last-child")
+          .textContent.replace("Sisa ", "")
+      ),
+    };
+
+    const updateTotal = () => {
+      const total = document.querySelector(".total span:last-child");
+      const quantity = parseInt(counterInput.value);
+      if (isNaN(quantity) || quantity < 0) {
+        total.textContent = "Rp0";
+        return;
+      }
+
+      const priceValue = parseInt(
+        product.price.replace("Rp", "").replace(/\./g, "")
+      );
+      total.textContent = `Rp${(quantity * priceValue).toLocaleString(
+        "id-ID"
+      )}`;
+    };
+
+    counterInput.addEventListener("input", () => {
+      counterInput.value = counterInput.value.replace(/\D/g, "");
+      let value = parseInt(counterInput.value);
+
+      if (value < 0) {
+        counterInput.value = 0;
+      } else if (value > product.stock) {
+        counterInput.value = product.stock;
+      }
+      updateTotal();
+    });
+    increaseBtn.addEventListener("click", () => {
+      let currentValue = parseInt(counterInput.value);
+      if (isNaN(currentValue)) currentValue = 0;
+
+      if (currentValue < product.stock) {
+        counterInput.value = currentValue + 1;
+        updateTotal();
+      }
+    });
+    decreaseBtn.addEventListener("click", () => {
+      if (counterInput.value == "") counterInput.value = "0";
+      let currentValue = parseInt(counterInput.value);
+
+      if (currentValue > 0) {
+        counterInput.value = currentValue - 1;
+        updateTotal();
+      }
+    });
+
+    /* PRICE */
+    price.textContent = `Rp${parseInt(
+      price.textContent.replace("Rp", "").replace(".00", "")
+    ).toLocaleString("id-ID")}`;
+    price.textContent = price.textContent.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  });
+</script>
+{% endblock %}

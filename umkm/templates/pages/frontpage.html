@@ -1,0 +1,46 @@
+{% extends '../layout/base.html' %}{% block content %}
+<section class="short_about">
+  <div class="content">
+    <aside>
+      <h1 class="underline-text">Dapurku</h1>
+      <span>
+        Kami menyediakan platform untuk para UMKM di Kota Bogor yang ingin
+        meningkatkan penjualan produknya dibidang kuliner. Kami hadir untuk
+        membantu para UMKM di Kota Bogor dalam mempromosikan produk terbaik
+        mereka, menjangkau lebih banyak pelanggan, dan mengembangkan usaha
+        secara berkelanjutan.
+      </span>
+    </aside>
+    <img src="/static/logo.png" alt="logo" />
+  </div>
+</section>
+<section class="products">
+  <h1 class="judul">Produk Kami</h1>
+  <div class="content">
+    {% if fourLatestProducts %}
+    <div class="product-list">
+      {% for product in fourLatestProducts %}
+      <a href="{% url 'product_detail' product.pk %}" class="product-item">
+        <span class="category {{ product.category }}"
+          >{{ product.category }}</span
+        >
+        <div class="image">
+          <img src="{{ product.image.url }}" alt="{{ product.name }}" />
+          <div class="overlay">{{ product.description }}</div>
+        </div>
+        <div class="desc">
+          <span class="nama">{{ product.name }}</span>
+          <span class="harga">Rp{{ product.price }}</span>
+          <p class="nama-umkm">{{ product.umkm_user_id.username }}</p>
+          <span><i class="fa-solid fa-star"></i> 5 | 100+ terjual</span>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+    {% else %} {% for message in messages %}
+    <p class="no-products">{{ message }}</p>
+    {% endfor %} {% endif %}
+    <a href="/products" class="button-lihat-produk">Lihat Semua Produk</a>
+  </div>
+</section>
+{% endblock %}

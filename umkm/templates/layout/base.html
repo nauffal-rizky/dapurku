@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dapur UMKM</title>
+    <link rel="stylesheet" href="/static/main.css" />
+  </head>
+  <body>
+    <div id="page-loader">
+      <img src="/static/logo.png" alt="Loading..." />
+    </div>
+
+    <!-- Header /n-->
+    <header class="main-header">
+      {% if not plain_page %}
+      <nav class="main-navbar">
+        <div class="logo">
+          <div class="head">
+            <a href="/"><img src="/static/logo.png" alt="logo" /></a>
+            <a href="/">DAPURKU</a>
+          </div>
+          <i class="fa-solid fa-bars"></i>
+        </div>
+        <div class="links">
+          <a href="/" class="nav-link">Beranda</a>
+          <a href="/about" class="nav-link">Tentang Kami</a>
+          <a href="/products" class="nav-link">Produk</a>
+          <a href="/contact" class="nav-link">Kontak</a>
+        </div>
+        {% if user.is_authenticated %}
+        <a href="{% url 'profile' %}"><i class="fa-solid fa-user"></i>{{user.username}}</a>
+        {% else %}
+        <div class="logSign-btns">
+          <a href="/login" class="login-btn">Login</a>
+          <a href="/signup" class="signup-btn">Sign-Up</a>
+        </div>
+        {% endif %}
+      </nav>
+      {% endif %}
+      <!--  -->
+      {% if page == "front" %}
+      <div class="jumbotron">
+        <div class="texts">
+          <h1>Selamat datang di Dapurku</h1>
+          <span
+            >Membangun Ekonomi Lokal Melalui Kreativitas dan Inovasi
+            Kuliner</span
+          >
+          <p>
+            Dapur UMKM adalah tempat di mana cita rasa lokal bertemu dengan
+            peluang global. Kami hadir untuk mendukung pelaku UMKM kuliner Kota
+            Bogor dalam mempromosikan produk terbaik mereka, menjangkau lebih
+            banyak pelanggan, dan mengembangkan usaha secara berkelanjutan.
+          </p>
+        </div>
+      </div>
+      {% endif %}
+    </header>
+    {% if plain_page %}
+    <main class="mainPlainPage">
+    {% else %}
+    <main>
+    {% endif %}
+    {% block content %}{% endblock %}</main>
+    {% if not plain_page %}
+    <a href="{% url 'cart' %}" class="cartpage-btn">
+      <i class="fa-solid fa-cart-shopping"></i>
+    </a>
+    <footer>
+      <div class="contact">
+        <div class="row">
+          <i class="fa-solid fa-envelope"></i>
+          <span>dapurumkm@gmail.com</span>
+        </div>
+        <div class="row">
+          <i class="fa-solid fa-phone"></i>
+          <span>+1 234 567 890</span>
+        </div>
+      </div>
+      <span>&copy; 2025 Dapur UMKM. All Rights Reserved.</span>
+    </footer>
+    {% endif %}
+
+    <!-- JS -->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const navbar = document.querySelector(".main-navbar");
+        const jumbotron = document.querySelector(".jumbotron");
+
+        /* 
+        const menuIcon = document.querySelector(".logo i");
+        const links = document.querySelector(".links");
+
+        menuIcon.addEventListener("click", () => {
+          links.classList.toggle("active");
+          menuIcon.classList.toggle("fa-xmark");
+        });
+
+        document.addEventListener("click", (event) => {
+          if (!navbar.contains(event.target)) {
+            links.classList.remove("active");
+            menuIcon.classList.remove("fa-xmark");
+          }
+        });
+         */
+
+        window.addEventListener("load", () => {
+          const loader = document.getElementById("page-loader");
+          if (loader) {
+            loader.style.opacity = "0";
+            loader.style.pointerEvents = "none";
+            setTimeout(() => loader.remove(), 500);
+          }
+        });
+  
+        if (navbar) {
+          const navbarHeight = navbar.offsetHeight;
+          window.addEventListener("scroll", () => {
+            if (window.scrollY >= navbarHeight) {
+              navbar.classList.add("scrolled");
+              if (jumbotron) jumbotron.style.height = `100vh`;
+            } else if (window.scrollY == 0) {
+              navbar.classList.remove("scrolled");
+              if (jumbotron) jumbotron.style.height = `calc(100vh - ${navbarHeight}px)`;
+            }
+          });
+        }
+      });
+    </script>
+    {% block script %}{% endblock %}
+
+    <script
+      src="https://kit.fontawesome.com/1160dd891b.js"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

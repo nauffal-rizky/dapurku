@@ -1,0 +1,15 @@
+{% extends '../../layout/base.html' %} {% block content %}
+<div class="container">
+  <h2>Hapus Produk</h2>
+  <p>
+    Apakah Anda yakin ingin menghapus produk
+    <strong>{{ product.name }}</strong>?
+  </p>
+
+  <form method="POST">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Ya, Hapus</button>
+    <a href="{% url 'profile' %}" class="btn btn-secondary">Batal</a>
+  </form>
+</div>
+{% endblock %}

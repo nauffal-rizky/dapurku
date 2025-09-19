@@ -1,0 +1,333 @@
+{% extends '../layout/base.html' %} {% block content %}
+<section class="profile">
+  <article class="content">
+    <a href="{% url 'frontpage' %}" class="back-btn"
+      ><i class="fa-solid fa-arrow-left"></i>Kembali ke halaman depan</a
+    >
+    <div class="details">
+      <div class="img-box">
+        {% if user.profile_image %}
+        <img
+          src="{{ user.profile_image.url }}"
+          alt="Profile Image"
+          width="150"
+          height="150"
+        />
+        {% else %}
+        <img
+          src="/static/1.jpg"
+          alt="Default Avatar"
+          width="150"
+          height="150"
+        />
+        {% endif %}
+      </div>
+      <div class="detail-info">
+        <div class="desc">
+          <div class="head">
+            <h1 id="lblUsername">{{ user.username }}</h1>
+            {% if user.is_umkm %}
+            <span class="umkm" style="color: green">UMKM</span>
+            {% else %}
+            <span style="color: blue">Customer</span>
+            {% endif %}
+          </div>
+          <div class="row">
+            <div class="col">
+              <span>Email</span>
+              <span>Phone Number</span>
+              <span>Status</span>
+              <span>Deskripsi</span>
+            </div>
+            <div class="col">
+              <span class="underline-text" id="lblEmail">{{ user.email }}</span>
+              <span class="underline-text" id="lblPhone"
+                >{{ user.phone_number }}</span
+              >
+              <span class="underline-text" id="lblStatus"
+                >{{ user.get_user_status_display }}</span
+              >
+              <span class="underline-text" id="lblDescription">
+                {% if user.description %} {{ user.description }} {% else %} UMKM
+                ini belum menambahkan deskripsi. {% endif %}
+              </span>
+            </div>
+          </div>
+          <button id="editBtn">Ubah Profil</button>
+        </div>
+        {% if messages %}
+        <div class="message-box">
+          {% for message in messages %}
+          <div class="alert {{ message.tags }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="edit-profile hidden">
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <i class="fa-solid fa-xmark"></i>
+        <span>Ubah Profil</span>
+        <div class="img-box">
+          <img
+            src="{{ user.profile_image.url }}"
+            alt="Default Avatar"
+            width="150"
+            height="150"
+          />
+          <label for="profile_image">
+            <i class="fa-solid fa-pen"></i>
+            <input
+              type="file"
+              id="profile_image"
+              name="profile_image"
+              autocomplete="off"
+            />
+          </label>
+        </div>
+        <div class="input-container">
+          <div class="input-box">
+            <label for="input_username">Nama</label>
+            <input
+              type="text"
+              name="username"
+              id="input_username"
+              value="{{ user.username }}"
+              autocomplete="off"
+              required
+            />
+          </div>
+          <div class="input-box">
+            <label for="input_email">Email</label>
+            <input
+              type="text"
+              name="email"
+              id="input_email"
+              value="{{ user.email }}"
+              autocomplete="off"
+              required
+            />
+          </div>
+          <div class="input-box">
+            <label for="input_phone_number">Nomor Telepon</label>
+            <input
+              type="text"
+              id="input_phone_number"
+              name="phone_number"
+              value="{{ user.phone_number }}"
+              autocomplete="off"
+              required
+            />
+          </div>
+          <div class="input-box">
+            <label for="input_status">Status</label>
+            <select name="user_status" id="input_status" class="custom-select">
+              <!-- <option value="active" {% if user.user_status == 'active' %}selected{% endif %}>Active</option>
+              <option value="inactive" {% if user.user_status == 'inactive' %}selected{% endif %}>Inactive</option>
+              <option value="suspended" {% if user.user_status == 'suspended' %}selected{% endif %}>Suspended</option> -->
+            </select>
+            <i class="fa-solid fa-chevron-down"></i>
+          </div>
+          <div class="input-box">
+            <label for="input_description">Deskripsi</label>
+            <textarea id="input_description" name="description" rows="4">
+{{ user.description }}</textarea
+            >
+          </div>
+        </div>
+        <button id="saveBtn" type="submit">Simpan</button>
+      </form>
+    </div>
+
+    {% if user.is_umkm %}
+    <div class="my-products">
+      <div class="head">
+        <h2>Produk Saya</h2>
+        <a href="{% url 'add_product' %}">Tambah Produk</a>
+      </div>
+      <div class="product-list">
+        {% for product in products %}
+        <div class="product-item">
+          <span class="category {{ product.category }}"
+            >{{ product.category }}</span
+          >
+          <div class="image">
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" />
+            <div class="overlay">{{ product.description }}</div>
+          </div>
+          <div class="desc">
+            <span class="nama">{{ product.name }}</span>
+            <span class="harga">Rp{{ product.price }}</span>
+            <p>{{ product.umkm_user_id.username }}</p>
+            <span><i class="fa-solid fa-star"></i> 5 | 100+ terjual</span>
+            <div class="btn-container">
+              <a href="{% url 'edit_product' product.pk %}" class="edit-btn"
+                >Edit</a
+              >
+              <a href="{% url 'delete_product' product.pk %}" class="delete-btn"
+                >Hapus</a
+              >
+              <a href="{% url 'product_detail' product.pk %}" class="detail-btn"
+                >Detail</a
+              >
+            </div>
+          </div>
+        </div>
+        {% empty %}
+        <p class="no-products">Tidak ada produk yang tersedia.</p>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+    <a href="/logout" class="logout-btn"
+      >Logout<i class="fa-solid fa-right-from-bracket"></i
+    ></a>
+  </article>
+</section>
+{% endblock %} {% block script %}
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const editProfileForm = document.querySelector(".edit-profile");
+    const exitForm = document.querySelector(".edit-profile i");
+    const editButton = document.querySelector("#editBtn");
+    const saveButton = document.querySelector("#saveBtn");
+
+    if (!editButton || !saveButton || !editProfileForm) return;
+
+    const toggleEditFormVisibility = (e) => {
+      editProfileForm.classList.toggle("hidden");
+    };
+
+    window.addEventListener("click", (e) => {
+      if (
+        e.target === exitForm ||
+        e.target === saveButton ||
+        e.target === editButton ||
+        (e.target === editProfileForm &&
+          e.target !== editProfileForm.querySelector("form"))
+      ) {
+        editProfileForm.classList.toggle("hidden");
+      }
+    });
+
+    const profileImagePreview = document.querySelector(
+      ".edit-profile .img-box img"
+    );
+    const inputProfileImage = document.querySelector("#profile_image");
+    const profileImage = document.querySelector(".details .img-box img");
+
+    inputProfileImage.addEventListener("change", function () {
+      const file = this.files[0];
+
+      if (!file) {
+        profileImagePreview.src = "";
+        profileImagePreview.style.display = "none";
+        return;
+      }
+
+      if (!file.type.startsWith("image/")) {
+        alert("Please select a valid image file.");
+        this.value = "";
+        profileImagePreview.src = "";
+        profileImagePreview.style.display = "none";
+        return;
+      }
+
+      const objectURL = URL.createObjectURL(file);
+
+      profileImagePreview.src = objectURL;
+      profileImagePreview.style.display = "block";
+
+      profileImagePreview.onload = () => {
+        URL.revokeObjectURL(objectURL);
+      };
+
+      profileImagePreview.onerror = () => {
+        profileImagePreview.src = "";
+        profileImagePreview.style.display = "none";
+        alert("Failed to load the selected image.");
+      };
+    });
+
+    const inputs = document.querySelectorAll(".input-box > input");
+
+    const MAX_LENGTHS = {
+      username: 10,
+      email: 30,
+      phone_number: 13,
+      password1: 12,
+      password2: 12,
+    };
+
+    const validators = {
+      username: (value) =>
+        value.length <= MAX_LENGTHS.username ||
+        `Maksimal ${MAX_LENGTHS.username} karakter`,
+      email: (value) =>
+        value.includes("@") && value.length <= MAX_LENGTHS.email
+          ? true
+          : `Email harus valid dan maksimal ${MAX_LENGTHS.email} karakter`,
+      phone_number: (value) =>
+        (value.length <= MAX_LENGTHS.phone_number && /^\d+$/.test(value)) ||
+        "Nomor telepon harus berupa angka",
+      password: (value) =>
+        value.length <= MAX_LENGTHS.password ||
+        `Maksimal ${MAX_LENGTHS.password} karakter`,
+    };
+
+    const validateInput = (input) => {
+      const fieldName = input.id.replace("input_", "");
+      const value = input.value.trim();
+      const validator = validators[fieldName];
+
+      if (validator) {
+        const result = validator(value);
+        if (result !== true) {
+          input.setCustomValidity(result);
+          input.reportValidity();
+          return false;
+        } else {
+          input.setCustomValidity("");
+          return true;
+        }
+      }
+      return true;
+    };
+
+    inputs.forEach((input) => {
+      input.addEventListener("input", () => {
+        const field = input.id.replace("input_", "");
+        const maxLength = MAX_LENGTHS[field];
+        if (maxLength && input.value.length > maxLength) {
+          input.value = input.value.slice(0, maxLength);
+        }
+      });
+
+      input.addEventListener("blur", () => {
+        validateInput(input);
+      });
+    });
+
+    const inputUsername = document.querySelector("#input_username");
+    const inputEmail = document.querySelector("#input_email");
+    const inputPhoneNumber = document.querySelector("#input_phone_number");
+    const inputUserStatus = document.querySelector("#input_status");
+
+    const lblUsername = document.querySelector("#lblUsername");
+    const lblEmail = document.querySelector("#lblEmail");
+    const lblPhone = document.querySelector("#lblPhone");
+    const lblStatus = document.querySelector("#lblStatus");
+
+    const form = document.querySelector(".edit-profile form");
+    form.addEventListener("submit", () => {
+      profileImage.src = profileImagePreview.src || "/static/1.jpg";
+      lblUsername.textContent = inputUsername.value;
+      lblEmail.textContent = inputEmail.value;
+      lblPhone.textContent = inputPhoneNumber.value;
+      lblStatus.textContent = inputUserStatus.value;
+    });
+  });
+</script>
+{% endblock %}

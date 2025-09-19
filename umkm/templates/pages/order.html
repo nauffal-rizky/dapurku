@@ -1,0 +1,250 @@
+{% extends '../layout/base.html' %} {% block content %}
+<section class="order">
+  <article class="content">
+    <a href="{% url 'products' %}" class="back-btn"
+      ><i class="fa-solid fa-arrow-left"></i>Kembali ke halaman produk</a
+    >
+    <div class="popup">
+      <div class="popup-content"></div>
+    </div>
+    <div class="order-info">
+      <a class="user-address">
+        <div class="address">
+          <span>{{ user.username }}</span>
+          <span>Alamat Pengiriman:</span>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Aut, saepe.
+            Ex quidem suscipit quas, exercitationem excepturi soluta amet sequi
+            nesciunt aliquid autem quia modi porro doloremque earum et saepe,
+            optio debitis quam ab consectetur vero?
+          </p>
+        </div>
+        <i class="fa-solid fa-chevron-right"></i>
+      </a>
+      <div class="ordered-products">
+        <h2 class="underline-text">Ringkasan Pesanan</h2>
+        <div class="products-container">
+          <div class="product">
+            <div class="head">
+              <a href="">Nama UMKM</a>
+              <div class="info">
+                <a href="">
+                  <img src="/static/1.jpg" alt="" />
+                </a>
+                <div class="desc">
+                  <a href="">Nama Produk</a>
+                  <span>Nama Produk dan Varian Produk</span>
+                  <div class="price-counter">
+                    <div class="price">
+                      <p>Rp50.000</p>
+                      <div class="discount">
+                        <p>Rp100.000</p>
+                        <span class="percent">-50%</span>
+                      </div>
+                    </div>
+                    <div class="counter">
+                      <button class="decrease-btn">-</button>
+                      <input type="text" maxlength="3" value="0" required />
+                      <button class="increase-btn">+</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <a class="delivery-option">
+              <div class="delivery-info">
+                <span>Waktu sampai: <span>99, Klopember 6969</span></span>
+                <span>Biaya Pengiriman: <span>Rp15.000</span></span>
+              </div>
+              <i class="fa-solid fa-chevron-right"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="order-summary">
+        <span>Order Summary</span>
+        <div class="subtotals">
+          <div class="product-subtotal">
+            <span>Subtotal Produk:</span>
+            <span class="subtotal-price">Rp50.000</span>
+          </div>
+          <div class="shipping-subtotal">
+            <div class="sub-total">
+              <span
+                >Subtotal Pengiriman:<i class="fa-solid fa-caret-down"></i
+              ></span>
+              <span class="subtotal-price">Rp50.000</span>
+            </div>
+            <div class="shipping-details">
+              <div class="row">
+                <span>Biaya Pengiriman:</span>
+                <span class="shipping-price">Rp50.000</span>
+              </div>
+              <div class="row">
+                <span>Diskon Pengiriman:</span>
+                <span class="shipping-discount">Rp50.000</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="total">
+          <span>Total:</span>
+          <span class="total-price">Rp50.000</span>
+        </div>
+      </div>
+      <div class="payment-method">
+        <span>Metode Pembayaran</span>
+        <div class="methods">
+          <label for="ovo">
+            <div class="method-info">
+              <img src="/static/icons/ovo.png" alt="method_img" />
+              <span>OVO</span>
+            </div>
+            <input type="radio" name="payment-method" id="ovo" />
+          </label>
+          <label for="dana">
+            <div class="method-info">
+              <img src="/static/icons/dana.png" alt="method_img" />
+              <span>Dana</span>
+            </div>
+            <input type="radio" name="payment-method" id="dana" />
+          </label>
+        </div>
+      </div>
+      <div class="checkout">
+        <div class="total">
+          <span>Total <span>(0 barang)</span>:</span>
+          <span>Rp999.999</span>
+        </div>
+        <button class="checkout-btn">Pesan Sekarang</button>
+      </div>
+    </div>
+  </article>
+</section>
+{% endblock %} {% block script %}
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    /* ADDRESS */
+    const addressIcon = document.querySelector(".user-address i");
+    const deliveryIcon = document.querySelector(".delivery-option i");
+    const popup = document.querySelector(".popup");
+    const popupContent = popup.querySelector(".popup-content");
+
+    window.addEventListener("click", (e) => {
+      if (e.target == addressIcon) {
+        popup.classList.add("address", "active");
+        popup.setAttribute("class", "popup address active");
+        popupContent.innerHTML = `
+          <i class="fa-solid fa-xmark"></i>
+          <span>Masukkan alamat anda</span>
+          <div class="address-input">
+            <div class="inputs">
+              <div class="input-box">
+                <label for="street">Name jalan</label>
+                <input type="text" id="street" placeholder="Jalan..." />
+              </div>
+              <div class="input-box">
+                <label for="house_no">Nomor Rumah</label>
+                <input type="text" id="house_no" placeholder="Rumah nomor..." />
+              </div>
+              <div class="input-box">
+                <label for="rtrw">RT/RW</label>
+                <input type="text" id="rtrw" placeholder="RT/RW..." />
+              </div>
+              <div class="input-box">
+                <label for="kelurahan">Kelurahan/Desa</label>
+                <input
+                  type="text"
+                  id="kelurahan"
+                  placeholder="Kelurahan/Desa..."
+                />
+              </div>
+              <div class="input-box">
+                <label for="kecamatan">Kecamatan</label>
+                <input type="text" id="kecamatan" placeholder="Kecamatan..." />
+              </div>
+              <div class="input-box">
+                <label for="city">Kota/Kabupaten</label>
+                <input type="text" id="city" placeholder="Kota/Kabupaten..." />
+              </div>
+              <div class="input-box">
+                <label for="province">Provinsi</label>
+                <input type="text" id="province" placeholder="Provinsi..." />
+              </div>
+              <div class="input-box">
+                <label for="postal_code">Kode Pos</label>
+                <input type="text" id="postal_code" placeholder="Kode Pos..." />
+              </div>
+            </div>
+            <button class="edit-btn">Edit</button>
+          </div>
+        `;
+
+        popupContent.querySelector("i").addEventListener("click", () => {
+          popup.classList.remove("active");
+        });
+      } else if (e.target == deliveryIcon) {
+        popup.classList.add("delivery", "active");
+        popup.setAttribute("class", "popup delivery active");
+        popupContent.innerHTML = `
+          <i class="fa-solid fa-xmark"></i>
+          <span>Masukkan opsi pengiriman</span>
+          <div class="delivery-input">
+            <div class="delivery-drop">
+              <div class="input-box">
+                <label for="delivery_method">Metode Pengiriman</label>
+                <select id="delivery_method">
+                  <option value="standard">Pengiriman Standar</option>
+                  <option value="express">Pengiriman Ekspres</option>
+                </select>
+              </div>
+              <i class="fa-solid fa-caret-down"></i>
+            </div>
+            <span>Estimasi pengiriman: <span></span>hari</span>
+            <span>Biaya pengiriman: Rp.<span></span></span>
+            <button class="edit-btn">Edit</button>
+          </div>
+        `;
+
+        popupContent.querySelector("i").addEventListener("click", () => {
+          popup.setAttribute("class", "popup");
+        });
+      } else if (e.target == popup) {
+        popup.setAttribute("class", "popup");
+      }
+    });
+
+    /* COUNTER */
+    const counters = document.querySelectorAll(".counter");
+    counters.forEach((counter) => {
+      const decreaseBtn = counter.querySelector(".decrease-btn");
+      const increaseBtn = counter.querySelector(".increase-btn");
+      const inputField = counter.querySelector("input");
+
+      decreaseBtn.addEventListener("click", () => {
+        let value = parseInt(inputField.value);
+        if (value > 0) {
+          value--;
+          inputField.value = value;
+        }
+      });
+
+      increaseBtn.addEventListener("click", () => {
+        let value = parseInt(inputField.value);
+        value++;
+        inputField.value = value;
+      });
+    });
+
+    /* CHECKOUT */
+    const checkout = document.querySelector(".checkout");
+    window.addEventListener("scroll", () => {
+      if (window.screenY >= checkout.screenY) {
+        checkout.classList.add("fixed");
+      } else {
+        checkout.classList.remove("fixed");
+      }
+    });
+  });
+</script>
+{% endblock %}

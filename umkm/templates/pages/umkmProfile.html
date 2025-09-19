@@ -1,0 +1,88 @@
+{% extends '../layout/base.html' %}{% block content %}
+<section class="umkm-profile">
+  <div class="content">
+    <a href="{% url 'products' %}" class="back-btn"
+      ><i class="fa-solid fa-arrow-left"></i>Kembali ke halaman produk</a
+    >
+    <div class="umkm-content">
+      <div class="umkm-info">
+        <img src="{{ user.profile_image.url }}" alt="" />
+        <div class="desc">
+          <div class="head">
+            <h1>{{ user.username }}</h1>
+            {% if user.user_status == "active" %}
+            <span class="active">{{ user.user_status }}</span>
+            {% else %}
+            <span>{{ user.user_status }}</span>
+            {% endif %}
+          </div>
+          <div class="body">
+            <div class="col">
+              <span>Email</span>
+              <span>Phone number</span>
+              <span>Since</span>
+            </div>
+            <div class="col">
+              <span class="underline-text">{{ user.email }}</span>
+              <span class="underline-text">{{ user.phone_number }}</span>
+              <span class="underline-text">{{ user.created_at }}</span>
+            </div>
+          </div>
+          <p>
+            {% if user.description %} {{ user.description }} {% else %} UMKM ini
+            belum menambahkan deskripsi. {% endif %}
+          </p>
+        </div>
+      </div>
+      <div class="umkm-products">
+        <h2 class="underline-text">Produk UMKM</h2>
+        <div class="product-list">
+          {% for product in umkmProducts %}
+          <a href="{% url 'product_detail' product.pk %}" class="product-item">
+            <span class="category {{ product.category }}"
+              >{{ product.category }}</span
+            >
+            <div class="image">
+              <img src="{{ product.image.url }}" alt="{{ product.name }}" />
+              <div class="overlay">{{ product.description }}</div>
+            </div>
+            <div class="desc">
+              <span class="nama">{{ product.name }}</span>
+              <span class="harga">Rp{{ product.price }}</span>
+              <p>{{ product.umkm_user_id.username }}</p>
+              <span><i class="fa-solid fa-star"></i> 5 | 100+ terjual</span>
+            </div>
+          </a>
+          {% empty %}
+          <p class="no-products">Tidak ada produk UMKM yang tersedia.</p>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="other-products">
+        <h2 class="underline-text">Produk Lainnya</h2>
+        <div class="product-list">
+          {% for product in otherProducts %}
+          <a href="{% url 'product_detail' product.pk %}" class="product-item">
+            <span class="category {{ product.category }}"
+              >{{ product.category }}</span
+            >
+            <div class="image">
+              <img src="{{ product.image.url }}" alt="{{ product.name }}" />
+              <div class="overlay">{{ product.description }}</div>
+            </div>
+            <div class="desc">
+              <span class="nama">{{ product.name }}</span>
+              <span class="harga">Rp{{ product.price }}</span>
+              <p>{{ product.umkm_user_id.username }}</p>
+              <span><i class="fa-solid fa-star"></i> 5 | 100+ terjual</span>
+            </div>
+          </a>
+          {% empty %}
+          <p class="no-products">Tidak ada produk lainnya yang tersedia.</p>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

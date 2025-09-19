@@ -1,0 +1,126 @@
+{% extends '../layout/base.html' %} {% block content %}
+<section class="products all">
+  <article class="content">
+    <div class="filter-search">
+      <div class="search-bar">
+        <input
+          type="text"
+          id="search"
+          name="search"
+          placeholder="Search for products..."
+          autocomplete="off"
+        />
+        <button type="submit">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+      </div>
+      <div class="filter-bar">
+        <select id="category" name="category">
+          <option value="semua">Semua</option>
+          <option value="makanan kering">Makanan Kering</option>
+          <option value="makanan basah">Makanan Basah</option>
+          <option value="manis">Manis</option>
+          <option value="basah">Basah</option>
+        </select>
+        <button type="submit">
+          <i class="fa-solid fa-sliders"></i>
+        </button>
+      </div>
+    </div>
+    <div class="all-products">
+      <h2>Semua Produk</h2>
+      <div class="product-list">
+        {% for product in products %}
+        <a href="{% url 'product_detail' product.pk %}" class="product-item">
+          <span class="category {{ product.category }}"
+            >{{ product.category }}</span
+          >
+          <div class="image">
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" />
+            <div class="overlay">{{ product.description }}</div>
+          </div>
+          <div class="desc">
+            <span class="nama">{{ product.name }}</span>
+            <span class="harga">Rp{{ product.price }}</span>
+            <p>{{ product.umkm_user_id.username }}</p>
+            <span>
+              <i class="fa-solid fa-star"></i>
+              {{ product.rating }} | {{ product.sold }} terjual
+            </span>
+          </div>
+        </a>
+        {% endfor %}
+        <p class="no-products hidden">Tidak ada produk yang tersedia.</p>
+      </div>
+    </div>
+  </article>
+</section>
+{% endblock %} {% block script %}
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const searchInput = document.getElementById("search");
+    const categorySelect = document.getElementById("category");
+    const products = document.querySelectorAll(".product-item");
+    const allProductsContainer = document.querySelector(".product-list");
+    const productsMessage = document.querySelector(".no-products");
+
+    const getVisibleProducts = () =>
+      Array.from(products).filter(
+        (product) => !product.classList.contains("hidden")
+      );
+
+    const updateNoProductsMessage = (query, category) => {
+      const visibleProducts = getVisibleProducts();
+      const message = `Tidak ada produk yang ditemukan untuk "${query}", dengan kategori "${category}"`;
+
+      if (visibleProducts.length === 0) {
+        productsMessage.textContent = message;
+        productsMessage.classList.remove("hidden");
+      } else {
+        productsMessage.classList.add("hidden");
+      }
+    };
+
+    searchInput.addEventListener("input", () => {
+      const query = searchInput.value.trim().toLowerCase();
+      const category = categorySelect.value.trim();
+
+      filterProducts(query, category);
+      updateNoProductsMessage(query, category);
+    });
+
+    categorySelect.addEventListener("change", () => {
+      const query = searchInput.value.trim().toLowerCase();
+      const category = categorySelect.value.trim();
+
+      filterProducts(query, category);
+      updateNoProductsMessage(query, category);
+    });
+
+    const filterProducts = (query, category) => {
+      products.forEach((product) => {
+        const productName = product
+          .querySelector(".nama")
+          .textContent.toLowerCase();
+        const productCategory = product
+          .querySelector(".category")
+          .textContent.toLowerCase();
+        const productUmkmName = product
+          .querySelector(".desc p")
+          .textContent.toLowerCase();
+
+        if (
+          (productName.includes(query) ||
+            productUmkmName.includes(query) ||
+            query === "") &&
+          (productCategory === category || category === "semua")
+        ) {
+          product.classList.remove("hidden");
+        } else {
+          product.classList.add("hidden");
+        }
+      });
+    };
+  });
+</script>
+{% endblock %}

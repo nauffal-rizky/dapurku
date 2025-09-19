@@ -1,0 +1,68 @@
+{% extends '../layout/base.html' %}{% block content %}
+<section class="cartpage">
+  <div class="content">
+    <a href="{% url 'products' %}" class="back-btn"
+      ><i class="fa-solid fa-arrow-left"></i>Kembali ke halaman produk</a
+    >
+    <div class="desc">
+      <span
+        >Ada <span class="amount">sekian</span> produk di keranjang belanja
+        Anda</span
+      >
+      <label class="select-all"
+        ><input type="checkbox" name="" />
+        <div class="checkbox"><i class="fa-solid fa-check"></i></div>
+        Pilih semua</label
+      >
+    </div>
+    <div class="cart-products">
+      {% for item in cart_items %}
+      <div class="product-info">
+        <label>
+          <input type="checkbox" />
+          <div class="checkbox"><i class="fa-solid fa-check"></i></div>
+        </label>
+        <div class="purchase-details">
+          <img src="{{ item.product.image.url }}" alt="product_img" />
+          <div class="desc">
+            <span>{{ item.product.name }}</span>
+            {% if item.variant %}
+            <span>Varian: {{ item.variant.name }}</span>
+            {% endif %}
+            <span>Harga satuan: Rp {{ item.product.price|floatformat:0 }}</span>
+          </div>
+          <div class="stock">
+            <i class="fa-solid fa-circle"></i>
+            <span>Stok: {{ item.product.stock }}</span>
+          </div>
+          <div class="quantity">
+            <span>{{ item.quantity }}</span>
+          </div>
+          <span class="total-price"
+            >Rp {{ item.total_price|floatformat:0 }}</span
+          >
+        </div>
+      </div>
+      {% empty %}
+      <p>Keranjang belanja Anda kosong.</p>
+      {% endfor %}
+    </div>
+
+    <div class="checkout">
+      <span>Sub Total: Rp {{ subtotal|floatformat:0 }}</span>
+      <div class="btn-container">
+        <a href="{% url 'products' %}">Kembali belanja</a>
+        <a href="{% url 'order' %}">Pesan</a>
+      </div>
+    </div>
+    <div class="checkout">
+      <span>Sub Total: Rp<span class="sub-total">000.000</span></span>
+      <span class="text">Lorem ipsum dolor sit amet.</span>
+      <div class="btn-container">
+        <a href="{% url 'products' %}">Kembali belanja</a>
+        <a href="{% url 'order' %}">Pesan</a>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

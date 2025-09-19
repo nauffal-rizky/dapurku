@@ -1,0 +1,110 @@
+{% extends '../layout/base.html' %} {% block content %}
+<section class="login">
+  <article class="content">
+    <h1>Log In</h1>
+    <form method="post" enctype="multipart/form-data" novalidate>
+      {% csrf_token %}
+      <div class="input-box">
+        <label for="username">Username</label>
+        <input
+          type="text"
+          id="username"
+          name="username"
+          placeholder="Masukkan username anda..."
+          autocomplete="off"
+          required
+        />
+      </div>
+      <div class="input-box">
+        <label for="password">Password</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          placeholder="Masukkan password anda..."
+          autocomplete="off"
+          required
+        />
+        <i class="fa-solid fa-eye"></i>
+      </div>
+      <button type="submit">Login</button>
+    </form>
+    <span>
+      Belum memiliki akun?
+      <a href="/signup">Daftar</a>
+    </span>
+    {% if form.errors %}
+    <ul class="error-list">
+      {% for field in form %} {% for error in field.errors %}
+      <li>{{ field.label }}: {{ error }}</li>
+      {% endfor %} {% endfor %} {% for error in form.non_field_errors %}
+      <li>{{ error }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+  </article>
+</section>
+{% endblock %} {% block script %}
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const inputs = document.querySelectorAll(".input-box > input");
+    const icons = document.querySelectorAll(".input-box > i");
+
+    const MAX_LENGTHS = {
+      username: 10,
+      password: 12,
+    };
+
+    const validators = {
+      username: (value) =>
+        value.length <= MAX_LENGTHS.username ||
+        `Maksimal ${MAX_LENGTHS.username} karakter`,
+      password: (value) =>
+        value.length <= MAX_LENGTHS.password ||
+        `Maksimal ${MAX_LENGTHS.password} karakter`,
+    };
+
+    const validateInput = (input) => {
+      const fieldName = input.id.replace("input_", "");
+      const value = input.value.trim();
+      const validator = validators[fieldName];
+
+      if (validator) {
+        const result = validator(value);
+        if (result !== true) {
+          input.setCustomValidity(result);
+          input.reportValidity();
+          return false;
+        } else {
+          input.setCustomValidity("");
+          return true;
+        }
+      }
+      return true;
+    };
+
+    inputs.forEach((input) => {
+      input.addEventListener("input", () => {
+        const field = input.id.replace("input_", "");
+        const maxLength = MAX_LENGTHS[field];
+        if (maxLength && input.value.length > maxLength) {
+          input.value = input.value.slice(0, maxLength);
+        }
+      });
+
+      input.addEventListener("blur", () => {
+        validateInput(input);
+      });
+    });
+
+    icons.forEach((icon) => {
+      icon.addEventListener("click", () => {
+        const input = icon.previousElementSibling;
+        input.type = input.type === "password" ? "text" : "password";
+        icon.classList.toggle("fa-eye");
+        icon.classList.toggle("fa-eye-slash");
+      });
+    });
+  });
+</script>
+{% endblock %}

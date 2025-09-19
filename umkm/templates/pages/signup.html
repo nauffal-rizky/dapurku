@@ -1,0 +1,239 @@
+{% extends '../layout/base.html' %} {% block content %}
+<section class="signup">
+  <article class="content">
+    <h1>Sign Up</h1>
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+
+      <!-- Hidden is_umkm field -->
+      <input type="hidden" name="is_umkm" id="is_umkm_input" value="false" />
+
+      <div class="img-profile">
+        <img src="/static/3.jpg" alt="img_profile" />
+        <label for="img_profile" class="img-profile-edit">
+          <input type="file" name="profile_image" id="img_profile" />
+          <i class="fa-regular fa-pen-to-square"></i>
+        </label>
+      </div>
+      <div class="grid-cols">
+        <div class="input-box">
+          <label for="input_username">Username</label>
+          <input
+            type="text"
+            id="input_username"
+            name="username"
+            placeholder="Masukkan username anda..."
+            autocomplete="off"
+            required
+          />
+        </div>
+        <div class="input-box">
+          <label for="input_email">Email</label>
+          <input
+            type="email"
+            id="input_email"
+            name="email"
+            placeholder="Masukkan email anda..."
+            autocomplete="off"
+            required
+          />
+        </div>
+        <div class="input-box">
+          <label for="input_phone_number">Nomor telepon</label>
+          <input
+            type="tel"
+            id="input_phone_number"
+            name="phone_number"
+            placeholder="Masukkan nomor telepon anda..."
+            autocomplete="off"
+            required
+          />
+        </div>
+        <div class="input-box">
+          <label for="input_password1">Password</label>
+          <input
+            type="password"
+            id="input_password1"
+            name="password1"
+            placeholder="Masukkan password anda..."
+            autocomplete="off"
+            required
+          />
+          <i class="fa-solid fa-eye"></i>
+        </div>
+        <div class="input-box">
+          <label for="input_password2">Konfirmasi Password</label>
+          <input
+            type="password"
+            id="input_password2"
+            name="password2"
+            placeholder="Masukkan konfirmasi password anda..."
+            autocomplete="off"
+            required
+          />
+          <i class="fa-solid fa-eye"></i>
+        </div>
+        <div class="desc-box">
+          <label for="input_description">Deskripsi</label>
+          <textarea
+            id="input_description"
+            name="description"
+            placeholder="Tuliskan deskripsi singkat Anda/UMKM..."
+            rows="4"
+          ></textarea>
+        </div>
+      </div>
+      <div class="btn-container">
+        <button type="submit" class="customerBtn">Sebagai Pembeli</button>
+        <button type="submit" class="umkmBtn">Sebagai UMKM</button>
+      </div>
+    </form>
+    <span>Sudah memiliki akun?<a href="/login">Login</a></span>
+    {% if form.errors %}
+    <ul class="error-list">
+      {% for field in form %} {% for error in field.errors %}
+      <li>{{ field.label }}: {{ error }}</li>
+      {% endfor %} {% endfor %} {% for error in form.non_field_errors %}
+      <li>{{ error }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+  </article>
+</section>
+{% endblock %} {% block script %}
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const image = document.querySelector(".img-profile img");
+    const imageInput = document.querySelector("#img_profile");
+
+    imageInput.addEventListener("change", function () {
+      const file = this.files[0];
+
+      if (!file) {
+        image.src = "";
+        image.style.display = "none";
+        return;
+      }
+
+      if (!file.type.startsWith("image/")) {
+        alert("Please select a valid image file.");
+        this.value = ""; // Clear invalid file
+        image.src = "";
+        image.style.display = "none";
+        return;
+      }
+
+      const objectURL = URL.createObjectURL(file);
+
+      image.src = objectURL;
+      image.style.display = "block";
+
+      image.onload = () => {
+        URL.revokeObjectURL(objectURL);
+      };
+
+      image.onerror = () => {
+        image.src = "";
+        image.style.display = "none";
+        alert("Failed to load the selected image.");
+      };
+    });
+
+    const icons = document.querySelectorAll(".input-box > i");
+    const inputs = document.querySelectorAll(".input-box > input");
+
+    const MAX_LENGTHS = {
+      username: 10,
+      email: 30,
+      phone_number: 13,
+      password1: 12,
+      password2: 12,
+    };
+
+    const validators = {
+      username: (value) =>
+        value.length <= MAX_LENGTHS.username ||
+        `Maksimal ${MAX_LENGTHS.username} karakter`,
+      email: (value) =>
+        value.includes("@") && value.length <= MAX_LENGTHS.email
+          ? true
+          : `Email harus valid dan maksimal ${MAX_LENGTHS.email} karakter`,
+      phone_number: (value) =>
+        (value.length <= MAX_LENGTHS.phone_number && /^\d+$/.test(value)) ||
+        "Nomor telepon harus berupa angka",
+      password1: (value) =>
+        value.length <= MAX_LENGTHS.password1 ||
+        `Maksimal ${MAX_LENGTHS.password1} karakter`,
+      password2: (value) =>
+        value.length <= MAX_LENGTHS.password2 ||
+        `Maksimal ${MAX_LENGTHS.password2} karakter`,
+    };
+
+    const validateInput = (input) => {
+      const fieldName = input.id.replace("input_", "");
+      const value = input.value.trim();
+      const validator = validators[fieldName];
+
+      if (validator) {
+        const result = validator(value);
+        if (result !== true) {
+          input.setCustomValidity(result);
+          input.reportValidity();
+          return false;
+        } else {
+          input.setCustomValidity("");
+          return true;
+        }
+      }
+      return true;
+    };
+
+    inputs.forEach((input) => {
+      input.addEventListener("input", () => {
+        const field = input.id.replace("input_", "");
+        const maxLength = MAX_LENGTHS[field];
+        if (maxLength && input.value.length > maxLength) {
+          input.value = input.value.slice(0, maxLength);
+        }
+      });
+
+      input.addEventListener("blur", () => {
+        validateInput(input);
+      });
+    });
+
+    icons.forEach((icon) => {
+      icon.addEventListener("click", () => {
+        const input = icon.previousElementSibling;
+        input.type = input.type === "password" ? "text" : "password";
+        icon.classList.toggle("fa-eye");
+        icon.classList.toggle("fa-eye-slash");
+      });
+    });
+
+    const isUmkmInput = document.querySelector("#is_umkm_input");
+    const form = document.querySelector("form");
+
+    const setIsUmkm = (value) => {
+      if (isUmkmInput) {
+        isUmkmInput.value = value ? "true" : "false";
+      }
+    };
+
+    const customerBtn = document.querySelector(".customerBtn");
+    const umkmBtn = document.querySelector(".umkmBtn");
+
+    if (customerBtn) {
+      customerBtn.addEventListener("click", (e) => {
+        setIsUmkm(false);
+      });
+    }
+
+    if (umkmBtn) {
+      umkmBtn.addEventListener("click", (e) => {
+        setIsUmkm(true);
+      });
+    }
+  });
+</script>
+{% endblock %}

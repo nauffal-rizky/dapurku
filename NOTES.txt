@@ -1,0 +1,38 @@
+# Admin Log-In
+
+mummiew - annanendra020422
+
+# Checklist
+
+1. Frontpage ✔
+2. About page ✔
+3. Product page ✔
+4. Contact page ✔
+5. User Profile page ✔
+6. UMKM Add Product page
+7. UMKM Edit Product page
+8.
+
+# To-do list
+
+## UI/UX
+
+1. Buat fitur "Pilih Semua" berjalan pada halaman Cart
+2. Buat fitur "Counter" berjalan pada halaman Cart dan satukan kodenya dengan yang sebelumnya
+3. Buat fitur "Sub Total" berjalan pada halaman Cart dan satukan kodenya dengan yang sebelumnya
+4. Buat fitur "Ada sekian produk di dalam keranjang anda" berjalan pada halaman Cart
+5. Tambahkan fitur "Hapus product belanjaan" pada halaman Cart
+6. Perbaiki design halaman Cart
+7. Perbaiki tampilan profil user
+
+## System
+
+1. Membuat fitur "Tambah Varian" berjalan dengan lancar di halaman add product
+2. Membuat fitur "Varian" berjalan dengan lancar di halaman edit product
+3. Tampilkan varian-varian produk sesuai dengan produk di halaman detail product
+
+**=============================================================**
+
+**NOTES**
+git config user.name "dyni0j"
+git config user.email "dwihw7@gmail.com"

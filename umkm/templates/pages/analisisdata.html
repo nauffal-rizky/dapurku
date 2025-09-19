@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Modul Analisis Data</title>
+    <link rel="stylesheet" href="styles.css" />
+    <!-- Tambahkan CSS jika diperlukan -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Library untuk visualisasi data -->
+  </head>
+  <body>
+    <h2>Modul Analisis Data</h2>
+
+    <h3>Laporan Penjualan & Produk Terlaris</h3>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>Produk</th>
+          <th>Jumlah Terjual</th>
+          <th>Pendapatan</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Nasi Goreng</td>
+          <td>150</td>
+          <td>Rp 3.750.000</td>
+        </tr>
+        <tr>
+          <td>Ayam Bakar</td>
+          <td>120</td>
+          <td>Rp 3.000.000</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Analisis Segmentasi Pelanggan</h3>
+    <ul>
+      <li>50% pelanggan adalah mahasiswa.</li>
+      <li>30% pelanggan adalah pekerja kantoran.</li>
+      <li>20% pelanggan lainnya berasal dari berbagai latar belakang.</li>
+    </ul>
+
+    <h3>Dashboard Visualisasi Data</h3>
+    <canvas id="salesChart"></canvas>
+
+    <script>
+      const ctx = document.getElementById("salesChart").getContext("2d");
+      new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels: ["Nasi Goreng", "Ayam Bakar"],
+          datasets: [
+            {
+              label: "Jumlah Terjual",
+              data: [150, 120],
+              backgroundColor: ["blue", "green"],
+            },
+          ],
+        },
+      });
+    </script>
+  </body>
+</html>
