@@ -34,6 +34,5 @@ mummiew - annanendra020422
 **=============================================================**
 
 **NOTES**
-pip uninstall -y decouple config
-pip install python-decouple
-pip freeze > requirements.txt
+git config --global user.email "nauffal2005@gmail.com"
+git config --global user.name "nauffal-rizky"
