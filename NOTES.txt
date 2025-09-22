@@ -33,4 +33,10 @@ mummiew - annanendra020422
 
 **=============================================================**
 
+<<<<<<< HEAD
 **NOTES**
+=======
+**NOTES**
+git config --global user.email "nauffal2005@gmail.com"
+git config --global user.name "nauffal-rizky"
+>>>>>>> 594040ac2cc4190d0cdba7f62f65e3a47786d4eb
