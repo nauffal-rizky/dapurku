@@ -34,5 +34,3 @@ mummiew - annanendra020422
 **=============================================================**
 
 **NOTES**
-git config user.name "dyni0j"
-git config user.email "dwihw7@gmail.com"
