@@ -22,7 +22,7 @@
             type="text"
             id="input_username"
             name="username"
-            placeholder="Masukkan username anda..."
+            placeholder="Username..."
             autocomplete="off"
             required
           />
@@ -33,7 +33,7 @@
             type="email"
             id="input_email"
             name="email"
-            placeholder="Masukkan email anda..."
+            placeholder="Email..."
             autocomplete="off"
             required
           />
@@ -44,7 +44,7 @@
             type="tel"
             id="input_phone_number"
             name="phone_number"
-            placeholder="Masukkan nomor telepon anda..."
+            placeholder="Nomor telepon..."
             autocomplete="off"
             required
           />
@@ -55,7 +55,7 @@
             type="password"
             id="input_password1"
             name="password1"
-            placeholder="Masukkan password anda..."
+            placeholder="Password..."
             autocomplete="off"
             required
           />
@@ -67,28 +67,28 @@
             type="password"
             id="input_password2"
             name="password2"
-            placeholder="Masukkan konfirmasi password anda..."
+            placeholder="Konfirmasi password..."
             autocomplete="off"
             required
           />
           <i class="fa-solid fa-eye"></i>
         </div>
-        <div class="desc-box">
-          <label for="input_description">Deskripsi</label>
-          <textarea
-            id="input_description"
-            name="description"
-            placeholder="Tuliskan deskripsi singkat Anda/UMKM..."
-            rows="4"
-          ></textarea>
-        </div>
+      </div>
+      <div class="desc-box">
+        <label for="input_description">Deskripsi</label>
+        <textarea
+          id="input_description"
+          name="description"
+          placeholder="Deskripsi diri/UMKM..."
+          rows="4"
+        ></textarea>
       </div>
       <div class="btn-container">
         <button type="submit" class="customerBtn">Sebagai Pembeli</button>
         <button type="submit" class="umkmBtn">Sebagai UMKM</button>
       </div>
     </form>
-    <span>Sudah memiliki akun?<a href="/login">Login</a></span>
+    <span>Sudah memiliki akun? <a href="/login">Login</a></span>
     {% if form.errors %}
     <ul class="error-list">
       {% for field in form %} {% for error in field.errors %}

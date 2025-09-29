@@ -32,24 +32,28 @@
             <span style="color: blue">Customer</span>
             {% endif %}
           </div>
-          <div class="row">
-            <div class="col">
-              <span>Email</span>
-              <span>Phone Number</span>
-              <span>Status</span>
-              <span>Deskripsi</span>
-            </div>
-            <div class="col">
+          <div class="col">
+            <div class="row">
+              <span>Email:</span>
               <span class="underline-text" id="lblEmail">{{ user.email }}</span>
+            </div>
+            <div class="row">
+              <span>Phone Number:</span>
               <span class="underline-text" id="lblPhone"
                 >{{ user.phone_number }}</span
               >
+            </div>
+            <div class="row">
+              <span>Status:</span>
               <span class="underline-text" id="lblStatus"
                 >{{ user.get_user_status_display }}</span
               >
+            </div>
+            <div class="row">
+              <span>Deskripsi:</span>
               <span class="underline-text" id="lblDescription">
-                {% if user.description %} {{ user.description }} {% else %} UMKM
-                ini belum menambahkan deskripsi. {% endif %}
+                {% if user.description %} {{ user.description }} {% else %}
+                Belum ada deskripsi. {% endif %}
               </span>
             </div>
           </div>
@@ -71,12 +75,13 @@
         <i class="fa-solid fa-xmark"></i>
         <span>Ubah Profil</span>
         <div class="img-box">
-          <img
-            src="{{ user.profile_image.url }}"
-            alt="Default Avatar"
-            width="150"
-            height="150"
-          />
+          {% if product.image %} {% if form.instance.image %}
+          <img src="{{ form.instance.image.url }}" alt="product-img" />
+          {% else %}
+          <img src="/static/1.jpg" alt="default-img" />
+          {% endif %} {% else %}
+          <img src="/static/1.jpg" alt="{{ product.name }}" />
+          {% endif %}
           <label for="profile_image">
             <i class="fa-solid fa-pen"></i>
             <input
@@ -154,7 +159,13 @@
             >{{ product.category }}</span
           >
           <div class="image">
-            <img src="{{ product.image.url }}" alt="{{ product.name }}" />
+            {% if product.image %} {% if form.image.value %}
+            <img src="{{ form.image.value.url }}" alt="product-img" />
+            {% else %}
+            <img src="/static/1.jpg" alt="product-img" />
+            {% endif %} {% else %}
+            <img src="/static/1.jpg" alt="{{ product.name }}" />
+            {% endif %}
             <div class="overlay">{{ product.description }}</div>
           </div>
           <div class="desc">

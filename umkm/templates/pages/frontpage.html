@@ -25,7 +25,12 @@
           >{{ product.category }}</span
         >
         <div class="image">
+          {% if product.image %}
           <img src="{{ product.image.url }}" alt="{{ product.name }}" />
+          {% else %}
+          <img src="/static/default_product.png" alt="No image available" />
+          {% endif %}
+
           <div class="overlay">{{ product.description }}</div>
         </div>
         <div class="desc">

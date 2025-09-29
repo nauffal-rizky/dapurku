@@ -7,18 +7,38 @@
     <div class="detail-content">
       <div class="product-information">
         <div class="image-container">
-          <img src="{{ product.image.url }}" alt="{{ product.name }}" />
+          {% if form.instance.image %}
+          <img src="{{ form.instance.image.url }}" alt="product-img" />
+          {% else %}
+          <img src="/static/1.jpg" alt="default-img" />
+          {% endif %}
           <div class="overlays">
             <img
               class="active"
               src="{{ product.image.url }}"
               alt="{{ product.name }}"
             />
-            <img src="{{ product.image.url }}" alt="{{ product.name }}" />
-            <img src="{{ product.image.url }}" alt="{{ product.name }}" />
-            <img src="{{ product.image.url }}" alt="{{ product.name }}" />
-            <img src="{{ product.image.url }}" alt="{{ product.name }}" />
-            <img src="{{ product.image.url }}" alt="{{ product.name }}" />
+            {% if form.image.value %}
+            <img src="{{ form.image.value.url }}" alt="product-img" />
+            {% else %}
+            <img src="/static/1.jpg" alt="product-img" />
+            {% endif %} {% if form.image.value %}
+            <img src="{{ form.image.value.url }}" alt="product-img" />
+            {% else %}
+            <img src="/static/1.jpg" alt="product-img" />
+            {% endif %} {% if form.image.value %}
+            <img src="{{ form.image.value.url }}" alt="product-img" />
+            {% else %}
+            <img src="/static/1.jpg" alt="product-img" />
+            {% endif %} {% if form.image.value %}
+            <img src="{{ form.image.value.url }}" alt="product-img" />
+            {% else %}
+            <img src="/static/1.jpg" alt="product-img" />
+            {% endif %} {% if form.image.value %}
+            <img src="{{ form.image.value.url }}" alt="product-img" />
+            {% else %}
+            <img src="/static/1.jpg" alt="product-img" />
+            {% endif %}
           </div>
         </div>
         <div class="desc">
@@ -91,7 +111,11 @@
               >{{ product.category }}</span
             >
             <div class="image">
-              <img src="{{ product.image.url }}" alt="{{ product.name }}" />
+              {% if form.image.value %}
+              <img src="{{ form.image.value.url }}" alt="product-img" />
+              {% else %}
+              <img src="/static/1.jpg" alt="product-img" />
+              {% endif %}
               <div class="overlay">{{ product.description }}</div>
             </div>
             <div class="desc">
@@ -115,7 +139,11 @@
               >{{ product.category }}</span
             >
             <div class="image">
-              <img src="{{ product.image.url }}" alt="{{ product.name }}" />
+              {% if form.image.value %}
+              <img src="{{ form.image.value.url }}" alt="product-img" />
+              {% else %}
+              <img src="/static/1.jpg" alt="product-img" />
+              {% endif %}
               <div class="overlay">{{ product.description }}</div>
             </div>
             <div class="desc">

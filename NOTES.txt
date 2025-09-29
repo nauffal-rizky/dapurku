@@ -4,14 +4,16 @@ mummiew - annanendra020422
 
 # Checklist
 
-1. Frontpage ✔
-2. About page ✔
-3. Product page ✔
-4. Contact page ✔
-5. User Profile page ✔
-6. UMKM Add Product page
-7. UMKM Edit Product page
-8.
+- Sign-Up page ✔
+- Login page ✔
+- Front page ✔
+- About page ✔
+- User Profile page ✔
+- UMKM Add Product page
+- UMKM Edit Product page
+- Product page 
+- Contact page
+-
 
 # To-do list
 
@@ -33,10 +35,5 @@ mummiew - annanendra020422
 
 **=============================================================**
 
-<<<<<<< HEAD
-**NOTES**
-=======
-**NOTES**
-git config --global user.email "nauffal2005@gmail.com"
-git config --global user.name "nauffal-rizky"
->>>>>>> 594040ac2cc4190d0cdba7f62f65e3a47786d4eb
+python manage.py check
+python manage.py runserver

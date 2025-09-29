@@ -16,16 +16,22 @@
             <span>{{ user.user_status }}</span>
             {% endif %}
           </div>
-          <div class="body">
-            <div class="col">
-              <span>Email</span>
-              <span>Phone number</span>
-              <span>Since</span>
+          <div class="col">
+            <div class="row">
+              <span>Email:</span>
+              <span class="underline-text" id="lblEmail">{{ user.email }}</span>
             </div>
-            <div class="col">
-              <span class="underline-text">{{ user.email }}</span>
-              <span class="underline-text">{{ user.phone_number }}</span>
-              <span class="underline-text">{{ user.created_at }}</span>
+            <div class="row">
+              <span>Phone Number:</span>
+              <span class="underline-text" id="lblPhone"
+                >{{ user.phone_number }}</span
+              >
+            </div>
+            <div class="row">
+              <span>Status:</span>
+              <span class="underline-text" id="lblStatus"
+                >{{ user.get_user_status_display }}</span
+              >
             </div>
           </div>
           <p>
@@ -43,7 +49,11 @@
               >{{ product.category }}</span
             >
             <div class="image">
-              <img src="{{ product.image.url }}" alt="{{ product.name }}" />
+              {% if form.image.value %}
+              <img src="{{ form.image.value.url }}" alt="product-img" />
+              {% else %}
+              <img src="/static/1.jpg" alt="product-img" />
+              {% endif %}
               <div class="overlay">{{ product.description }}</div>
             </div>
             <div class="desc">
@@ -67,7 +77,11 @@
               >{{ product.category }}</span
             >
             <div class="image">
-              <img src="{{ product.image.url }}" alt="{{ product.name }}" />
+              {% if form.image.value %}
+              <img src="{{ form.image.value.url }}" alt="product-img" />
+              {% else %}
+              <img src="/static/1.jpg" alt="product-img" />
+              {% endif %}
               <div class="overlay">{{ product.description }}</div>
             </div>
             <div class="desc">

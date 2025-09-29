@@ -1,0 +1,182 @@
+{% extends '../../layout/base.html' %} {% block content %}
+<section class="product-form">
+  <article class="content">
+    <a href="{% url 'profile' %}" class="back-btn"
+      ><i class="fa-solid fa-arrow-left"></i>Kembali ke halaman profil</a
+    >
+    <h1 class="judul">
+      {% if product %}Edit Produk{% else %}Tambah Produk Baru{% endif %}
+    </h1>
+
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+
+      <div class="main-details">
+        <div class="img-box">
+          {% if product and product.image %}
+          <img src="{{ product.image.url }}" alt="product-img" />
+          {% else %}
+          <img src="/static/1.jpg" alt="product-img" />
+          {% endif %}
+          <label for="id_image">
+            <i class="fa-solid fa-pen"></i>
+            {{ form.image }}
+          </label>
+        </div>
+        <div class="inputs">
+          <div class="input-box">{{ form.name.label_tag }} {{ form.name }}</div>
+          <div class="input-box">
+            {{ form.price.label_tag }} {{ form.price }}
+          </div>
+          <div class="input-box">
+            {{ form.category.label_tag }} {{ form.category }}
+          </div>
+          <div class="desc-box">
+            {{ form.description.label_tag }} {{ form.description }}
+          </div>
+          <div class="check-box">
+            {{ form.is_available.label_tag }} {{ form.is_available }}
+          </div>
+        </div>
+      </div>
+      <div class="variant-container">
+        <div class="head">
+          <h2 class="underline-text">Tambah Varian Baru</h2>
+          <button type="button" id="add-variant-btn" class="add-variant-btn">
+            <i class="fa-solid fa-plus"></i> Tambah Varian
+          </button>
+        </div>
+        {{ formset.management_form }}
+        <div class="variants">
+          {% for variant_form in formset %}
+          <div class="variant">
+            <div class="variant-inputs">
+              <div class="input-box">
+                {{ variant_form.name.label_tag }} {{ variant_form.name }}
+              </div>
+              <div class="input-box">
+                {{ variant_form.additional_price.label_tag }}
+                <div class="additional-price">
+                  {{ variant_form.additional_price }}
+                  <span>Rp</span>
+                </div>
+              </div>
+              <div class="input-box">
+                {{ variant_form.stock.label_tag }} {{ variant_form.stock }}
+              </div>
+            </div>
+            <button type="button" class="remove-variant-btn">
+              <i class="fa-solid fa-minus"></i>
+            </button>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <button type="submit">Tambah Produk</button>
+    </form>
+  </article>
+</section>
+{% endblock %} {% block script %}
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const variantsContainer = document.querySelector(".variants");
+    const addButton = document.getElementById("add-variant-btn");
+    const totalForms = document.getElementById("id_variants-TOTAL_FORMS");
+
+    // Reusable: re-index form fields
+    const updateFormIndices = () => {
+      const forms = variantsContainer.querySelectorAll(".variant");
+      forms.forEach((form, index) => {
+        form
+          .querySelectorAll("input, select, textarea, label")
+          .forEach((el) => {
+            if (el.name)
+              el.name = el.name.replace(/form-(\d+)-/, `form-${index}-`);
+            if (el.id) el.id = el.id.replace(/form-(\d+)-/, `form-${index}-`);
+            if (el.htmlFor)
+              el.htmlFor = el.htmlFor.replace(/form-(\d+)-/, `form-${index}-`);
+          });
+      });
+
+      console.log(totalForms, forms);
+      totalForms.value = forms.length;
+    };
+
+    // Add new variant
+    addButton.addEventListener("click", () => {
+      const formCount = parseInt(totalForms.value);
+      const emptyFormTemplate = `
+        <div class="variant">
+          <div class="variant-inputs">
+            <div class="input-box">
+              <label for="id_form-${formCount}-name">Nama:</label>
+              <input type="text" name="form-${formCount}-name" id="id_form-${formCount}-name">
+            </div>
+            <div class="input-box">
+              <label for="id_form-${formCount}-additional_price">Harga Tambahan:</label>
+              <div class="additional-price">
+                <input type="number" step="0.01" name="form-${formCount}-additional_price" id="id_form-${formCount}-additional_price">
+                <span>Rp</span>
+              </div>
+            </div>
+            <div class="input-box">
+              <label for="id_form-${formCount}-stock">Stok:</label>
+              <input type="number" name="form-${formCount}-stock" id="id_form-${formCount}-stock">
+            </div>
+          </div>
+          <button type="button" class="remove-variant-btn"><i class="fa-solid fa-minus"></i></button>
+        </div>
+      `;
+      variantsContainer.insertAdjacentHTML("beforeend", emptyFormTemplate);
+      updateFormIndices();
+    });
+
+    // Delegate remove buttons
+    variantsContainer.addEventListener("click", (e) => {
+      if (e.target.closest(".remove-variant-btn")) {
+        const variant = e.target.closest(".variant");
+        variant.remove();
+        updateFormIndices();
+      }
+    });
+
+    // Initial indexing
+    updateFormIndices();
+
+    const profileImagePreview = document.querySelector("form img");
+    document.querySelector("#id_image").addEventListener("change", function () {
+      const file = this.files[0];
+
+      if (!file) {
+        profileImagePreview.src = "";
+        profileImagePreview.style.display = "none";
+        return;
+      }
+
+      if (!file.type.startsWith("image/")) {
+        alert("Please select a valid image file.");
+        this.value = "";
+        profileImagePreview.src = "";
+        profileImagePreview.style.display = "none";
+        return;
+      }
+
+      const objectURL = URL.createObjectURL(file);
+
+      profileImagePreview.src = objectURL;
+      profileImagePreview.style.display = "block";
+
+      profileImagePreview.onload = () => {
+        URL.revokeObjectURL(objectURL);
+      };
+
+      profileImagePreview.onerror = () => {
+        profileImagePreview.src = "";
+        profileImagePreview.style.display = "none";
+        alert("Failed to load the selected image.");
+      };
+    });
+  });
+</script>
+{% endblock %}

@@ -1,7 +1,9 @@
 from django.urls import path
-from . import views
 from django.conf import settings
 from django.conf.urls.static import static
+
+# Import all views you need
+from . import views
 
 urlpatterns = [
   path('', views.frontPage, name = "frontpage"),
@@ -11,16 +13,19 @@ urlpatterns = [
   path('about/', views.aboutPage, name = "about"),
   path('profile/', views.profilePage, name = "profile"),
   path('umkm/profile/<int:user_id>/', views.umkmProfilePage, name = "umkm_profile"),
+
   path('products/', views.productPage, name = "products"),
   path('products/<int:pk>', views.productDetailPage, name = "product_detail"),
-  path('umkm/add-product/', views.addProduct, name='add_product'),
-  path('umkm/edit-product/<int:pk>/', views.editProduct, name='edit_product'),
-  path('umkm/delete-product/<int:pk>/', views.deleteProduct, name='delete_product'),
+
+  path("umkm/product/add", views.manage_product, name="add_product"),
+  path("umkm/product/<int:pk>/", views.manage_product, name="edit_product"),
+  path("umkm/product/<int:pk>/delete/", views.delete_product, name="delete_product"),
+
   path('order/', views.orderPage, name = "order"),
   path('cartpage/', views.cartPage, name = "cart"),
   path("cartpage/add/<int:product_id>/", views.addToCart, name="cartNewProduct"),
   path("cartpage/add/<int:product_id>/<int:variant_id>/", views.addToCart, name="cartNewVariant"),
-  path('contact/', views.contactPage, name = "contact"),
+  path("contact/", views.contactPage, name="contact"),
 ]
 
 if settings.DEBUG:

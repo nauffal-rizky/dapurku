@@ -36,7 +36,11 @@
             >{{ product.category }}</span
           >
           <div class="image">
-            <img src="{{ product.image.url }}" alt="{{ product.name }}" />
+            {% if form.image.value %}
+            <img src="{{ form.image.value.url }}" alt="product-img" />
+            {% else %}
+            <img src="/static/1.jpg" alt="product-img" />
+            {% endif %}
             <div class="overlay">{{ product.description }}</div>
           </div>
           <div class="desc">

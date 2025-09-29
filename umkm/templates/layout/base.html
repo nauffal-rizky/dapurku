@@ -11,7 +11,7 @@
       <img src="/static/logo.png" alt="Loading..." />
     </div>
 
-    <!-- Header /n-->
+    <!-- HEADER -->
     <header class="main-header">
       {% if not plain_page %}
       <nav class="main-navbar">
@@ -29,7 +29,9 @@
           <a href="/contact" class="nav-link">Kontak</a>
         </div>
         {% if user.is_authenticated %}
-        <a href="{% url 'profile' %}"><i class="fa-solid fa-user"></i>{{user.username}}</a>
+        <a href="{% url 'profile' %}"
+          ><i class="fa-solid fa-user"></i>{{user.username}}</a
+        >
         {% else %}
         <div class="logSign-btns">
           <a href="/login" class="login-btn">Login</a>
@@ -57,16 +59,17 @@
       </div>
       {% endif %}
     </header>
-    {% if plain_page %}
-    <main class="mainPlainPage">
-    {% else %}
-    <main>
-    {% endif %}
-    {% block content %}{% endblock %}</main>
+
+    <!-- MAIN CONTENT -->
+    <main>{% block content %}{% endblock %}</main>
+
+    <!-- CART POPUP -->
     {% if not plain_page %}
     <a href="{% url 'cart' %}" class="cartpage-btn">
       <i class="fa-solid fa-cart-shopping"></i>
     </a>
+
+    <!-- FOOTER -->
     <footer>
       <div class="contact">
         <div class="row">
@@ -88,23 +91,6 @@
         const navbar = document.querySelector(".main-navbar");
         const jumbotron = document.querySelector(".jumbotron");
 
-        /* 
-        const menuIcon = document.querySelector(".logo i");
-        const links = document.querySelector(".links");
-
-        menuIcon.addEventListener("click", () => {
-          links.classList.toggle("active");
-          menuIcon.classList.toggle("fa-xmark");
-        });
-
-        document.addEventListener("click", (event) => {
-          if (!navbar.contains(event.target)) {
-            links.classList.remove("active");
-            menuIcon.classList.remove("fa-xmark");
-          }
-        });
-         */
-
         window.addEventListener("load", () => {
           const loader = document.getElementById("page-loader");
           if (loader) {
@@ -113,16 +99,19 @@
             setTimeout(() => loader.remove(), 500);
           }
         });
-  
+
         if (navbar) {
           const navbarHeight = navbar.offsetHeight;
+          jumbotron.style.height = `calc(100vh - ${navbarHeight}px)`;
+
           window.addEventListener("scroll", () => {
             if (window.scrollY >= navbarHeight) {
               navbar.classList.add("scrolled");
               if (jumbotron) jumbotron.style.height = `100vh`;
             } else if (window.scrollY == 0) {
               navbar.classList.remove("scrolled");
-              if (jumbotron) jumbotron.style.height = `calc(100vh - ${navbarHeight}px)`;
+              if (jumbotron)
+                jumbotron.style.height = `calc(100vh - ${navbarHeight}px)`;
             }
           });
         }

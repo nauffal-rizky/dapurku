@@ -26,9 +26,14 @@
   user-select: none;
 }
 
+body.loginSignup {
+  background-color: var(--warna-utama);
+}
+
 main {
-  min-height: calc(100vh - 10rem);
+  justify-content: center;
   gap: 5rem;
+  min-height: 100vh;
   padding: 5rem 0;
 }
 
@@ -44,18 +49,28 @@ input,
 select,
 textarea {
   height: 100%;
-  font-size: 1.1rem;
-  padding: 1rem 1.5rem;
+  font-size: 1rem;
+  padding: 0.75rem 1.25rem;
   border: 2px solid #ccc;
   border-radius: 5px;
   outline: none;
   transition: 0.3s;
 }
-input:hover {
+input:not(:disabled):hover,
+select:not(:disabled):hover,
+textarea:not(:disabled):hover {
   border: 2px solid var(--abuabu);
 }
-input:focus {
+input:not(:disabled):focus,
+select:not(:disabled):focus,
+textarea:not(:disabled):focus {
   border: 2px solid var(--warna-utama);
+}
+
+button,
+a,
+i {
+  cursor: pointer;
 }
 
 img {
@@ -96,10 +111,6 @@ p {
   font-size: 1rem;
   font-family: "Times New Roman", Times, serif;
 }
-
-button {
-  font-family: var(--font-utama), sans-serif;
-}
 .back-btn {
   display: flex;
   align-items: center;
@@ -123,14 +134,14 @@ button {
   height: 0.2rem;
   background-color: var(--warna-utama);
 }
+.row {
+  display: flex;
+  align-items: center;
+}
 
 section {
   align-items: center;
   gap: 3rem;
-}
-.mainPlainPage section {
-  min-height: 100vh;
-  justify-content: center;
 }
 .content {
   width: 900px;
@@ -317,7 +328,6 @@ section {
 .main-header .jumbotron {
   display: flex;
   background-color: rgba(51, 51, 51, 0.1);
-  height: 100vh;
 }
 .main-header .jumbotron .texts {
   justify-content: center;
@@ -338,28 +348,15 @@ section {
 }
 
 /* LOGIN - SIGNUP */
-:is(.login, .signup) {
-  background-color: var(--warna-utama);
-  padding: 0;
-  height: 100vh;
-  justify-content: center;
-}
 :is(.login, .signup) .content {
+  gap: 0.5rem;
   width: 500px;
   background-color: var(--putih);
   padding: 1.25rem 2rem;
   border-radius: 20px;
 }
-.signup .content {
-  width: 700px;
-}
 :is(.login, .signup) .content h1 {
   text-align: center;
-}
-.signup .content form .btn-container {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 0.5rem;
 }
 :is(.login, .signup) .content form button {
   background-color: var(--warna-utama);
@@ -376,71 +373,94 @@ section {
   background-color: var(--putih);
   color: var(--warna-utama);
 }
-:is(.login, .signup) .content > span {
-  display: inline-block;
-  margin: 0.5rem 0 0 0;
-}
 :is(.login, .signup) .content > span a {
   color: var(--warna-utama);
 }
 :is(.login, .signup) .content > span a:hover {
   text-decoration: underline;
 }
-.login .content form {
-  gap: 0.5rem;
-}
-.signup .content form {
-  margin: 1.25rem 0 0 0;
-}
-:is(.login, .signup) .content form .img-profile {
-  position: relative;
-  align-items: center;
-  gap: 0.5rem;
-  width: fit-content;
-  margin: 0 auto;
-}
-:is(.login, .signup) .content form .img-profile img {
-  width: 200px;
-  height: 200px;
-  border-radius: 50%;
-}
-:is(.login, .signup) .content form .img-profile .img-profile-edit {
-  position: absolute;
-  top: 0;
-  right: 0;
-}
-:is(.login, .signup) .content form .img-profile .img-profile-edit input {
-  display: none;
-}
-:is(.login, .signup) .content form .img-profile .img-profile-edit i {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 50px;
-  height: 50px;
-  background-color: var(--warna-utama);
-  color: var(--putih);
-  font-size: 1.5rem;
-  border-radius: 50%;
-  border: none;
-  cursor: pointer;
-}
-:is(.login, .signup) .content form .grid-cols {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.5rem;
-  margin: 1rem 0;
-}
-:is(.login, .signup) .content form .grid-cols div:first-of-type {
-  grid-column: span 2;
-}
 :is(.login, .signup) .content form .input-box {
   position: relative;
+  margin: 0;
 }
 :is(.login, .signup) .content form .input-box i {
   position: absolute;
   top: calc(50% + 9px);
-  right: 1.5rem;
+  right: 1.25rem;
+}
+
+/* LOGIN */
+.login .content form {
+  gap: 0.5rem;
+}
+
+/* SIGNUP */
+.signup .content {
+  width: fit-content;
+}
+.signup .content form .img-profile {
+  position: relative;
+  align-items: center;
+  width: fit-content;
+}
+.signup .content form {
+  display: grid;
+  grid-template-areas:
+    "img inputs"
+    "desc desc"
+    "btns btns";
+}
+.signup .content form .img-profile {
+  grid-area: img;
+  width: 250px;
+  height: 250px;
+  margin: 0 1rem 0.5rem 0;
+}
+.signup .content form .grid-cols {
+  grid-area: inputs;
+}
+.signup .content form .desc-box {
+  grid-area: desc;
+}
+.signup .content form .btn-container {
+  grid-area: btns;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+  margin: 1rem 0 0 0;
+}
+.signup .content form .img-profile img {
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+}
+.signup .content form .img-profile .img-profile-edit {
+  position: absolute;
+  top: 0.25rem;
+  right: 0.25rem;
+}
+.signup .content form .img-profile .img-profile-edit input {
+  display: none;
+}
+.signup .content form .img-profile .img-profile-edit i {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  background-color: var(--warna-utama);
+  color: var(--putih);
+  font-size: 1.25rem;
+  border-radius: 50%;
+  border: none;
+}
+.signup .content form .grid-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+.signup .content form .grid-cols div:first-of-type {
+  grid-column: span 2;
 }
 
 /* ABOUT */
@@ -460,6 +480,9 @@ section {
 .short_about .content img {
   height: 250px;
   aspect-ratio: 1/1;
+}
+.long_about .content {
+  gap: 4rem;
 }
 .long_about .content .intro .head {
   display: flex;
@@ -494,7 +517,6 @@ section {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 2rem;
-  margin: 8rem 0 4rem 0;
 }
 .long_about .content .challenge .analysis {
   display: flex;
@@ -505,6 +527,7 @@ section {
   border-radius: 10px;
 }
 section,
+.col,
 .main-header .jumbotron .texts,
 :is(.login, .signup) .content form .img-profile,
 .login .content form,
@@ -520,7 +543,7 @@ section,
 .input-box,
 .desc-box,
 .detail-product .content .desc,
-.connects :is(.informations, .informations .row .col),
+.connects .informations,
 .cartpage .content .cart-products,
 .cartpage .content .cart-products .product-info .desc,
 .cartpage .content .checkout,
@@ -528,12 +551,8 @@ section,
 .product-item .desc,
 .image-container,
 .connects .desc,
-.profile .content .details .desc,
-.profile .content .details .desc .row .col,
 .profile .content .edit-profile form,
 .profile .content .edit-profile form .input-box,
-.umkm-info .desc,
-.umkm-info .desc .body .col,
 footer,
 .contact-form,
 .umkm-products,
@@ -614,7 +633,7 @@ main {
 }
 .product-list {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 0.75rem;
 }
 .product-list.empty {
@@ -712,7 +731,6 @@ main {
   font-weight: 600;
   padding: 0.5rem 0.75rem;
   border-radius: 5px;
-  cursor: pointer;
 }
 .product-item .desc .btn-container .edit-btn {
   background-color: var(--green);
@@ -737,7 +755,6 @@ main {
   padding: 0.75rem 0;
   border: 1px solid #ccc;
   border-radius: 50px;
-  cursor: pointer;
   transition: background-color 0.3s ease;
 }
 .button-lihat-produk:hover {
@@ -749,8 +766,7 @@ main {
   align-items: center;
   gap: 0.5rem;
 }
-.search-bar,
-.filter-bar {
+:is(.search-bar, .filter-bar) {
   position: relative;
   display: flex;
 }
@@ -762,8 +778,7 @@ main {
   border: 2px solid var(--warna-utama);
   border-radius: 50px;
 }
-.search-bar button,
-.filter-bar button {
+:is(.search-bar, .filter-bar) button {
   position: absolute;
   top: 50%;
   right: 1.5rem;
@@ -771,10 +786,8 @@ main {
   font-size: 1.25rem;
   border: none;
   transform: translateY(-50%);
-  cursor: pointer;
 }
-.search-bar button i,
-.filter-bar button i {
+:is(.search-bar, .filter-bar) button i {
   color: var(--warna-utama);
 }
 .search-bar {
@@ -876,7 +889,7 @@ main {
   .content
   .desc
   .variants
-  .variant-container::-webkit-scrollbar-thumb:hover {
+  .variants::-webkit-scrollbar-thumb:hover {
   background-color: #555;
 }
 .detail-product .content .desc .variants .variant-container span.active,
@@ -1019,9 +1032,6 @@ main {
 }
 .umkm-info .desc .head span.active {
   background-color: var(--green);
-}
-.umkm-info .desc .body {
-  margin: 1rem 0 2rem 0;
 }
 .umkm-info .desc p {
   font-size: 1.25rem;
@@ -1248,7 +1258,6 @@ main {
   right: 1rem;
   color: var(--red);
   font-size: 2rem;
-  cursor: pointer;
 }
 .popup .popup-content > span {
   display: inline-block;
@@ -1343,7 +1352,6 @@ main {
 .order-info .user-address i,
 .order-info .ordered-products .products-container .product .delivery-option i {
   font-size: 2rem;
-  cursor: pointer;
 }
 .order-info .user-address i {
   color: var(--warna-utama);
@@ -1657,11 +1665,6 @@ main {
 .input-box:nth-child(2) {
   margin: 0.5rem 0;
 }
-.input-box,
-.desc-box,
-:is(.login, .signup) .content form .grid-cols div {
-  gap: 0.25rem;
-}
 :is(.login, .signup) .content form .grid-cols div .helptext {
   font-size: 0.75rem;
 }
@@ -1702,7 +1705,8 @@ main {
 
 /* PROFILE */
 .profile .content .details {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 1fr;
   gap: 1.5rem;
   margin: 0 0 3rem 0;
 }
@@ -1747,15 +1751,16 @@ main {
   font-size: 1.5rem;
   font-weight: 500;
 }
-.profile .content .details .desc .row,
-.umkm-info .desc .body {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
+.profile .content .details .desc span.underline-text,
+.umkm-info .desc span.underline-text {
+  font-size: 1.25rem;
 }
-.profile .content .details .desc .row .col,
-.umkm-info .desc .body .col {
+:is(.profile .content .details, .umkm-info) .desc .col {
   gap: 0.75rem;
+  margin: 0.5rem 0 1.5rem 0;
+}
+.profile .content .details .desc .col .row {
+  gap: 0.5rem;
 }
 .profile .content .details .message-box {
   grid-area: message;
@@ -1790,7 +1795,6 @@ main {
   padding: 0.5rem 0;
   border: 2px solid var(--warna-utama);
   border-radius: 0.5rem;
-  cursor: pointer;
 }
 .profile .content .logout-btn {
   display: flex;
@@ -1835,7 +1839,6 @@ main {
   right: 1rem;
   font-size: 1.5rem;
   color: var(--red);
-  cursor: pointer;
 }
 .profile .content .edit-profile form span {
   color: var(--warna-utama);
@@ -1845,7 +1848,6 @@ main {
 }
 .profile .content .details .img-box {
   position: relative;
-  grid-area: image;
   width: fit-content;
 }
 .profile .content .details .img-box img,
@@ -1854,22 +1856,17 @@ main {
   height: 400px;
   border-radius: 20px;
 }
-:is(.profile .content .edit-profile, :is(.add-product, .edit-product) .content)
-  form
-  .img-box {
+:is(.profile .content .edit-profile, .product-form .content) form .img-box {
   position: relative;
   width: fit-content;
   margin: 0 auto;
 }
-:is(.profile .content .edit-profile, :is(.add-product, .edit-product) .content)
-  form
-  .img-box
-  img {
+:is(.profile .content .edit-profile, .product-form .content) form .img-box img {
   width: 300px;
   height: 300px;
   border-radius: 50%;
 }
-:is(.profile .content .edit-profile, :is(.add-product, .edit-product) .content)
+:is(.profile .content .edit-profile, .product-form .content)
   form
   .img-box
   label {
@@ -1879,17 +1876,14 @@ main {
   width: 100%;
   height: calc(100% - 4.8px);
 }
-:is(.profile .content .edit-profile, :is(.add-product, .edit-product) .content)
+:is(.profile .content .edit-profile, .product-form .content)
   form
   .img-box
   input {
   height: fit-content;
   opacity: 0;
 }
-:is(.profile .content .edit-profile, :is(.add-product, .edit-product) .content)
-  form
-  .img-box
-  i {
+:is(.profile .content .edit-profile, .product-form .content) form .img-box i {
   float: right;
   background-color: var(--warna-utama);
   color: var(--putih);
@@ -1897,7 +1891,7 @@ main {
   padding: 0.75rem;
   border-radius: 50%;
 }
-:is(.profile .content .edit-profile, :is(.add-product, .edit-product) .content)
+:is(.profile .content .edit-profile, .product-form .content)
   form
   .img-box
   label:active
@@ -1939,7 +1933,6 @@ main {
   padding: 0.5rem 0;
   border: none;
   border-radius: 0.5rem;
-  cursor: pointer;
   transition: background-color 0.3s ease;
 }
 .profile .content .my-products .head {
@@ -1964,27 +1957,27 @@ main {
 }
 
 /* UMKM ADD PRODUCTS */
-:is(.add-product, .edit-product) .content h1 {
+.product-form .content h1 {
   text-align: center;
   margin: 1rem 0 3rem 0;
 }
-:is(.add-product, .edit-product) .content form .main-details {
-  display: flex;
-  align-items: flex-start;
+.product-form .content form .main-details {
+  display: grid;
+  grid-template-columns: auto 1fr;
   gap: 1.5rem;
 }
-:is(.add-product, .edit-product) .content form .main-details .img-box {
+.product-form .content form .main-details .img-box {
   margin: 0;
 }
-:is(.add-product, .edit-product) .content form .main-details .img-box img {
+.product-form .content form .main-details .img-box img {
   border-radius: 10px;
 }
-:is(.add-product, .edit-product) .content form .main-details .inputs {
+.product-form .content form .main-details .inputs {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 0.5rem 0.75rem;
 }
-:is(.add-product, .edit-product)
+.product-form
   .content
   form
   .main-details
@@ -1992,56 +1985,56 @@ main {
   :is(.input-box:first-of-type, .desc-box) {
   grid-column: span 2;
 }
-:is(.add-product, .edit-product) .content form .inputs .input-box {
+.product-form .content form .inputs .input-box {
   margin: 0;
 }
-:is(.add-product, .edit-product) .content form .variant-container {
+.product-form .content form .variant-container .head {
+  display: flex;
+  justify-content: space-between;
+}
+.product-form .content form .variants {
   margin: 1rem 0;
 }
-:is(.add-product, .edit-product) .content form .variant-container .head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.product-form .content form .variants h2 {
   margin: 0 0 1.5rem 0;
 }
-:is(.add-product, .edit-product) .content form .variant-container .variant {
+.product-form .content form .variants {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.product-form .content form .variants .variant {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+.product-form .content form .variants .variant .variant-inputs {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 0.75rem;
 }
-:is(.add-product, .edit-product)
-  .content
-  form
-  .variant-container
-  .variant
-  .input-box {
+.product-form .content form .variants .variant .add-variant-btn {
+  background-color: var(--green);
+  border-color: var(--green);
+}
+.product-form .content form .variants .variant .remove-variant-btn {
+  background-color: var(--red);
+  border-color: var(--red);
+}
+.product-form .content form .variants .variant button:hover {
+  color: var(--putih);
+}
+.product-form .content form .variants .variant .input-box {
   margin: 0;
 }
-:is(.add-product, .edit-product)
-  .content
-  form
-  .variant-container
-  .variant
-  .additional-price {
+.product-form .content form .variants .variant .additional-price {
   display: flex;
   flex-direction: row-reverse;
 }
-:is(.add-product, .edit-product)
-  .content
-  form
-  .variant-container
-  .variant
-  .additional-price
-  input {
+.product-form .content form .variants .variant .additional-price input {
   border-radius: 0 5px 5px 0;
 }
-:is(.add-product, .edit-product)
-  .content
-  form
-  .variant-container
-  .variant
-  .additional-price
-  span {
+.product-form .content form .variants .variant .additional-price span {
   display: flex;
   align-items: center;
   background-color: #ccc;
@@ -2051,43 +2044,43 @@ main {
   padding: 0 1rem;
   transition: 0.3s;
 }
-:is(.add-product, .edit-product)
+.product-form
   .content
   form
-  .variant-container
+  .variants
   .variant
   .additional-price
-  input:hover
+  input:not(:disabled):hover
   ~ span {
   background-color: var(--abuabu);
   border: 2px solid var(--abuabu);
 }
-:is(.add-product, .edit-product)
+.product-form
   .content
   form
-  .variant-container
+  .variants
   .variant
   .additional-price
-  input:focus
+  input:not(:disabled):focus
   ~ span {
   background-color: var(--warna-utama);
   border: 2px solid var(--warna-utama);
 }
-:is(.add-product, .edit-product) .content form .desc-box textarea {
+.product-form .content form .desc-box textarea {
   height: 150px;
   resize: none;
 }
-:is(.add-product, .edit-product) .content form .check-box {
+.product-form .content form .check-box {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   margin: 0.5rem 0 1rem 0;
 }
-:is(.add-product, .edit-product) .content form > button {
+.product-form .content form > button {
   width: 100%;
   font-size: 1.5rem;
 }
-:is(.add-product, .edit-product) .content form :is(span, button) {
+.product-form .content form :is(span, button) {
   background-color: var(--warna-utama);
   color: var(--putih);
   font-size: 1.25rem;
@@ -2097,7 +2090,7 @@ main {
   border: 2px solid var(--warna-utama);
   border-radius: 10px;
 }
-:is(.add-product, .edit-product) .content form button:hover {
+.product-form .content form button:hover {
   background-color: var(--putih);
   color: var(--warna-utama);
   transition: 0.3s;

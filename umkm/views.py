@@ -1,11 +1,26 @@
 from django.shortcuts import get_object_or_404, render, redirect
+
+from django.views.generic import CreateView, UpdateView, DeleteView, DetailView
+from django.views.generic.list import ListView
+
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
-from users_db.forms import RegisterForm, ProductForm, ProductVariantFormSet, ProfileUpdateForm
-from users_db.models import CustomUser, Product, Order, Cart
-from django.db.models import Sum
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
+from django.urls import reverse_lazy
+
+from django.forms import inlineformset_factory
+
+from django.db.models import Sum
+from users_db.models import CustomUser, Product, ProductVariant, Order, Cart
+from users_db.forms import RegisterForm, ProductForm, ProductVariantForm, ProductVariantFormSet, ProfileUpdateForm
+
+
+loginSignupPage = [
+  "signup",
+  "login"
+]
 plain_pages = [
   "signup",
   "login",
@@ -16,6 +31,13 @@ plain_pages = [
   "order",
   "cart"
 ]
+ProductVariantFormSet = inlineformset_factory(
+  Product,
+  ProductVariant,
+  form=ProductVariantForm,
+  extra=1,
+  can_delete=True
+)
 
 def loginPage(request):
   page = "login"
@@ -33,7 +55,7 @@ def loginPage(request):
       else:
         messages.error(request, "Username atau password salah.")
 
-    contents = {'page': page, 'plain_page': page in plain_pages} 
+    contents = {'page': page, 'plain_page': page in plain_pages, 'loginSignupPage': page in loginSignupPage} 
     return render(request, './pages/login.html', contents)
 
 def signupPage(request):
@@ -56,7 +78,7 @@ def signupPage(request):
   else:
     form = RegisterForm()
       
-  contents = {'page': page, 'form': form, 'plain_page': page in plain_pages} 
+  contents = {'page': page, 'form': form, 'plain_page': page in plain_pages, 'loginSignupPage': page in loginSignupPage} 
   return render(request, './pages/signup.html', contents)
 
 def logoutUser(request):
@@ -149,63 +171,64 @@ def productDetailPage(request, pk):
   
   return render(request, './pages/product-detail.html', contents)
 
-@login_required(login_url='login')
-def addProduct(request):
-  page = "add_product"
+@login_required(login_url="login")
+def manage_product(request, pk=None):
+  page = "edit_product" if pk else "add_product"
 
-  if not request.user.is_umkm:
-    return redirect('frontpage')
+  product = get_object_or_404(Product, pk=pk, umkm_user_id=request.user) if pk else None
+  form = ProductForm(request.POST or None, request.FILES or None, instance=product)
+  formset = ProductVariantFormSet(request.POST or None, instance=product)
 
-  if request.method == 'POST':
-    product_form = ProductForm(request.POST, request.FILES)
-    formset = ProductVariantFormSet(request.POST)
-
-    if product_form.is_valid() and formset.is_valid():
-      product = product_form.save(commit=False)
-      product.umkm_user_id = request.user   # FIXED
+  if request.method == "POST":
+    if form.is_valid() and formset.is_valid():
+      product = form.save(commit=False)
+      product.umkm_user_id = request.user
       product.save()
 
+      # ✅ Filter out empty variants before saving
       variants = formset.save(commit=False)
       for variant in variants:
-        variant.product = product
-        variant.save()
+        if variant.name or variant.additional_price or variant.stock:
+          variant.product = product
+          variant.save()
 
-      return redirect('profile')
-  else:
-    product_form = ProductForm()
-    formset = ProductVariantFormSet()
+      # delete any marked-for-deletion variants
+      for obj in formset.deleted_objects:
+        obj.delete()
 
-  context = {
-    'page': page,
-    'plain_page': page in plain_pages,
-    'form': product_form,
-    'formset': formset,
-  }
-  return render(request, 'pages/umkm/add-product.html', context)
+      return redirect("profile")
+    else:
+      print("FORM ERRORS:", form.errors)
+      print("FORMSET ERRORS:", formset.errors)
 
-@login_required(login_url = 'login')
-def editProduct(request, pk):
-  page = "edit_product"
+  return render(
+    request,
+    "pages/umkm/product-form.html",
+    {
+      "page": page,
+      "plain_page": page in plain_pages,
+      "form": form,
+      "formset": formset,
+      "product": product,
+    },
+  )
 
+
+@login_required(login_url="login")
+def delete_product(request, pk):
+  page = 'delete_product'
+  
   product = get_object_or_404(Product, pk=pk, umkm_user_id=request.user)
-  form = ProductForm(request.POST or None, request.FILES or None, instance=product)
-  if form.is_valid():
-      form.save()
-      return redirect('profile')
-  contents = {'page': page, 'plain_page': page in plain_pages, 'form': form, 'product':product}
-  return render(request, './pages/umkm/edit-product.html', contents)
-
-@login_required
-def deleteProduct(request, pk):
-  page = "edit_product"
-
-  product = get_object_or_404(Product, pk=pk, umkm_user_id=request.user)
-  if request.method == 'POST':
+  if request.method == "POST":
     product.delete()
-    return redirect('profile')
+    return redirect("profile")
 
-  contents = {'page': page, 'plain_page': page in plain_pages, 'product': product}
-  return render(request, './pages/umkm/delete-product.html', contents)
+  contents = {
+    "page": page,
+    "plain_page": page in plain_pages,
+    "product": product,
+  }
+  return render(request, "pages/umkm/delete-product.html", contents)
 
 def orderPage(request):
   page = "order"
