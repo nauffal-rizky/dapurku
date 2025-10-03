@@ -2,26 +2,45 @@
 
 mummiew - annanendra020422
 
-# Checklist
+# ERROR!
+- Sesuaikan kategori produk pada halaman Products, Detail Product, Profile, dan UMKM Profile.
+- Buat Variant Produk required minimal 1
+- Buat Tambah Produk dapat dilakukan tanpa menambahkan Varian Produk
+- Buat Edit Produk dapat dilakukan tanpa ada error soal ID produk/variant produk
+- 
 
+
+# Screenshot Checklist
+- Sign-Up page ✔
+- Login page ✔
+- Front page ✔
+- About page ✔
+- Products page ✔
+- Contact page ✔
+- User Profile page ✔
+- UMKM Add Product page ✔
+- UMKM Edit Product page ✔
+- UMKM Delete Product page ✔
+
+# Checklist
 - Sign-Up page ✔
 - Login page ✔
 - Front page ✔
 - About page ✔
 - User Profile page ✔
-- UMKM Add Product page
-- UMKM Edit Product page
+- UMKM Edit Product page ✔
 - Product page 
 - Contact page
+- UMKM Add Product page
 -
 
-# To-do list
+# ========== To-do list ========== #
 
 ## UI/UX
 
-1. Buat fitur "Pilih Semua" berjalan pada halaman Cart
-2. Buat fitur "Counter" berjalan pada halaman Cart dan satukan kodenya dengan yang sebelumnya
-3. Buat fitur "Sub Total" berjalan pada halaman Cart dan satukan kodenya dengan yang sebelumnya
+1. Buat fitur "Pilih Semua" berjalan pada halaman Cart ✔
+2. Buat fitur "Counter" berjalan pada halaman Cart dan satukan kodenya dengan yang sebelumnya ✔
+3. Buat fitur "Sub Total" berjalan pada halaman Cart dan satukan kodenya dengan yang sebelumnya ✔
 4. Buat fitur "Ada sekian produk di dalam keranjang anda" berjalan pada halaman Cart
 5. Tambahkan fitur "Hapus product belanjaan" pada halaman Cart
 6. Perbaiki design halaman Cart
@@ -29,9 +48,10 @@ mummiew - annanendra020422
 
 ## System
 
-1. Membuat fitur "Tambah Varian" berjalan dengan lancar di halaman add product
+1. Membuat fitur "Tambah Varian" berjalan dengan lancar di halaman add product 
 2. Membuat fitur "Varian" berjalan dengan lancar di halaman edit product
 3. Tampilkan varian-varian produk sesuai dengan produk di halaman detail product
+4. Buat proses menambahkan ke keranjang saat user click keranjang pada halaman detail product
 
 **=============================================================**
 

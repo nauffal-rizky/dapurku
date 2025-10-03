@@ -28,8 +28,8 @@ plain_pages = [
   "add_product",
   "edit_product",
   "delete_product",
+  "cart",
   "order",
-  "cart"
 ]
 ProductVariantFormSet = inlineformset_factory(
   Product,
@@ -213,7 +213,6 @@ def manage_product(request, pk=None):
     },
   )
 
-
 @login_required(login_url="login")
 def delete_product(request, pk):
   page = 'delete_product'
@@ -239,35 +238,38 @@ def orderPage(request):
 
 @login_required
 def cartPage(request):
+  page = "cart" 
   cart_items = Cart.objects.filter(user=request.user).select_related("product", "variant")
   subtotal = sum(item.total_price for item in cart_items)
 
   context = {
+    'page': page,
+    'plain_page': page in plain_pages,
     "cart_items": cart_items,
     "subtotal": subtotal
   }
-  return render(request, "cart/cartpage.html", context)
+  return render(request, "./pages/cartpage.html", context)
 
-@login_required
-def addToCart(request, product_id, variant_id=None):
-  product = get_object_or_404(Product, id=product_id)
+# @login_required
+# def addToCart(request, product_id, variant_id=None):
+#   product = get_object_or_404(Product, id=product_id)
 
-  variant = None
-  if variant_id:
-    variant = get_object_or_404(ProductVariant, id=variant_id, product=product)
+#   variant = None
+#   if variant_id:
+#     variant = get_object_or_404(ProductVariant, id=variant_id, product=product)
 
-  cart_item, created = Cart.objects.get_or_create(
-    user=request.user,
-    product=product,
-    variant=variant,
-    defaults={"quantity": 1}
-  )
-  if not created:
-    cart_item.quantity += 1
-    cart_item.save()
+#   cart_item, created = Cart.objects.get_or_create(
+#     user=request.user,
+#     product=product,
+#     variant=variant,
+#     defaults={"quantity": 1}
+#   )
+#   if not created:
+#     cart_item.quantity += 1
+#     cart_item.save()
 
-  messages.success(request, f"{product.name} berhasil ditambahkan ke keranjang.")
-  return redirect("cart_page")
+#   messages.success(request, f"{product.name} berhasil ditambahkan ke keranjang.")
+#   return redirect("cart")
 
 def contactPage(request):
   page = "contact"

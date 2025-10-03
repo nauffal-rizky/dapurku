@@ -23,8 +23,8 @@ urlpatterns = [
 
   path('order/', views.orderPage, name = "order"),
   path('cartpage/', views.cartPage, name = "cart"),
-  path("cartpage/add/<int:product_id>/", views.addToCart, name="cartNewProduct"),
-  path("cartpage/add/<int:product_id>/<int:variant_id>/", views.addToCart, name="cartNewVariant"),
+  # path("cartpage/add/<int:product_id>/", views.addToCart, name="cartNewProduct"),
+  # path("cartpage/add/<int:product_id>/<int:variant_id>/", views.addToCart, name="cartNewVariant"),
   path("contact/", views.contactPage, name="contact"),
 ]
 

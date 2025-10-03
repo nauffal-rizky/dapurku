@@ -73,7 +73,9 @@
         </div>
       </div>
 
-      <button type="submit">Tambah Produk</button>
+      <button type="submit">
+        {% if product %}Edit Produk{% else %}Tambah Produk{% endif %}
+      </button>
     </form>
   </article>
 </section>
@@ -99,7 +101,6 @@
           });
       });
 
-      console.log(totalForms, forms);
       totalForms.value = forms.length;
     };
 

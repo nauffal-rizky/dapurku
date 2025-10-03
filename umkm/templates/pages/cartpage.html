@@ -16,7 +16,79 @@
       >
     </div>
     <div class="cart-products">
-      {% for item in cart_items %}
+      <div class="product-info">
+        <label>
+          <input type="checkbox" />
+          <div class="checkbox"><i class="fa-solid fa-check"></i></div>
+        </label>
+        <div class="purchase-details">
+          <img src="/static/logo.png" alt="product_img" />
+          <div class="desc">
+            <span>Produk 1</span>
+            <span>Varian: Varian Produk 1</span>
+            <span>Harga satuan: Rp 1.234.56</span>
+          </div>
+          <div class="stock">
+            <i class="fa-solid fa-circle stocked"></i>
+            <span>Stok: 99</span>
+          </div>
+          <div class="quantity">
+            <button><i class="fa-solid fa-minus"></i></button>
+            <span>3</span>
+            <button><i class="fa-solid fa-plus"></i></button>
+          </div>
+          <span class="total-price">Rp 7.890.12</span>
+        </div>
+      </div>
+      <div class="product-info">
+        <label>
+          <input type="checkbox" />
+          <div class="checkbox"><i class="fa-solid fa-check"></i></div>
+        </label>
+        <div class="purchase-details">
+          <img src="/static/logo.png" alt="product_img" />
+          <div class="desc">
+            <span>Produk 2</span>
+            <span>Varian: Varian Produk 2</span>
+            <span>Harga satuan: Rp 1.234.56</span>
+          </div>
+          <div class="stock">
+            <i class="fa-solid fa-circle almost_run_out"></i>
+            <span>Stok: 99</span>
+          </div>
+          <div class="quantity">
+            <button><i class="fa-solid fa-minus"></i></button>
+            <span>3</span>
+            <button><i class="fa-solid fa-plus"></i></button>
+          </div>
+          <span class="total-price">Rp 7.890.12</span>
+        </div>
+      </div>
+      <div class="product-info">
+        <label>
+          <input type="checkbox" />
+          <div class="checkbox"><i class="fa-solid fa-check"></i></div>
+        </label>
+        <div class="purchase-details">
+          <img src="/static/logo.png" alt="product_img" />
+          <div class="desc">
+            <span>Produk 3</span>
+            <span>Varian: Varian Produk 3</span>
+            <span>Harga satuan: Rp 1.234.56</span>
+          </div>
+          <div class="stock">
+            <i class="fa-solid fa-circle run_out"></i>
+            <span>Stok: 99</span>
+          </div>
+          <div class="quantity">
+            <button><i class="fa-solid fa-minus"></i></button>
+            <span>3</span>
+            <button><i class="fa-solid fa-plus"></i></button>
+          </div>
+          <span class="total-price">Rp 7.890.12</span>
+        </div>
+      </div>
+      {% comment %} {% for item in cart_items %}
       <div class="product-info">
         <label>
           <input type="checkbox" />
@@ -36,7 +108,9 @@
             <span>Stok: {{ item.product.stock }}</span>
           </div>
           <div class="quantity">
+            <button><i class="fa-solid fa-minus"></i></button>
             <span>{{ item.quantity }}</span>
+            <button><i class="fa-solid fa-plus"></i></button>
           </div>
           <span class="total-price"
             >Rp {{ item.total_price|floatformat:0 }}</span
@@ -45,9 +119,8 @@
       </div>
       {% empty %}
       <p>Keranjang belanja Anda kosong.</p>
-      {% endfor %}
+      {% endfor %} {% endcomment %}
     </div>
-
     <div class="checkout">
       <span>Sub Total: Rp {{ subtotal|floatformat:0 }}</span>
       <div class="btn-container">
@@ -55,14 +128,103 @@
         <a href="{% url 'order' %}">Pesan</a>
       </div>
     </div>
-    <div class="checkout">
-      <span>Sub Total: Rp<span class="sub-total">000.000</span></span>
-      <span class="text">Lorem ipsum dolor sit amet.</span>
-      <div class="btn-container">
-        <a href="{% url 'products' %}">Kembali belanja</a>
-        <a href="{% url 'order' %}">Pesan</a>
-      </div>
-    </div>
   </div>
 </section>
+{% endblock %} {% block script %}
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const products = document.querySelectorAll(
+      ".cartpage .content .cart-products .product-info"
+    );
+    const amount = document.querySelector(".cartpage .content .desc .amount");
+    amount.textContent = products.length;
+
+    const selectAllCheckbox = document.querySelector(".select-all input");
+    const itemCheckboxes = document.querySelectorAll(
+      ".product-info label input"
+    );
+
+    selectAllCheckbox.addEventListener("change", () => {
+      itemCheckboxes.forEach((checkbox) => {
+        checkbox.checked = selectAllCheckbox.checked;
+      });
+    });
+
+    itemCheckboxes.forEach((checkbox) => {
+      checkbox.addEventListener("change", () => {
+        if (!checkbox.checked) {
+          selectAllCheckbox.checked = false;
+        } else {
+          const allChecked = Array.from(itemCheckboxes).every(
+            (cb) => cb.checked
+          );
+          selectAllCheckbox.checked = allChecked;
+        }
+      });
+    });
+
+    const minusButtons = document.querySelectorAll(
+      ".quantity button:first-of-type"
+    );
+    const plusButtons = document.querySelectorAll(
+      ".quantity button:last-of-type"
+    );
+    const quantitySpans = document.querySelectorAll(".quantity span");
+    const totalPriceSpans = document.querySelectorAll(".total-price");
+    const unitPriceSpans = document.querySelectorAll(
+      ".purchase-details .desc span:nth-of-type(3)"
+    );
+    const subtotalSpan = document.querySelector(".checkout span");
+
+    const updateSubtotal = () => {
+      let subtotal = 0;
+      totalPriceSpans.forEach((span) => {
+        const priceText = span.textContent
+          .replace("Rp ", "")
+          .replace(/\./g, "");
+        subtotal += parseInt(priceText);
+      });
+      subtotalSpan.textContent = `Sub Total: Rp ${subtotal.toLocaleString(
+        "id-ID"
+      )}`;
+    };
+
+    minusButtons.forEach((button, index) => {
+      button.addEventListener("click", () => {
+        let quantity = parseInt(quantitySpans[index].textContent);
+        if (quantity > 1) {
+          quantity--;
+          quantitySpans[index].textContent = quantity;
+          const unitPriceText = unitPriceSpans[index].textContent
+            .replace("Harga satuan: Rp ", "")
+            .replace(/\./g, "");
+          const unitPrice = parseInt(unitPriceText);
+          const totalPrice = unitPrice * quantity;
+          totalPriceSpans[index].textContent = `Rp ${totalPrice.toLocaleString(
+            "id-ID"
+          )}`;
+          updateSubtotal();
+        }
+      });
+    });
+    plusButtons.forEach((button, index) => {
+      button.addEventListener("click", () => {
+        let quantity = parseInt(quantitySpans[index].textContent);
+        quantity++;
+        quantitySpans[index].textContent = quantity;
+        const unitPriceText = unitPriceSpans[index].textContent
+          .replace("Harga satuan: Rp ", "")
+          .replace(/\./g, "");
+        const unitPrice = parseInt(unitPriceText);
+        const totalPrice = unitPrice * quantity;
+        totalPriceSpans[index].textContent = `Rp ${totalPrice.toLocaleString(
+          "id-ID"
+        )}`;
+        updateSubtotal();
+      });
+    });
+
+    updateSubtotal();
+  });
+</script>
 {% endblock %}

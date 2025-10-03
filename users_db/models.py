@@ -60,6 +60,7 @@ class Product(models.Model):
     total_stock = self.variants.aggregate(total=models.Sum('stock'))['total'] or 0
     self.stock = total_stock
     self.save(update_fields=['stock'])
+
 class ProductVariant(models.Model):
   product = models.ForeignKey(
     Product,
@@ -80,6 +81,7 @@ class ProductVariant(models.Model):
   def delete(self, *args, **kwargs):
     super().delete(*args, **kwargs)
     self.product.update_stock()
+
 class Order(models.Model):
   user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
   product = models.ForeignKey(Product, on_delete=models.CASCADE)
