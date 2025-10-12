@@ -546,7 +546,6 @@ section,
 .connects .informations,
 .cartpage .content .cart-products,
 .cartpage .content .cart-products .product-info .desc,
-.cartpage .content .checkout,
 .product-item .image .overlay,
 .product-item .desc,
 .image-container,
@@ -1213,40 +1212,35 @@ main {
   button:last-of-type {
   color: var(--warna-utama);
 }
-.cartpage .content .checkout {
-  align-items: flex-end;
-  gap: 0.5rem;
-  margin: 1rem 0 0 0;
-}
-.cartpage .content .checkout span:first-of-type {
+.cartpage .content > span {
+  display: block;
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 500;
+  text-align: end;
+  margin: 1rem 0 0.75rem 0;
 }
-.cartpage .content .checkout .text {
-  font-size: 0.75rem;
-  margin: 0 0 1rem 0;
-}
-.cartpage .content .checkout .btn-container {
+.cartpage .content .btn-container {
   display: flex;
+  justify-content: flex-end;
   gap: 1rem;
 }
-.cartpage .content .checkout .btn-container a {
+.cartpage .content .btn-container a {
   font-size: 1.25rem;
   font-weight: 500;
   padding: 0.8rem 1.5rem;
   border-radius: 10px;
 }
-.cartpage .content .checkout .btn-container a:first-of-type {
+.cartpage .content .btn-container a:first-of-type {
   color: var(--warna-utama);
   text-decoration: underline;
 }
-.cartpage .content .checkout .btn-container a:last-of-type {
+.cartpage .content .btn-container a:last-of-type {
   background-color: var(--warna-utama);
   color: var(--putih);
   border: 2px solid var(--warna-utama);
   transition: 0.3s;
 }
-.cartpage .content .checkout .btn-container a:last-of-type:hover {
+.cartpage .content .btn-container a:last-of-type:hover {
   background-color: transparent;
   color: var(--warna-utama);
 }

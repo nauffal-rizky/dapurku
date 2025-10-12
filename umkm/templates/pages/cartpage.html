@@ -37,7 +37,7 @@
             <span>3</span>
             <button><i class="fa-solid fa-plus"></i></button>
           </div>
-          <span class="total-price">Rp 7.890.12</span>
+          <span class="total-price">Rp 7.890</span>
         </div>
       </div>
       <div class="product-info">
@@ -61,7 +61,7 @@
             <span>3</span>
             <button><i class="fa-solid fa-plus"></i></button>
           </div>
-          <span class="total-price">Rp 7.890.12</span>
+          <span class="total-price">Rp 7.890</span>
         </div>
       </div>
       <div class="product-info">
@@ -85,10 +85,10 @@
             <span>3</span>
             <button><i class="fa-solid fa-plus"></i></button>
           </div>
-          <span class="total-price">Rp 7.890.12</span>
+          <span class="total-price">Rp 7.890</span>
         </div>
       </div>
-      {% comment %} {% for item in cart_items %}
+      {% comment %} {% for item in cart_items %} --BARU--
       <div class="product-info">
         <label>
           <input type="checkbox" />
@@ -121,12 +121,10 @@
       <p>Keranjang belanja Anda kosong.</p>
       {% endfor %} {% endcomment %}
     </div>
-    <div class="checkout">
-      <span>Sub Total: Rp {{ subtotal|floatformat:0 }}</span>
-      <div class="btn-container">
-        <a href="{% url 'products' %}">Kembali belanja</a>
-        <a href="{% url 'order' %}">Pesan</a>
-      </div>
+    <span>Sub Total: <span class="subtotal underline-text">0</span></span>
+    <div class="btn-container">
+      <a href="{% url 'products' %}">Kembali belanja</a>
+      <a href="{% url 'order' %}">Pesan</a>
     </div>
   </div>
 </section>
@@ -174,7 +172,7 @@
     const unitPriceSpans = document.querySelectorAll(
       ".purchase-details .desc span:nth-of-type(3)"
     );
-    const subtotalSpan = document.querySelector(".checkout span");
+    const subtotalSpan = document.querySelector(".subtotal");
 
     const updateSubtotal = () => {
       let subtotal = 0;
@@ -184,9 +182,7 @@
           .replace(/\./g, "");
         subtotal += parseInt(priceText);
       });
-      subtotalSpan.textContent = `Sub Total: Rp ${subtotal.toLocaleString(
-        "id-ID"
-      )}`;
+      subtotalSpan.textContent = `Rp${subtotal.toLocaleString("id-ID")}`;
     };
 
     minusButtons.forEach((button, index) => {

@@ -21,6 +21,11 @@ mummiew - annanendra020422
 - UMKM Add Product page ✔
 - UMKM Edit Product page ✔
 - UMKM Delete Product page ✔
+- Cart Page ✔
+- Order page ✔
+- UMKM Profile & Product Analytic per Product in Product
+- UMKM Profile & Product Analytic All Product in User Profile Page
+- Payment Gateway (OTP/Code)
 
 # Checklist
 - Sign-Up page ✔
@@ -32,11 +37,13 @@ mummiew - annanendra020422
 - Product page 
 - Contact page
 - UMKM Add Product page
--
+- Cart Page
+- Order page
+- UMKM Profile & Product Analytic per Product in Product
+- UMKM Profile & Product Analytic All Product in User Profile Page
+- Payment Gateway (OTP/Code)
 
-# ========== To-do list ========== #
-
-## UI/UX
+# ========== To-do list___UI/UX ========== #
 
 1. Buat fitur "Pilih Semua" berjalan pada halaman Cart ✔
 2. Buat fitur "Counter" berjalan pada halaman Cart dan satukan kodenya dengan yang sebelumnya ✔
@@ -46,7 +53,7 @@ mummiew - annanendra020422
 6. Perbaiki design halaman Cart
 7. Perbaiki tampilan profil user
 
-## System
+# ========== To-do list___System ========== #
 
 1. Membuat fitur "Tambah Varian" berjalan dengan lancar di halaman add product 
 2. Membuat fitur "Varian" berjalan dengan lancar di halaman edit product
