@@ -1,127 +1,137 @@
-{% extends '../layout/base.html' %} {% block content %}
+{% extends '../layout/base.html' %} {% load static %} {% block content %}
 <section class="detail-product">
   <div class="content">
-    <a href="{% url 'products' %}" class="back-btn"
-      ><i class="fa-solid fa-arrow-left"></i>Kembali ke halaman produk</a
-    >
+    <a href="{% url 'products' %}" class="back-btn">
+      <i class="fa-solid fa-arrow-left"></i>Kembali ke halaman produk
+    </a>
+
     <div class="detail-content">
       <div class="product-information">
         <div class="image-container">
-          {% if form.instance.image %}
-          <img src="{{ form.instance.image.url }}" alt="product-img" />
+          {% if product.image %}
+          <img src="{{ product.image.url }}" alt="{{ product.name }}" />
           {% else %}
-          <img src="/static/1.jpg" alt="default-img" />
+          <img src="{% static '1.jpg' %}" alt="default image" />
           {% endif %}
+
           <div class="overlays">
-            <img
-              class="active"
-              src="{{ product.image.url }}"
-              alt="{{ product.name }}"
-            />
-            {% if form.image.value %}
-            <img src="{{ form.image.value.url }}" alt="product-img" />
+            {% for i in "123456" %} {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" />
             {% else %}
-            <img src="/static/1.jpg" alt="product-img" />
-            {% endif %} {% if form.image.value %}
-            <img src="{{ form.image.value.url }}" alt="product-img" />
-            {% else %}
-            <img src="/static/1.jpg" alt="product-img" />
-            {% endif %} {% if form.image.value %}
-            <img src="{{ form.image.value.url }}" alt="product-img" />
-            {% else %}
-            <img src="/static/1.jpg" alt="product-img" />
-            {% endif %} {% if form.image.value %}
-            <img src="{{ form.image.value.url }}" alt="product-img" />
-            {% else %}
-            <img src="/static/1.jpg" alt="product-img" />
-            {% endif %} {% if form.image.value %}
-            <img src="{{ form.image.value.url }}" alt="product-img" />
-            {% else %}
-            <img src="/static/1.jpg" alt="product-img" />
-            {% endif %}
+            <img src="{% static '1.jpg' %}" alt="default image" />
+            {% endif %} {% endfor %}
           </div>
         </div>
         <div class="desc">
           <div class="head">
-            <span
-              >{{ product.name }} |
-              <a href="{% url 'umkm_profile' product.umkm_user_id.id %}"
-                >{{ product.umkm_user_id.username }}</a
-              ></span
-            >
+            <span>
+              {{ product.name }} |
+              <a href="{% url 'umkm_profile' product.umkm_user_id.id %}">
+                {{ product.umkm_user_id.username }}
+              </a>
+            </span>
+
             <p>
-              Terjual <span>250+</span> | <i class="fa-solid fa-star"></i>
+              Terjual <span>{{ soldProducts.stock }}</span> |
+              <i class="fa-solid fa-star"></i>
               <span>5</span><span>(166 Rating)</span>
             </p>
           </div>
           <span class="category"
-            >Category: <span>{{ product.category }}</span></span
+            >Kategori: <span>{{ product.category }}</span></span
           >
           <span class="price">Rp{{ product.price }}</span>
+
           <div class="line"></div>
+
+          <!-- === VARIANTS === -->
+          {% if product.variants.exists %}
           <div class="variants">
-            <span>Pilih varian produk: <span>Pedas</span></span>
+            <span
+              >Pilih varian produk:
+              <span class="underline-text">{{ product.variants.first.name }}</span></span
+            >
             <div class="variant-container">
-              <span>Batagor1</span>
-              <span class="active">Batagor2</span>
-              <span>Batagor3</span>
-              <span>Batagor4</span>
-              <span>Batagor5</span>
+              {% for variant in product.variants.all %}
+              <span class="{% if forloop.first %}active{% endif %}"
+                >{{ variant.name }}</span
+              >
+              {% endfor %}
             </div>
           </div>
+          {% endif %}
+
           <p class="description">{{ product.description }}</p>
         </div>
         <div class="checkout">
           <span>Atur jumlah dan catatan</span>
-          <p>Batagor 1</p>
+          <p>{{ product.name }}</p>
+
           <div class="line"></div>
+
           <div class="product-amount">
             <div class="counter">
-              <button class="decrease-btn">-</button>
+              <button type="button" class="decrease-btn">-</button>
               <input type="text" maxlength="3" value="0" required />
-              <button class="increase-btn">+</button>
+              <button type="button" class="increase-btn">+</button>
             </div>
             <span class="stock">
-              Stok:
-              <span>Sisa {{ product.stock }}</span>
+              Stok: <span>Sisa {{ product.stock }}</span>
             </span>
           </div>
+
           <div class="total">
-            <span>Subtotal</span>
+            <span class="subTotal">Subtotal</span>
             <span>Rp0</span>
           </div>
-          <div class="btns">
-            <a href="{% url 'order' %}">Beli</a>
-            <a href="{% url 'cart' %}" class="active">+ Keranjang</a>
-          </div>
-          <div class="tab-container">
-            <span><i class="fa-regular fa-comment-dots"></i>Chat</span>
-            <span><i class="fa-solid fa-share-nodes"></i>Share</span>
+
+          <form method="POST" action="{% url 'add_to_cart' product.id %}">
+            {% csrf_token %}
+
+            <!-- hidden variant (kalau ada) -->
+            {% if product.variants.exists %}
+            <input
+              type="hidden"
+              name="variant_id"
+              id="variant_id"
+              value="{{ product.variants.first.id }}"
+            />
+            {% endif %}
+
+            <!-- hidden quantity -->
+            <input type="hidden" name="quantity" id="quantity" value="1" />
+
+            <div class="btns">
+              <button type="submit" class="active">+ Keranjang</button>
+              <a href="{% url 'order' %}">Beli</a>
+            </div>
+          </form>
           </div>
         </div>
       </div>
+
       <div class="umkm-products">
         <h2 class="underline-text">
           Produk {{ product.umkm_user_id.username }}
         </h2>
         <div class="product-list">
-          {% for product in umkmProducts %}
-          <a href="{% url 'product_detail' product.pk %}" class="product-item">
-            <span class="category {{ product.category }}"
-              >{{ product.category }}</span
+          {% for item in umkmProducts %}
+          <a href="{% url 'product_detail' item.pk %}" class="product-item">
+            <span class="category {{ item.category }}"
+              >{{ item.category }}</span
             >
             <div class="image">
-              {% if form.image.value %}
-              <img src="{{ form.image.value.url }}" alt="product-img" />
+              {% if item.image %}
+              <img src="{{ item.image.url }}" alt="{{ item.name }}" />
               {% else %}
-              <img src="/static/1.jpg" alt="product-img" />
+              <img src="{% static '1.jpg' %}" alt="default image" />
               {% endif %}
-              <div class="overlay">{{ product.description }}</div>
+              <div class="overlay">{{ item.description }}</div>
             </div>
             <div class="desc">
-              <span class="nama">{{ product.name }}</span>
-              <span class="harga">Rp{{ product.price }}</span>
-              <p>{{ product.umkm_user_id.username }}</p>
+              <span class="nama">{{ item.name }}</span>
+              <span class="harga">Rp{{ item.price }}</span>
+              <p>{{ item.umkm_user_id.username }}</p>
               <span><i class="fa-solid fa-star"></i> 5 | 100+ terjual</span>
             </div>
           </a>
@@ -130,26 +140,27 @@
           {% endfor %}
         </div>
       </div>
+
       <div class="other-products">
         <h2 class="underline-text">Produk Lainnya</h2>
         <div class="product-list">
-          {% for product in otherProducts %}
-          <a href="{% url 'product_detail' product.pk %}" class="product-item">
-            <span class="category {{ product.category }}"
-              >{{ product.category }}</span
+          {% for item in otherProducts %}
+          <a href="{% url 'product_detail' item.pk %}" class="product-item">
+            <span class="category {{ item.category }}"
+              >{{ item.category }}</span
             >
             <div class="image">
-              {% if form.image.value %}
-              <img src="{{ form.image.value.url }}" alt="product-img" />
+              {% if item.image %}
+              <img src="{{ item.image.url }}" alt="{{ item.name }}" />
               {% else %}
-              <img src="/static/1.jpg" alt="product-img" />
+              <img src="{% static '1.jpg' %}" alt="default image" />
               {% endif %}
-              <div class="overlay">{{ product.description }}</div>
+              <div class="overlay">{{ item.description }}</div>
             </div>
             <div class="desc">
-              <span class="nama">{{ product.name }}</span>
-              <span class="harga">Rp{{ product.price }}</span>
-              <p>{{ product.umkm_user_id.username }}</p>
+              <span class="nama">{{ item.name }}</span>
+              <span class="harga">Rp{{ item.price }}</span>
+              <p>{{ item.umkm_user_id.username }}</p>
               <span><i class="fa-solid fa-star"></i> 5 | 100+ terjual</span>
             </div>
           </a>
@@ -164,9 +175,8 @@
 {% endblock %} {% block script %}
 <script>
   document.addEventListener("DOMContentLoaded", () => {
-    /* IMG THUMB */
     const overlays = document.querySelectorAll(".overlays img");
-    const activeImage = document.querySelector(".overlays .active");
+    const activeImage = document.querySelector(".image-container > img");
 
     overlays.forEach((overlay) => {
       overlay.addEventListener("click", () => {
@@ -177,93 +187,85 @@
       });
     });
 
-    /* VARIANTS */
     const variantContainer = document.querySelector(".variant-container");
-    const lblVariant =
-      variantContainer.previousElementSibling.querySelector("span");
-    let activeVariantValue = variantContainer
-      .querySelector(".active")
-      .textContent.trim();
-    lblVariant.textContent = activeVariantValue;
+    if (variantContainer) {
+      const lblVariant =
+        variantContainer.previousElementSibling.querySelector("span");
+      let activeVariantValue =
+        variantContainer.querySelector(".active")?.textContent.trim() || "";
+      lblVariant.textContent = activeVariantValue;
 
-    const variants = variantContainer.querySelectorAll("span");
-    variants.forEach((variant) => {
-      variant.addEventListener("click", () => {
-        variants.forEach((v) => v.classList.remove("active"));
-        variant.classList.add("active");
-
-        activeVariantValue = variantContainer
-          .querySelector(".active")
-          .textContent.trim();
-        lblVariant.textContent = activeVariantValue;
+      variantContainer.querySelectorAll("span").forEach((variant) => {
+        variant.addEventListener("click", () => {
+          variantContainer
+            .querySelectorAll("span")
+            .forEach((v) => v.classList.remove("active"));
+          variant.classList.add("active");
+          lblVariant.textContent = variant.textContent.trim();
+        });
       });
-    });
+    }
 
-    /* COUNTER */
     const price = document.querySelector(".price");
+    const subTotal = document.querySelector('.subTotal')
     const counterInput = document.querySelector(".counter input");
     const increaseBtn = document.querySelector(".increase-btn");
     const decreaseBtn = document.querySelector(".decrease-btn");
+
     const product = {
       price: price.textContent,
-      stock: parseInt(
-        document
-          .querySelector(".stock span:last-child")
-          .textContent.replace("Sisa ", "")
-      ),
+      stock:
+        parseInt(
+          document
+            .querySelector(".stock span:last-child")
+            .textContent.replace("Sisa ", "")
+        ) || 0,
     };
 
     const updateTotal = () => {
       const total = document.querySelector(".total span:last-child");
-      const quantity = parseInt(counterInput.value);
-      if (isNaN(quantity) || quantity < 0) {
-        total.textContent = "Rp0";
-        return;
-      }
-
+      const quantity = parseInt(counterInput.value) || 0;
       const priceValue = parseInt(
         product.price.replace("Rp", "").replace(/\./g, "")
       );
-      total.textContent = `Rp${(quantity * priceValue).toLocaleString(
-        "id-ID"
-      )}`;
+      total.textContent =
+        quantity > 0
+          ? `Rp${(quantity * priceValue).toLocaleString("id-ID")}`
+          : "Rp0";
     };
 
     counterInput.addEventListener("input", () => {
       counterInput.value = counterInput.value.replace(/\D/g, "");
-      let value = parseInt(counterInput.value);
-
-      if (value < 0) {
-        counterInput.value = 0;
-      } else if (value > product.stock) {
-        counterInput.value = product.stock;
-      }
+      let value = parseInt(counterInput.value) || 0;
+      if (value > product.stock) counterInput.value = product.stock;
       updateTotal();
     });
+
     increaseBtn.addEventListener("click", () => {
-      let currentValue = parseInt(counterInput.value);
-      if (isNaN(currentValue)) currentValue = 0;
-
-      if (currentValue < product.stock) {
-        counterInput.value = currentValue + 1;
-        updateTotal();
-      }
+      let value = parseInt(counterInput.value) || 0;
+      if (value < product.stock) counterInput.value = value + 1;
+      updateTotal();
     });
+
     decreaseBtn.addEventListener("click", () => {
-      if (counterInput.value == "") counterInput.value = "0";
-      let currentValue = parseInt(counterInput.value);
-
-      if (currentValue > 0) {
-        counterInput.value = currentValue - 1;
-        updateTotal();
-      }
+      let value = parseInt(counterInput.value) || 0;
+      if (value > 0) counterInput.value = value - 1;
+      updateTotal();
     });
 
-    /* PRICE */
-    price.textContent = `Rp${parseInt(
+    const form = document.querySelector('form[action*="add_to_cart"]');
+    const quantityField = document.querySelector('input[name="quantity"]');
+
+    if (form && quantityField && counterInput) {
+      form.addEventListener("submit", () => {
+        quantityField.value = counterInput.value || 1;
+      });
+    }
+
+    const formattedPrice = parseInt(
       price.textContent.replace("Rp", "").replace(".00", "")
-    ).toLocaleString("id-ID")}`;
-    price.textContent = price.textContent.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    ).toLocaleString("id-ID");
+    price.textContent = `Rp${formattedPrice}`;
   });
 </script>
 {% endblock %}

@@ -3,8 +3,8 @@
 mummiew - annanendra020422
 
 # ERROR!
-- Sesuaikan kategori produk pada halaman Products, Detail Product, Profile, dan UMKM Profile.
-- Buat Variant Produk required minimal 1
+- Buat Pop-up message untuk setiap error/pesan!
+- Buat UMKM hanya bisa membeli produk UMKM lain, bukan miliknya sendiri
 - Buat Tambah Produk dapat dilakukan tanpa menambahkan Varian Produk
 - Buat Edit Produk dapat dilakukan tanpa ada error soal ID produk/variant produk
 - 
@@ -21,10 +21,10 @@ mummiew - annanendra020422
 - UMKM Add Product page ✔
 - UMKM Edit Product page ✔
 - UMKM Delete Product page ✔
-- Cart Page ✔
-- Order page ✔
-- UMKM Profile & Product Analytic per Product in Product
-- UMKM Profile & Product Analytic All Product in User Profile Page
+- Cart Page 
+- Order page 
+- UMKM Profile & Product Analytic per Product in Product 
+- UMKM Profile & Product Analytic All Product in User Profile Page 
 - Payment Gateway (OTP/Code)
 
 # Checklist
@@ -34,13 +34,13 @@ mummiew - annanendra020422
 - About page ✔
 - User Profile page ✔
 - UMKM Edit Product page ✔
-- Product page 
-- Contact page
-- UMKM Add Product page
-- Cart Page
-- Order page
-- UMKM Profile & Product Analytic per Product in Product
-- UMKM Profile & Product Analytic All Product in User Profile Page
+- Product page ✔
+- Contact page ✔
+- UMKM Add Product page ✔
+- Cart Page ✔
+- Order page ✔
+- UMKM Profile & Product Analytic per Product in Product ✔
+- UMKM Profile & Product Analytic All Product in User Profile Page ✔
 - Payment Gateway (OTP/Code)
 
 # ========== To-do list___UI/UX ========== #

@@ -16,11 +16,11 @@
       </div>
       <div class="filter-bar">
         <select id="category" name="category">
-          <option value="semua">Semua</option>
-          <option value="makanan kering">Makanan Kering</option>
-          <option value="makanan basah">Makanan Basah</option>
-          <option value="manis">Manis</option>
-          <option value="basah">Basah</option>
+          <option value="makanan">Makanan</option>
+          <option value="minuman">Minuman</option>
+          <option value="camilan">Camilan</option>
+          <option value="lainnya">Lainnya</option>
+          {% comment %} {% endcomment %}
         </select>
         <button type="submit">
           <i class="fa-solid fa-sliders"></i>
@@ -53,6 +53,8 @@
             </span>
           </div>
         </a>
+        {% empty %}
+        <p class="no-products">Belum ada produk yang tersedia.</p>
         {% endfor %}
         <p class="no-products hidden">Tidak ada produk yang tersedia.</p>
       </div>

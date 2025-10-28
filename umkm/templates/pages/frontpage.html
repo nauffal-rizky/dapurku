@@ -17,7 +17,6 @@
 <section class="products">
   <h1 class="judul">Produk Kami</h1>
   <div class="content">
-    {% if fourLatestProducts %}
     <div class="product-list">
       {% for product in fourLatestProducts %}
       <a href="{% url 'product_detail' product.pk %}" class="product-item">
@@ -28,7 +27,7 @@
           {% if product.image %}
           <img src="{{ product.image.url }}" alt="{{ product.name }}" />
           {% else %}
-          <img src="/static/default_product.png" alt="No image available" />
+          <img src="/static/1.jpg" alt="No image available" />
           {% endif %}
 
           <div class="overlay">{{ product.description }}</div>
@@ -40,11 +39,10 @@
           <span><i class="fa-solid fa-star"></i> 5 | 100+ terjual</span>
         </div>
       </a>
+      {% empty %}
+      <p class="no-products">Belum ada produk yang tersedia.</p>
       {% endfor %}
     </div>
-    {% else %} {% for message in messages %}
-    <p class="no-products">{{ message }}</p>
-    {% endfor %} {% endif %}
     <a href="/products" class="button-lihat-produk">Lihat Semua Produk</a>
   </div>
 </section>

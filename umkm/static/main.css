@@ -66,6 +66,9 @@ select:not(:disabled):focus,
 textarea:not(:disabled):focus {
   border: 2px solid var(--warna-utama);
 }
+textarea {
+  resize: vertical;
+}
 
 button,
 a,
@@ -201,6 +204,12 @@ section {
 
 .no-products {
   grid-column: span 4;
+  background-color: var(--red);
+  color: var(--putih);
+  font: 600 1.5rem var(--font-utama), sans-serif;
+  text-align: center;
+  padding: 2rem;
+  border-radius: 15px;
 }
 
 /* HEADER /n*/
@@ -550,8 +559,8 @@ section,
 .product-item .desc,
 .image-container,
 .connects .desc,
-.profile .content .edit-profile form,
-.profile .content .edit-profile form .input-box,
+/* .profile .content .edit-profile form,
+.profile .content .edit-profile form .input-box, */
 footer,
 .contact-form,
 .umkm-products,
@@ -630,9 +639,12 @@ main {
   gap: 2rem;
   width: 100%;
 }
+.umkm-products {
+  margin: 3rem 0;
+}
 .product-list {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: 1fr 1fr 1fr 1fr;
   gap: 0.75rem;
 }
 .product-list.empty {
@@ -841,7 +853,7 @@ main {
   color: #ffde21;
 }
 .detail-product .content .desc .category {
-  margin: 0.5rem 0 0 0;
+  margin: 0.5rem 0;
 }
 .detail-product .content .desc .category span {
   color: var(--warna-utama);
@@ -851,26 +863,24 @@ main {
 .detail-product .content .desc .price {
   font-size: 1.75rem;
   font-weight: 700;
-  margin: 0.25rem 0 0.75rem 0;
 }
 .detail-product .content .desc .line {
   width: 100%;
   height: 2px;
   background-color: #ccc;
+  margin: 0.75rem 0;
 }
 .detail-product .content .desc .variants > span {
   display: block;
   font-weight: 600;
-  margin: 0.5rem 0;
 }
 .detail-product .content .desc .variants > span span {
   font-weight: 400;
 }
 .detail-product .content .desc .variants .variant-container {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  display: flex;
   gap: 0.3rem;
-  padding: 0 0 0.5rem 0;
+  padding: 1rem 0 0.5rem 0;
   overflow-x: scroll;
 }
 .detail-product .content .desc .variants .variant-container::-webkit-scrollbar {
@@ -896,7 +906,7 @@ main {
   color: var(--warna-utama);
 }
 .detail-product .content .desc .variants .variant-container span {
-  font-size: 1.1rem;
+  font-size: 0.75rem;
   border: 2px solid #ccc;
   border-radius: 0.5rem;
   padding: 0.5rem 1rem;
@@ -904,6 +914,8 @@ main {
 }
 .detail-product .content .desc .variants .variant-container span.active {
   background-color: rgba(128, 0, 0, 0.1);
+  font-weight: 600;
+  font-family: var(--font-utama), sans-serif;
   border: 2px solid var(--warna-utama);
 }
 .detail-product .content .desc .description {
@@ -969,7 +981,7 @@ main {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 0.75rem 0;
+  margin: 1rem 0 0.75rem 0;
 }
 .detail-product .content .checkout .total span:last-of-type {
   font-size: 1.1rem;
@@ -981,7 +993,7 @@ main {
   align-items: center;
   gap: 0.3rem;
 }
-.detail-product .content .checkout .btns a {
+.detail-product .content .checkout .btns :is(button, a) {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -992,7 +1004,7 @@ main {
   border: 2px solid var(--warna-utama);
   border-radius: 0.5rem;
 }
-.detail-product .content .checkout .btns a.active {
+.detail-product .content .checkout .btns button.active {
   background-color: var(--warna-utama);
   color: var(--putih);
 }
@@ -1075,6 +1087,19 @@ main {
 .cartpage .content > .desc label input:checked ~ .checkbox {
   background-color: var(--putih);
   color: var(--warna-utama);
+}
+.cartpage .content .spanBtn {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 1rem 0 0 0;
+}
+.cartpage .content .spanBtn > span {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+.cartpage .content .spanBtn > span span {
+  font-weight: 500;
 }
 .cartpage .content .cart-products {
   gap: 0.3rem;
@@ -1214,33 +1239,36 @@ main {
 }
 .cartpage .content > span {
   display: block;
-  font-size: 1rem;
-  font-weight: 500;
+  font-size: 1.25rem;
+  font-weight: 600;
   text-align: end;
-  margin: 1rem 0 0.75rem 0;
+  margin: 1rem 0;
+}
+.cartpage .content > span span {
+  font-weight: 500;
 }
 .cartpage .content .btn-container {
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
 }
-.cartpage .content .btn-container a {
+.cartpage .content .btn-container :is(a, form button) {
   font-size: 1.25rem;
   font-weight: 500;
   padding: 0.8rem 1.5rem;
   border-radius: 10px;
 }
-.cartpage .content .btn-container a:first-of-type {
+.cartpage .content .btn-container a {
   color: var(--warna-utama);
   text-decoration: underline;
 }
-.cartpage .content .btn-container a:last-of-type {
+.cartpage .content .btn-container form button {
   background-color: var(--warna-utama);
   color: var(--putih);
   border: 2px solid var(--warna-utama);
   transition: 0.3s;
 }
-.cartpage .content .btn-container a:last-of-type:hover {
+.cartpage .content .btn-container form button:hover {
   background-color: transparent;
   color: var(--warna-utama);
 }
@@ -1838,16 +1866,17 @@ main {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
   z-index: 3;
 }
 .profile .content .edit-profile form {
   position: relative;
+  width: 900px;
   background-color: var(--putih);
   padding: 1.5rem 2rem;
   border-radius: 1rem;
@@ -1877,7 +1906,6 @@ main {
 }
 :is(.profile .content .edit-profile, .product-form .content) form .img-box {
   position: relative;
-  width: fit-content;
   margin: 0 auto;
 }
 :is(.profile .content .edit-profile, .product-form .content) form .img-box img {
@@ -1918,13 +1946,6 @@ main {
   background-color: var(--putih);
   color: var(--warna-utama);
 }
-
-.profile .content .edit-profile form .input-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.5rem;
-  margin: 0.5rem 0 1rem 0;
-}
 .profile .content .edit-profile form .input-box {
   position: relative;
   gap: 0.5rem;
@@ -1945,6 +1966,7 @@ main {
   font-size: 1.25rem;
 }
 .profile .content .edit-profile form button {
+  width: 100%;
   background-color: var(--warna-utama);
   color: var(--putih);
   font-size: 1.25rem;
@@ -1972,7 +1994,37 @@ main {
 .profile .content .my-products .head a:hover {
   background-color: var(--putih);
   color: var(--warna-utama);
+  border: 2px solid var(--warna-utama);
   transition: 0.3s;
+}
+.profile .content .dashboard {
+  background: #f9f9f9;
+  margin: 1.5rem 0 0 0;
+  padding: 4.5rem 3rem 3rem 3rem;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+.profile .content .dashboard .metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.profile .content .dashboard .metrics .metric-card {
+  flex: 1 1 200px;
+  background: white;
+  border-radius: 12px;
+  padding: 1rem;
+  text-align: center;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+.profile .content .dashboard .metrics .metric-card h3 {
+  color: #555;
+  font-size: 1rem;
+}
+.profile .content .dashboard .metrics .metric-card p {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #222;
 }
 
 /* UMKM PRODUCTS FORM */
@@ -1980,16 +2032,24 @@ main {
   text-align: center;
   margin: 1rem 0 3rem 0;
 }
-.product-form .content form .main-details {
+.edit-profile form .main-details {
+  margin: 1.5rem 0 1rem 0;
+}
+:is(.edit-profile, .product-form .content) form .main-details {
   display: grid;
   grid-template-columns: auto 1fr;
   gap: 1.5rem;
 }
-.product-form .content form .main-details .img-box {
+:is(.edit-profile, .product-form .content) form .main-details .img-box {
   margin: 0;
 }
-.product-form .content form .main-details .img-box img {
+:is(.edit-profile, .product-form .content) form .main-details .img-box img {
   border-radius: 10px;
+}
+.edit-profile form .main-details .inputs .input-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem 0.75rem;
 }
 .product-form .content form .main-details .inputs {
   display: grid;
@@ -2109,7 +2169,7 @@ main {
   border: 2px solid var(--warna-utama);
   border-radius: 10px;
 }
-.product-form .content form button:hover {
+:is(.edit-profile, .product-form .content) form button:hover {
   background-color: var(--putih);
   color: var(--warna-utama);
   transition: 0.3s;

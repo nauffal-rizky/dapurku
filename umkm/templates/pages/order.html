@@ -1,194 +1,48 @@
 {% extends '../layout/base.html' %} {% block content %}
 <section class="order">
   <article class="content">
-    <a href="{% url 'products' %}" class="back-btn"
-      ><i class="fa-solid fa-arrow-left"></i>Kembali ke halaman produk</a
-    >
-    <div class="popup">
-      <div class="popup-content"></div>
-    </div>
+    <a href="{% url 'products' %}" class="back-btn">
+      <i class="fa-solid fa-arrow-left"></i> Kembali ke halaman produk
+    </a>
+
+    {% for order in orders %}
     <div class="order-info">
-      <a class="user-address">
-        <div class="address">
-          <span>{{ user.username }}</span>
-          <span>Alamat Pengiriman:</span>
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Aut, saepe.
-            Ex quidem suscipit quas, exercitationem excepturi soluta amet sequi
-            nesciunt aliquid autem quia modi porro doloremque earum et saepe,
-            optio debitis quam ab consectetur vero?
-          </p>
-        </div>
-        <i class="fa-solid fa-chevron-right"></i>
-      </a>
-      <div class="ordered-products">
-        <h2 class="underline-text">Ringkasan Pesanan</h2>
-        <div class="products-container">
-          <div class="product">
-            <div class="head">
-              <a href="">Nama UMKM</a>
-              <div class="info">
-                <a href="">
-                  <img src="/static/1.jpg" alt="" />
-                </a>
-                <div class="desc">
-                  <a href="">Nama Produk</a>
-                  <span>Nama Produk dan Varian Produk</span>
-                  <div class="price-counter">
-                    <div class="price">
-                      <p>Rp50.000</p>
-                      <div class="discount">
-                        <p>Rp100.000</p>
-                        <span class="percent">-50%</span>
-                      </div>
-                    </div>
-                    <div class="counter">
-                      <button class="decrease-btn">-</button>
-                      <input type="text" maxlength="3" value="0" required />
-                      <button class="increase-btn">+</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
+      <h2>Pesanan #{{ order.id }} — {{ order.status }}</h2>
+      <p><small>{{ order.created_at|date:"d M Y, H:i" }}</small></p>
+
+      <div class="products">
+        {% for item in order.items.all %}
+        <div class="product">
+          <div class="info">
+            {% if item.product.image %}
+            <img
+              src="{{ item.product.image.url }}"
+              alt="{{ item.product.name }}"
+            />
+            {% else %}
+            <img src="/static/1.jpg" alt="default image" />
+            {% endif %}
+            <div class="desc">
+              <span>{{ item.product.name }}</span>
+              {% if item.variant %}
+              <span>Varian: {{ item.variant.name }}</span>
+              {% endif %}
+              <span>Jumlah: {{ item.quantity }}</span>
+              <span>Harga: Rp {{ item.price|floatformat:0 }}</span>
+              <span>Total: Rp {{ item.get_total|floatformat:0 }}</span>
             </div>
-            <a class="delivery-option">
-              <div class="delivery-info">
-                <span>Waktu sampai: <span>99, Klopember 6969</span></span>
-                <span>Biaya Pengiriman: <span>Rp15.000</span></span>
-              </div>
-              <i class="fa-solid fa-chevron-right"></i>
-            </a>
-          </div>
-          <div class="product">
-            <div class="head">
-              <a href="">Nama UMKM</a>
-              <div class="info">
-                <a href="">
-                  <img src="/static/1.jpg" alt="" />
-                </a>
-                <div class="desc">
-                  <a href="">Nama Produk</a>
-                  <span>Nama Produk dan Varian Produk</span>
-                  <div class="price-counter">
-                    <div class="price">
-                      <p>Rp50.000</p>
-                      <div class="discount">
-                        <p>Rp100.000</p>
-                        <span class="percent">-50%</span>
-                      </div>
-                    </div>
-                    <div class="counter">
-                      <button class="decrease-btn">-</button>
-                      <input type="text" maxlength="3" value="0" required />
-                      <button class="increase-btn">+</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <a class="delivery-option">
-              <div class="delivery-info">
-                <span>Waktu sampai: <span>99, Klopember 6969</span></span>
-                <span>Biaya Pengiriman: <span>Rp15.000</span></span>
-              </div>
-              <i class="fa-solid fa-chevron-right"></i>
-            </a>
-          </div>
-          <div class="product">
-            <div class="head">
-              <a href="">Nama UMKM</a>
-              <div class="info">
-                <a href="">
-                  <img src="/static/1.jpg" alt="" />
-                </a>
-                <div class="desc">
-                  <a href="">Nama Produk</a>
-                  <span>Nama Produk dan Varian Produk</span>
-                  <div class="price-counter">
-                    <div class="price">
-                      <p>Rp50.000</p>
-                      <div class="discount">
-                        <p>Rp100.000</p>
-                        <span class="percent">-50%</span>
-                      </div>
-                    </div>
-                    <div class="counter">
-                      <button class="decrease-btn">-</button>
-                      <input type="text" maxlength="3" value="0" required />
-                      <button class="increase-btn">+</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <a class="delivery-option">
-              <div class="delivery-info">
-                <span>Waktu sampai: <span>99, Klopember 6969</span></span>
-                <span>Biaya Pengiriman: <span>Rp15.000</span></span>
-              </div>
-              <i class="fa-solid fa-chevron-right"></i>
-            </a>
           </div>
         </div>
+        {% endfor %}
       </div>
+
       <div class="order-summary">
-        <span>Order Summary</span>
-        <div class="subtotals">
-          <div class="product-subtotal">
-            <span>Subtotal Produk:</span>
-            <span class="subtotal-price">Rp50.000</span>
-          </div>
-          <div class="shipping-subtotal">
-            <div class="sub-total">
-              <span
-                >Subtotal Pengiriman:<i class="fa-solid fa-caret-down"></i
-              ></span>
-              <span class="subtotal-price">Rp50.000</span>
-            </div>
-            <div class="shipping-details">
-              <div class="row">
-                <span>Biaya Pengiriman:</span>
-                <span class="shipping-price">Rp50.000</span>
-              </div>
-              <div class="row">
-                <span>Diskon Pengiriman:</span>
-                <span class="shipping-discount">Rp50.000</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="total">
-          <span>Total:</span>
-          <span class="total-price">Rp50.000</span>
-        </div>
-      </div>
-      <div class="payment-method">
-        <span>Metode Pembayaran</span>
-        <div class="methods">
-          <label for="ovo">
-            <div class="method-info">
-              <img src="/static/icons/ovo.png" alt="method_img" />
-              <span>OVO</span>
-            </div>
-            <input type="radio" name="payment-method" id="ovo" />
-          </label>
-          <label for="dana">
-            <div class="method-info">
-              <img src="/static/icons/dana.png" alt="method_img" />
-              <span>Dana</span>
-            </div>
-            <input type="radio" name="payment-method" id="dana" />
-          </label>
-        </div>
-      </div>
-      <div class="checkout">
-        <div class="total">
-          <span>Total <span>(0 barang)</span>:</span>
-          <span>Rp999.999</span>
-        </div>
-        <button class="checkout-btn">Pesan Sekarang</button>
+        <strong>Total Harga: Rp {{ order.total_price|floatformat:0 }}</strong>
       </div>
     </div>
+    {% empty %}
+    <p>Belum ada pesanan.</p>
+    {% endfor %}
   </article>
 </section>
 {% endblock %} {% block script %}

@@ -22,9 +22,11 @@ urlpatterns = [
   path("umkm/product/<int:pk>/delete/", views.delete_product, name="delete_product"),
 
   path('order/', views.orderPage, name = "order"),
+  path('order/create/', views.create_order, name='create_order'),
+  
   path('cartpage/', views.cartPage, name = "cart"),
-  # path("cartpage/add/<int:product_id>/", views.addToCart, name="cartNewProduct"),
-  # path("cartpage/add/<int:product_id>/<int:variant_id>/", views.addToCart, name="cartNewVariant"),
+  path('cart/add/<int:product_id>/', views.add_to_cart, name='add_to_cart'),
+
   path("contact/", views.contactPage, name="contact"),
 ]
 

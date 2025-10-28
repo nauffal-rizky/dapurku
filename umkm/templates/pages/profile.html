@@ -52,8 +52,7 @@
             <div class="row">
               <span>Deskripsi:</span>
               <span class="underline-text" id="lblDescription">
-                {% if user.description %} {{ user.description }} {% else %}
-                Belum ada deskripsi. {% endif %}
+                {{ user.description }}
               </span>
             </div>
           </div>
@@ -74,72 +73,49 @@
         {% csrf_token %}
         <i class="fa-solid fa-xmark"></i>
         <span>Ubah Profil</span>
-        <div class="img-box">
-          {% if product.image %} {% if form.instance.image %}
-          <img src="{{ form.instance.image.url }}" alt="product-img" />
-          {% else %}
-          <img src="/static/1.jpg" alt="default-img" />
-          {% endif %} {% else %}
-          <img src="/static/1.jpg" alt="{{ product.name }}" />
-          {% endif %}
-          <label for="profile_image">
-            <i class="fa-solid fa-pen"></i>
-            <input
-              type="file"
-              id="profile_image"
-              name="profile_image"
-              autocomplete="off"
-            />
-          </label>
-        </div>
-        <div class="input-container">
-          <div class="input-box">
-            <label for="input_username">Nama</label>
-            <input
-              type="text"
-              name="username"
-              id="input_username"
-              value="{{ user.username }}"
-              autocomplete="off"
-              required
-            />
+        <div class="main-details">
+          <div class="img-box">
+            {% if product.image %} {% if form.instance.image %}
+            <img src="{{ form.instance.image.url }}" alt="product-img" />
+            {% else %}
+            <img src="/static/1.jpg" alt="default-img" />
+            {% endif %} {% else %}
+            <img src="/static/1.jpg" alt="{{ product.name }}" />
+            {% endif %}
+            <label for="profile_image">
+              <i class="fa-solid fa-pen"></i>
+              <input
+                type="file"
+                id="profile_image"
+                name="profile_image"
+                autocomplete="off"
+              />
+            </label>
           </div>
-          <div class="input-box">
-            <label for="input_email">Email</label>
-            <input
-              type="text"
-              name="email"
-              id="input_email"
-              value="{{ user.email }}"
-              autocomplete="off"
-              required
-            />
-          </div>
-          <div class="input-box">
-            <label for="input_phone_number">Nomor Telepon</label>
-            <input
-              type="text"
-              id="input_phone_number"
-              name="phone_number"
-              value="{{ user.phone_number }}"
-              autocomplete="off"
-              required
-            />
-          </div>
-          <div class="input-box">
-            <label for="input_status">Status</label>
-            <select name="user_status" id="input_status" class="custom-select">
-              <!-- <option value="active" {% if user.user_status == 'active' %}selected{% endif %}>Active</option>
-              <option value="inactive" {% if user.user_status == 'inactive' %}selected{% endif %}>Inactive</option>
-              <option value="suspended" {% if user.user_status == 'suspended' %}selected{% endif %}>Suspended</option> -->
-            </select>
-            <i class="fa-solid fa-chevron-down"></i>
-          </div>
-          <div class="input-box">
-            <label for="input_description">Deskripsi</label>
-            <textarea id="input_description" name="description" rows="4">
-{{ user.description }}</textarea
-            >
+          <div class="inputs">
+            <div class="input-container">
+              <div class="input-box">
+                {{ form.username.label_tag }} {{ form.username }}
+              </div>
+              <div class="input-box">
+                {{ form.email.label_tag }} {{ form.email }}
+              </div>
+              <div class="input-box">
+                {{ form.phone_number.label_tag }} {{ form.phone_number }}
+              </div>
+              <div class="input-box">
+                <label for="input_status">Status</label>
+                <select name="user_status" id="input_status" class="custom-select">
+                  <option value="active" {% if user.user_status == 'active' %}selected{% endif %}>Active</option>
+                  <option value="inactive" {% if user.user_status == 'inactive' %}selected{% endif %}>Inactive</option>
+                  <option value="suspended" {% if user.user_status == 'suspended' %}selected{% endif %}>Suspended</option>
+                </select>
+                <i class="fa-solid fa-chevron-down"></i>
+              </div>
+            </div>
+            <div class="input-box description-box">
+              {{ form.description.label_tag }} {{ form.description }}
+            </div>
           </div>
         </div>
         <button id="saveBtn" type="submit">Simpan</button>
@@ -172,7 +148,10 @@
             <span class="nama">{{ product.name }}</span>
             <span class="harga">Rp{{ product.price }}</span>
             <p>{{ product.umkm_user_id.username }}</p>
-            <span><i class="fa-solid fa-star"></i> 5 | 100+ terjual</span>
+            <span>
+              <i class="fa-solid fa-star"></i>
+              {{ product.rating }} | {{ product.sold }} terjual
+            </span>
             <div class="btn-container">
               <a href="{% url 'edit_product' product.pk %}" class="edit-btn"
                 >Edit</a
@@ -187,19 +166,88 @@
           </div>
         </div>
         {% empty %}
-        <p class="no-products">Tidak ada produk yang tersedia.</p>
+        <p class="no-products">Belum ada produk yang tersedia.</p>
         {% endfor %}
       </div>
     </div>
+
+    <section class="dashboard">
+      <h2>Analisis UMKM</h2>
+      <div class="metrics">
+        <div class="metric-card">
+          <h3>Total Produk</h3>
+          <p>{{ dashboard.total_products }}</p>
+        </div>
+        <div class="metric-card">
+          <h3>Total Penjualan</h3>
+          <p>{{ dashboard.total_sales }}</p>
+        </div>
+        <div class="metric-card">
+          <h3>Total Pendapatan</h3>
+          <p>Rp{{ dashboard.total_revenue|floatformat:2 }}</p>
+        </div>
+        <div class="metric-card">
+          <h3>Rata-rata Rating</h3>
+          <p>{{ dashboard.average_rating }}</p>
+        </div>
+      </div>
+
+      <canvas id="topProductsChart" width="400" height="200"></canvas>
+    </section>
+    {% else %}
+    <section class="dashboard">
+      <h2>Aktivitas Belanja Saya</h2>
+      <div class="metrics">
+        <div class="metric-card">
+          <h3>Total Pesanan</h3>
+          <p>{{ dashboard.total_orders }}</p>
+        </div>
+        <div class="metric-card">
+          <h3>Total Barang Dibeli</h3>
+          <p>{{ dashboard.total_items }}</p>
+        </div>
+        <div class="metric-card">
+          <h3>Total Pengeluaran</h3>
+          <p>Rp{{ dashboard.total_spent|floatformat:2 }}</p>
+        </div>
+        <div class="metric-card">
+          <h3>Kategori Favorit</h3>
+          <p>{{ dashboard.favorite_category }}</p>
+        </div>
+      </div>
+    </section>
     {% endif %}
+
     <a href="/logout" class="logout-btn"
       >Logout<i class="fa-solid fa-right-from-bracket"></i
     ></a>
   </article>
 </section>
 {% endblock %} {% block script %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
   document.addEventListener("DOMContentLoaded", () => {
+    {% if user.is_umkm and dashboard.top_products %}
+    const ctx = document.getElementById('topProductsChart');
+    const topProducts = {{ dashboard.top_products|json_script:"top-products" }};
+    const data = JSON.parse(document.getElementById('top-products').textContent);
+
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: data.map(p => p.name),
+        datasets: [{
+          label: 'Total Terjual',
+          data: data.map(p => p.sold),
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: { y: { beginAtZero: true } }
+      }
+    });
+    {% endif %}
+
     const editProfileForm = document.querySelector(".edit-profile");
     const exitForm = document.querySelector(".edit-profile i");
     const editButton = document.querySelector("#editBtn");
@@ -270,6 +318,7 @@
       phone_number: 13,
       password1: 12,
       password2: 12,
+      description: 150,
     };
 
     const validators = {
@@ -286,6 +335,9 @@
       password: (value) =>
         value.length <= MAX_LENGTHS.password ||
         `Maksimal ${MAX_LENGTHS.password} karakter`,
+      description: (value) =>
+        value.length <= MAX_LENGTHS.description ||
+        `Maksimal ${MAX_LENGTHS.description} karakter`,
     };
 
     const validateInput = (input) => {
@@ -325,11 +377,13 @@
     const inputEmail = document.querySelector("#input_email");
     const inputPhoneNumber = document.querySelector("#input_phone_number");
     const inputUserStatus = document.querySelector("#input_status");
+    const inputUserDescription = document.querySelector("#input_description");
 
     const lblUsername = document.querySelector("#lblUsername");
     const lblEmail = document.querySelector("#lblEmail");
     const lblPhone = document.querySelector("#lblPhone");
     const lblStatus = document.querySelector("#lblStatus");
+    const lblDescription = document.querySelector("#lblDescription");
 
     const form = document.querySelector(".edit-profile form");
     form.addEventListener("submit", () => {
@@ -338,6 +392,7 @@
       lblEmail.textContent = inputEmail.value;
       lblPhone.textContent = inputPhoneNumber.value;
       lblStatus.textContent = inputUserStatus.value;
+      lblDescription.textContent = inputUserDescription.value;
     });
   });
 </script>

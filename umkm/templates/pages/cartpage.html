@@ -16,86 +16,22 @@
       >
     </div>
     <div class="cart-products">
+      {% for item in cart_items %}
       <div class="product-info">
         <label>
           <input type="checkbox" />
           <div class="checkbox"><i class="fa-solid fa-check"></i></div>
         </label>
         <div class="purchase-details">
-          <img src="/static/logo.png" alt="product_img" />
-          <div class="desc">
-            <span>Produk 1</span>
-            <span>Varian: Varian Produk 1</span>
-            <span>Harga satuan: Rp 1.234.56</span>
-          </div>
-          <div class="stock">
-            <i class="fa-solid fa-circle stocked"></i>
-            <span>Stok: 99</span>
-          </div>
-          <div class="quantity">
-            <button><i class="fa-solid fa-minus"></i></button>
-            <span>3</span>
-            <button><i class="fa-solid fa-plus"></i></button>
-          </div>
-          <span class="total-price">Rp 7.890</span>
-        </div>
-      </div>
-      <div class="product-info">
-        <label>
-          <input type="checkbox" />
-          <div class="checkbox"><i class="fa-solid fa-check"></i></div>
-        </label>
-        <div class="purchase-details">
-          <img src="/static/logo.png" alt="product_img" />
-          <div class="desc">
-            <span>Produk 2</span>
-            <span>Varian: Varian Produk 2</span>
-            <span>Harga satuan: Rp 1.234.56</span>
-          </div>
-          <div class="stock">
-            <i class="fa-solid fa-circle almost_run_out"></i>
-            <span>Stok: 99</span>
-          </div>
-          <div class="quantity">
-            <button><i class="fa-solid fa-minus"></i></button>
-            <span>3</span>
-            <button><i class="fa-solid fa-plus"></i></button>
-          </div>
-          <span class="total-price">Rp 7.890</span>
-        </div>
-      </div>
-      <div class="product-info">
-        <label>
-          <input type="checkbox" />
-          <div class="checkbox"><i class="fa-solid fa-check"></i></div>
-        </label>
-        <div class="purchase-details">
-          <img src="/static/logo.png" alt="product_img" />
-          <div class="desc">
-            <span>Produk 3</span>
-            <span>Varian: Varian Produk 3</span>
-            <span>Harga satuan: Rp 1.234.56</span>
-          </div>
-          <div class="stock">
-            <i class="fa-solid fa-circle run_out"></i>
-            <span>Stok: 99</span>
-          </div>
-          <div class="quantity">
-            <button><i class="fa-solid fa-minus"></i></button>
-            <span>3</span>
-            <button><i class="fa-solid fa-plus"></i></button>
-          </div>
-          <span class="total-price">Rp 7.890</span>
-        </div>
-      </div>
-      {% comment %} {% for item in cart_items %} --BARU--
-      <div class="product-info">
-        <label>
-          <input type="checkbox" />
-          <div class="checkbox"><i class="fa-solid fa-check"></i></div>
-        </label>
-        <div class="purchase-details">
-          <img src="{{ item.product.image.url }}" alt="product_img" />
+          {% if item.product.image %}
+          <img
+            src="{{ item.product.image.url }}"
+            alt="{{ item.product.name }}"
+          />
+          {% else %}
+          <img src="/static/1.jpg" alt="default image" />
+          {% endif %}
+
           <div class="desc">
             <span>{{ item.product.name }}</span>
             {% if item.variant %}
@@ -119,12 +55,21 @@
       </div>
       {% empty %}
       <p>Keranjang belanja Anda kosong.</p>
-      {% endfor %} {% endcomment %}
+      {% endfor %}
     </div>
-    <span>Sub Total: <span class="subtotal underline-text">0</span></span>
-    <div class="btn-container">
-      <a href="{% url 'products' %}">Kembali belanja</a>
-      <a href="{% url 'order' %}">Pesan</a>
+    <div class="spanBtn">
+      <span>Sub Total: <span class="subtotal underline-text">0</span></span>
+      <div class="btn-container">
+        <a href="{% url 'products' %}">Kembali belanja</a>
+        <form
+          action="{% url 'create_order' %}"
+          method="post"
+          style="display: inline"
+        >
+          {% csrf_token %}
+          <button type="submit" class="pesan-btn">Pesan</button>
+        </form>
+      </div>
     </div>
   </div>
 </section>

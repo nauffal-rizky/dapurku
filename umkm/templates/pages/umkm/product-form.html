@@ -48,7 +48,7 @@
         </div>
         {{ formset.management_form }}
         <div class="variants">
-          {% for variant_form in formset %}
+          {% for variant_form in formset %} {{ variant_form.id }}
           <div class="variant">
             <div class="variant-inputs">
               <div class="input-box">
@@ -112,18 +112,18 @@
           <div class="variant-inputs">
             <div class="input-box">
               <label for="id_form-${formCount}-name">Nama:</label>
-              <input type="text" name="form-${formCount}-name" id="id_form-${formCount}-name">
-            </div>
+              <input type="text" name="variants-${formCount}-name" id="id_variants-${formCount}-name">
+              </div>
             <div class="input-box">
               <label for="id_form-${formCount}-additional_price">Harga Tambahan:</label>
               <div class="additional-price">
-                <input type="number" step="0.01" name="form-${formCount}-additional_price" id="id_form-${formCount}-additional_price">
+                <input type="text" name="form-${formCount}-additional_price" id="id_variants-${formCount}-additional_price">
                 <span>Rp</span>
               </div>
             </div>
             <div class="input-box">
               <label for="id_form-${formCount}-stock">Stok:</label>
-              <input type="number" name="form-${formCount}-stock" id="id_form-${formCount}-stock">
+              <input type="text" name="form-${formCount}-stock" id="id_variants-${formCount}-stock">
             </div>
           </div>
           <button type="button" class="remove-variant-btn"><i class="fa-solid fa-minus"></i></button>

@@ -60,15 +60,14 @@ ProductVariantFormSet = inlineformset_factory(
   ProductVariant,
   form=ProductVariantForm,
   extra=1,
-  can_delete=True,
-  validate_min=False,
-  validate_max=False
+  can_delete=True
 )
+
 
 class ProfileUpdateForm(forms.ModelForm):
   class Meta:
     model = CustomUser
-    fields = ['username', 'email', 'phone_number', 'user_status', 'profile_image']
+    fields = ['username', 'email', 'phone_number', 'user_status', 'profile_image', 'description']
     widgets = {
       'user_status': forms.Select(choices=CustomUser.STATUS_CHOICES),
     }
