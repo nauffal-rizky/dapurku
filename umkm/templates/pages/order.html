@@ -13,15 +13,11 @@
       <div class="products">
         {% for item in order.items.all %}
         <div class="product">
-          <div class="info">
             {% if item.product.image %}
             <img
               src="{{ item.product.image.url }}"
               alt="{{ item.product.name }}"
             />
-            {% else %}
-            <img src="/static/1.jpg" alt="default image" />
-            {% endif %}
             <div class="desc">
               <span>{{ item.product.name }}</span>
               {% if item.variant %}
@@ -31,15 +27,25 @@
               <span>Harga: Rp {{ item.price|floatformat:0 }}</span>
               <span>Total: Rp {{ item.get_total|floatformat:0 }}</span>
             </div>
-          </div>
+            {% else %}
+            <img src="/static/1.jpg" alt="default image" />
+            <div class="desc">
+              <span>{{ item.product.name }}</span>
+              {% if item.variant %}
+              <span>Varian: {{ item.variant.name }}</span>
+              {% endif %}
+              <span>Jumlah: {{ item.quantity }}</span>
+              <span>Harga: Rp {{ item.price|floatformat:0 }}</span>
+              <span>Total: Rp {{ item.get_total|floatformat:0 }}</span>
+            </div>
+            {% endif %}
         </div>
         {% endfor %}
-      </div>
 
+      </div>
       <div class="order-summary">
         <strong>Total Harga: Rp {{ order.total_price|floatformat:0 }}</strong>
       </div>
-    </div>
     {% empty %}
     <p>Belum ada pesanan.</p>
     {% endfor %}
@@ -51,8 +57,6 @@
     /* ADDRESS */
     const addressIcon = document.querySelector(".user-address i");
     const deliveryIcon = document.querySelector(".delivery-option i");
-    const popup = document.querySelector(".popup");
-    const popupContent = popup.querySelector(".popup-content");
 
     window.addEventListener("click", (e) => {
       if (e.target == addressIcon) {
