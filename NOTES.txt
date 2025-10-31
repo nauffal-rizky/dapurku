@@ -4,6 +4,7 @@ mummiew - annanendra020422
 
 # ERROR!
 - Buat Pop-up message untuk setiap error/pesan!
+- Buat lebih banyak components!
 - Buat UMKM hanya bisa membeli produk UMKM lain, bukan miliknya sendiri
 - Buat Tambah Produk dapat dilakukan tanpa menambahkan Varian Produk
 - Buat Edit Produk dapat dilakukan tanpa ada error soal ID produk/variant produk
