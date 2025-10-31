@@ -1,11 +1,13 @@
-{% block content %}
+{% block popup %}
 <section class="popup">
     <article class="content">
             <h2>Popup Title</h2>
         <p>Popup Content</p>
     </article>
 </section>
-  {% endblock %} {% block script %}
+{% endblock %} 
+
+{% block popup_script %}
 <script>
   document.addEventListener("DOMContentLoaded", () => {
     const popup = document.querySelector(".popup");

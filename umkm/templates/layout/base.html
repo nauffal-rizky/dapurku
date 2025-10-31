@@ -102,14 +102,16 @@
 
         if (navbar) {
           const navbarHeight = navbar.offsetHeight;
+          console.log(navbarHeight);
+
           if (jumbotron)
             jumbotron.style.height = `calc(100vh - ${navbarHeight}px)`;
 
           window.addEventListener("scroll", () => {
-            if (window.scrollY >= navbarHeight) {
+            if (window.scrollY >= 0) {
               navbar.classList.add("scrolled");
               if (jumbotron) jumbotron.style.height = `100vh`;
-            } else if (window.scrollY == 0) {
+            } else {
               navbar.classList.remove("scrolled");
               if (jumbotron)
                 jumbotron.style.height = `calc(100vh - ${navbarHeight}px)`;

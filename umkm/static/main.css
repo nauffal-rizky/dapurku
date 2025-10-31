@@ -30,17 +30,6 @@
 --transition-base: all 0.3s ease-in-out;
 }
 
-*, *::before, *::after {
-box-sizing: border-box;
-margin: 0;
-padding: 0;
-}
-
-
-html {
-scroll-behavior: smooth;
-}
-
 
 body {
 font-family: var(--font-base);
@@ -164,17 +153,18 @@ border-color: #007bff;
   --font-utama: "Manrope";
 }
 
-* {
+*, *::before, *::after {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
   font-family: var(--font-utama);
   text-decoration: none;
-}
-*,
-::after,
-::before {
   user-select: none;
+  }
+  
+
+html {
+scroll-behavior: smooth;
 }
 
 body.loginSignup {
