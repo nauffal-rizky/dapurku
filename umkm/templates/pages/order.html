@@ -13,39 +13,49 @@
       <div class="products">
         {% for item in order.items.all %}
         <div class="product">
-            {% if item.product.image %}
-            <img
-              src="{{ item.product.image.url }}"
-              alt="{{ item.product.name }}"
-            />
-            <div class="desc">
-              <span>{{ item.product.name }}</span>
-              {% if item.variant %}
-              <span>Varian: {{ item.variant.name }}</span>
-              {% endif %}
-              <span>Jumlah: {{ item.quantity }}</span>
-              <span>Harga: Rp {{ item.price|floatformat:0 }}</span>
-              <span>Total: Rp {{ item.get_total|floatformat:0 }}</span>
-            </div>
-            {% else %}
-            <img src="/static/1.jpg" alt="default image" />
-            <div class="desc">
-              <span>{{ item.product.name }}</span>
-              {% if item.variant %}
-              <span>Varian: {{ item.variant.name }}</span>
-              {% endif %}
-              <span>Jumlah: {{ item.quantity }}</span>
-              <span>Harga: Rp {{ item.price|floatformat:0 }}</span>
-              <span>Total: Rp {{ item.get_total|floatformat:0 }}</span>
-            </div>
+          {% if item.product.image %}
+          <img
+            src="{{ item.product.image.url }}"
+            alt="{{ item.product.name }}"
+          />
+          <div class="desc">
+            <span>{{ item.product.name }}</span>
+            {% if item.variant %}
+            <span>Varian: {{ item.variant.name }}</span>
             {% endif %}
+            <span>Jumlah: {{ item.quantity }}</span>
+            <span>Harga: Rp {{ item.price|floatformat:0 }}</span>
+            <span>Total: Rp {{ item.get_total|floatformat:0 }}</span>
+          </div>
+          {% else %}
+          <img src="/static/1.jpg" alt="default image" />
+          <div class="desc">
+            <div class="order-name-variant">
+              <span class="order-product-name">{{ item.product.name }}</span>
+              {% if item.variant %}
+              <span
+                >Varian:
+                <span class="underline-text"
+                  >{{ item.variant.name }}</span
+                ></span
+              >
+              {% endif %}
+            </div>
+            <div class="quantity-price-total">
+              <span>Harga: Rp {{ item.price|floatformat:0 }}</span>
+              <span>Jumlah: {{ item.quantity }}</span>
+              <span>Total: Rp {{ item.get_total|floatformat:0 }}</span>
+            </div>
+          </div>
+          {% endif %}
         </div>
         {% endfor %}
-
       </div>
-      <div class="order-summary">
-        <strong>Total Harga: Rp {{ order.total_price|floatformat:0 }}</strong>
-      </div>
+    </div>
+    <div class="order-summary">
+      <strong>Total Harga: Rp {{ order.total_price|floatformat:0 }}</strong>
+      <button class="checkout-btn">Beli</button>
+    </div>
     {% empty %}
     <p>Belum ada pesanan.</p>
     {% endfor %}

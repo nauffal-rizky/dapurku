@@ -30,6 +30,17 @@
 --transition-base: all 0.3s ease-in-out;
 }
 
+*, *::before, *::after {
+box-sizing: border-box;
+margin: 0;
+padding: 0;
+}
+
+
+html {
+scroll-behavior: smooth;
+}
+
 
 body {
 font-family: var(--font-base);
@@ -153,18 +164,18 @@ border-color: #007bff;
   --font-utama: "Manrope";
 }
 
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+*,
+*::before,
+*::after {
   font-family: var(--font-utama);
   text-decoration: none;
-  user-select: none;
-  }
-  
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
 html {
-scroll-behavior: smooth;
+  scroll-behavior: smooth;
 }
 
 body.loginSignup {
@@ -691,6 +702,7 @@ section,
 .products.all .content .all-products,
 .contact-form form,
 .input-box,
+.order-info .products .product .desc,
 .desc-box,
 .detail-product .content .desc,
 .connects .informations,
@@ -698,6 +710,7 @@ section,
 .cartpage .content .cart-products .product-info .desc,
 .product-item .image .overlay,
 .product-item .desc,
+.order-info .products .product,
 .image-container,
 .connects .desc,
 .order-info,
@@ -1067,15 +1080,42 @@ main {
 }
 .order-info .products {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   grid-template-rows: auto;
   gap: 1rem;
   margin: 1.5rem 0 2rem 0;
 }
 .order-info .products .product img {
   width: 100%;
-  height: 150px;
-  border-radius: 10px;
+  height: 100%;
+  aspect-ratio: 16/9;
+  border-radius: 10px 10px 0 0;
+}
+.order-info .products .product .desc {
+  background-color: var(--warna-utama);
+  color: var(--putih);
+  padding: 0.75rem 1rem;
+  border-radius: 0 0 10px 10px;
+  margin: -4px 0 0 0;
+}
+.order-info .products .product .desc .order-product-name {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+.order-info .products .product .desc .order-name-variant {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 0 0.5rem 0;
+}
+.order-info
+  .products
+  .product
+  .desc
+  .order-name-variant
+  span:last-of-type
+  span::after {
+  background-color: var(--warna-utama);
 }
 .detail-product .content .checkout .product-amount .counter,
 .order-info
@@ -1665,16 +1705,22 @@ main {
   padding: 0.25rem;
   border-radius: 5px;
 }
-.order-info .order-summary,
-.order-info .payment-method {
+.order-info .order-summary {
+  display: flex;
+  justify-content: space-between;
+}
+.order-info :is(.order-summary, .payment-method) {
   background-color: var(--warna-utama);
   color: var(--putih);
   padding: 1rem 1.5rem;
   border-radius: 10px;
   box-shadow: 0px 4px 8px rgba(51, 51, 51, 0.1);
 }
-.order-info .order-summary span {
+.order-info .order-summary :is(strong, button) {
+  background-color: transparent;
+  color: var(--putih);
   font-size: 1rem;
+  border: none;
 }
 .order-info
   .order-summary
