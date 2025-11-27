@@ -20,7 +20,18 @@
             <a href="/"><img src="/static/logo.png" alt="logo" /></a>
             <a href="/">DAPURKU</a>
           </div>
-          <i class="fa-solid fa-bars"></i>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            class="svg-20"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M3 6.75A.75.75 0 0 1 3.75 6h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 6.75ZM3 12a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 12Zm0 5.25a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75a.75.75 0 0 1-.75-.75Z"
+              clip-rule="evenodd"
+            />
+          </svg>
         </div>
         <div class="links">
           <a href="/" class="nav-link">Beranda</a>
@@ -28,16 +39,21 @@
           <a href="/products" class="nav-link">Produk</a>
           <a href="/contact" class="nav-link">Kontak</a>
         </div>
-        {% if user.is_authenticated %}
         <a href="{% url 'profile' %}"
-          ><i class="fa-solid fa-user"></i>{{user.username}}</a
-        >
-        {% else %}
-        <div class="logSign-btns">
-          <a href="/login" class="login-btn">Login</a>
-          <a href="/signup" class="signup-btn">Sign-Up</a>
-        </div>
-        {% endif %}
+          ><svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            class="svg-25"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z"
+              clip-rule="evenodd"
+            />
+          </svg>
+          <span>{{user.username}}</span>
+        </a>
       </nav>
       {% endif %}
       <!--  -->
@@ -66,18 +82,50 @@
     <!-- CART POPUP -->
     {% if not plain_page %}
     <a href="{% url 'cart' %}" class="cartpage-btn">
-      <i class="fa-solid fa-cart-shopping"></i>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        class="svg-25"
+      >
+        <path
+          d="M2.25 2.25a.75.75 0 0 0 0 1.5h1.386c.17 0 .318.114.362.278l2.558 9.592a3.752 3.752 0 0 0-2.806 3.63c0 .414.336.75.75.75h15.75a.75.75 0 0 0 0-1.5H5.378A2.25 2.25 0 0 1 7.5 15h11.218a.75.75 0 0 0 .674-.421 60.358 60.358 0 0 0 2.96-7.228.75.75 0 0 0-.525-.965A60.864 60.864 0 0 0 5.68 4.509l-.232-.867A1.875 1.875 0 0 0 3.636 2.25H2.25ZM3.75 20.25a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0ZM16.5 20.25a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Z"
+        />
+      </svg>
     </a>
 
     <!-- FOOTER -->
     <footer>
       <div class="contact">
         <div class="row">
-          <i class="fa-solid fa-envelope"></i>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            class="svg-25"
+          >
+            <path
+              d="M1.5 8.67v8.58a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3V8.67l-8.928 5.493a3 3 0 0 1-3.144 0L1.5 8.67Z"
+            />
+            <path
+              d="M22.5 6.908V6.75a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3v.158l9.714 5.978a1.5 1.5 0 0 0 1.572 0L22.5 6.908Z"
+            />
+          </svg>
           <span>dapurumkm@gmail.com</span>
         </div>
         <div class="row">
-          <i class="fa-solid fa-phone"></i>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            class="svg-25"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M1.5 4.5a3 3 0 0 1 3-3h1.372c.86 0 1.61.586 1.819 1.42l1.105 4.423a1.875 1.875 0 0 1-.694 1.955l-1.293.97c-.135.101-.164.249-.126.352a11.285 11.285 0 0 0 6.697 6.697c.103.038.25.009.352-.126l.97-1.293a1.875 1.875 0 0 1 1.955-.694l4.423 1.105c.834.209 1.42.959 1.42 1.82V19.5a3 3 0 0 1-3 3h-2.25C8.552 22.5 1.5 15.448 1.5 6.75V4.5Z"
+              clip-rule="evenodd"
+            />
+          </svg>
           <span>+1 234 567 890</span>
         </div>
       </div>
@@ -102,7 +150,6 @@
 
         if (navbar) {
           const navbarHeight = navbar.offsetHeight;
-          console.log(navbarHeight);
 
           if (jumbotron)
             jumbotron.style.height = `calc(100vh - ${navbarHeight}px)`;
@@ -121,10 +168,5 @@
       });
     </script>
     {% block script %}{% endblock %}
-
-    <script
-      src="https://kit.fontawesome.com/1160dd891b.js"
-      crossorigin="anonymous"
-    ></script>
   </body>
 </html>

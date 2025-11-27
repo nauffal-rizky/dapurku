@@ -2,6 +2,10 @@
 
 mummiew - annanendra020422
 
+# BUG
+- Cartpage/Order page ngga bisa beda varian
+- Payment Gateway: Gopay, OVO, Dana
+
 # ERROR!
 - Buat Pop-up message untuk setiap error/pesan!
 - Buat lebih banyak components!
@@ -65,3 +69,10 @@ mummiew - annanendra020422
 
 python manage.py check
 python manage.py runserver
+
+
+Saya ingin menjalankan command python manage.py collectstatic di Git Bash pada projek Django saya. Jelaskan fungsi dari command tersebut dan berikan best practices untuk menjalankan command tersebut. Lalu, pada saat saya menjalankan command tersebut error dibawah muncul:
+
+Traceback (most recent call last): File "C:\nAuFfAl\myProjects\dapurku\manage.py", line 22, in <module> main() ~~~~^^ File "C:\nAuFfAl\myProjects\dapurku\manage.py", line 18, in main execute_from_command_line(sys.argv) ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^ File "C:\Users\TestMe Kundenservice\.virtualenvs\dapurku-YOKAWqWZ\Lib\site-packages\django\core\management\__init__.py", line 442, in execute_from_command_line utility.execute() ~~~~~~~~~~~~~~~^^ File "C:\Users\TestMe Kundenservice\.virtualenvs\dapurku-YOKAWqWZ\Lib\site-packages\django\core\management\__init__.py", line 436, in execute self.fetch_command(subcommand).run_from_argv(self.argv) ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^ File "C:\Users\TestMe Kundenservice\.virtualenvs\dapurku-YOKAWqWZ\Lib\site-packages\django\core\management\base.py", line 416, in run_from_argv self.execute(*args, **cmd_options) ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^ File "C:\Users\TestMe Kundenservice\.virtualenvs\dapurku-YOKAWqWZ\Lib\site-packages\django\core\management\base.py", line 460, in execute output = self.handle(*args, **options) File "C:\Users\TestMe Kundenservice\.virtualenvs\dapurku-YOKAWqWZ\Lib\site-packages\django\contrib\staticfiles\management\commands\collectstatic.py", line 209, in handle collected = self.collect() File "C:\Users\TestMe Kundenservice\.virtualenvs\dapurku-YOKAWqWZ\Lib\site-packages\django\contrib\staticfiles\management\commands\collectstatic.py", line 135, in collect handler(path, prefixed_path, storage) ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ File "C:\Users\TestMe Kundenservice\.virtualenvs\dapurku-YOKAWqWZ\Lib\site-packages\django\contrib\staticfiles\management\commands\collectstatic.py", line 368, in copy_file if not self.delete_file(path, prefixed_path, source_storage): ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ File "C:\Users\TestMe Kundenservice\.virtualenvs\dapurku-YOKAWqWZ\Lib\site-packages\django\contrib\staticfiles\management\commands\collectstatic.py", line 278, in delete_file if self.storage.exists(prefixed_path): ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^ File "C:\Users\TestMe Kundenservice\.virtualenvs\dapurku-YOKAWqWZ\Lib\site-packages\django\core\files\storage\filesystem.py", line 206, in exists
+
+SOLVE THE ERROR ABOVE WITH THE BEST PRACTICE SO I DON'T HAVE TO FACE THE SAME ERROR IN THE FUTURE!

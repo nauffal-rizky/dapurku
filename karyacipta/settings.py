@@ -20,7 +20,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
@@ -30,7 +29,7 @@ SECRET_KEY = 'django-insecure-t-5to3(+(0h$lu_sm&hetnyvt!nnm^wv#js#=6euqclneyh524
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['dapurku.store', 'www.dapurku.store']
 
 # Application definition
 

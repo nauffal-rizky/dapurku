@@ -321,6 +321,14 @@ section {
 .cartpage-btn:hover {
   transform: scale(1.1);
 }
+.svg-20 {
+  width: 20px;
+  height: 20px;
+}
+.svg-25 {
+  width: 25px;
+  height: 25px;
+}
 
 #page-loader {
   position: fixed;
@@ -415,11 +423,12 @@ section {
 .main-header :is(.main-navbar, .products-navbar) .logo .head a {
   font-weight: bold;
 }
-.main-header :is(.main-navbar, .products-navbar) .logo i {
+.main-header :is(.main-navbar, .products-navbar) .logo svg {
   display: block;
+  color: var(--putih);
 }
-@media (min-width: 768px) {
-  .main-header :is(.main-navbar, .products-navbar) .logo i {
+@media (min-width: 469px) {
+  .main-header :is(.main-navbar, .products-navbar) .logo svg {
     display: none;
   }
 }
@@ -459,7 +468,8 @@ section {
   margin: 0 0.5rem 0 0;
 }
 .main-header :is(.main-navbar, .products-navbar) > a {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(2, auto);
   align-items: center;
   gap: 0.5rem;
   text-transform: capitalize;
@@ -863,10 +873,14 @@ main {
   margin: 0.5rem 0;
 }
 .product-item .desc span:last-of-type {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   color: var(--abuabu);
 }
-.product-item .desc span i {
-  color: #ffdf00;
+.product-item .desc span svg {
+  /* color: #ffdf00; */
+  color: var(--yellow);
 }
 .product-item .desc .btn-container {
   display: flex;
@@ -2475,21 +2489,33 @@ footer .contact .row {
   :is(.login, .signup) .content form .grid-cols {
     margin: 1rem 0;
   }
-  .main-header .main-navbar {
-    align-items: flex-start;
+
+  .main-header :is(.main-navbar, .products-navbar) {
+    padding: 0.75rem 1.25rem;
   }
-  .main-header :is(.main-navbar, .products-navbar) .logo {
-    width: 100%;
+  .main-header :is(.main-navbar, .products-navbar) .logo .head a:first-of-type {
+    width: 75px;
+    height: 75px;
   }
-  .main-header :is(.main-navbar, .products-navbar) .logo i {
-    font-size: 1.5rem;
-  }
-  .main-header :is(.main-navbar, .products-navbar) .logo .head a:last-of-type {
-    display: none;
-  }
+  .main-header :is(.main-navbar, .products-navbar) .logo .head,
   .main-header :is(.main-navbar, .products-navbar) .links {
-    margin: 1rem 0 0.75rem 0;
+    gap: 0.5rem;
   }
+  .main-header :is(.main-navbar, .products-navbar) > a,
+  .main-header :is(.main-navbar, .products-navbar) .logo .head a:last-of-type {
+    font-size: 1rem;
+  }
+  .main-header :is(.main-navbar, .products-navbar) .links a {
+    font-size: 0.75rem;
+  }
+  .main-header :is(.main-navbar, .products-navbar) > a {
+    gap: 0.25rem;
+  }
+  .main-header :is(.main-navbar, .products-navbar) > a svg {
+    width: 20px;
+    height: 20px;
+  }
+
   .login-btn,
   .signup-btn {
     padding: 0.3rem 0.5rem;
@@ -2678,9 +2704,9 @@ footer .contact .row {
   :is(.login, .signup) .content form button {
     font-size: 1rem;
   }
+
   p,
   :is(.login, .signup) .content > span,
-  .main-header :is(.main-navbar, .products-navbar) .links a,
   .login-btn,
   .signup-btn,
   .short_about .content aside span,
@@ -2688,10 +2714,22 @@ footer .contact .row {
   .button-lihat-produk {
     font-size: 0.9rem;
   }
+
+  .main-header {
+    background-position: -375px 0;
+  }
+  .main-header :is(.main-navbar, .products-navbar) .logo .head a:first-of-type {
+    width: 50px;
+    height: 50px;
+  }
   .main-header :is(.main-navbar, .products-navbar) > a,
   .main-header :is(.main-navbar, .products-navbar) .logo .head a:last-of-type {
-    font-size: 1rem;
+    font-size: 0.75rem;
     font-weight: 600;
+  }
+  .main-header :is(.main-navbar, .products-navbar) > a svg {
+    width: 15px;
+    height: 15px;
   }
   .main-header .jumbotron .texts span {
     font-size: 1rem;
@@ -2701,6 +2739,7 @@ footer .contact .row {
     width: 300px;
     margin: 0 0 0 3rem;
   }
+
   .short_about .content img {
     height: 150px;
   }
@@ -2864,5 +2903,43 @@ footer .contact .row {
   }
   footer span {
     font-size: 0.9rem;
+  }
+}
+@media (max-width: 468px) {
+  h1,
+  .judul,
+  .about .content aside h2,
+  .products.all h2 {
+    font-size: 1.5rem;
+  }
+
+  .main-header {
+    background-position: -450px 0;
+  }
+  .main-header :is(.main-navbar, .products-navbar) {
+    flex-direction: column;
+    height: calc(50px + 1.5rem);
+    overflow-y: hidden;
+  }
+  .main-header :is(.main-navbar, .products-navbar) .logo {
+    width: 100%;
+  }
+  .main-header :is(.main-navbar, .products-navbar) .links,
+  .main-header :is(.main-navbar, .products-navbar) > a {
+    opacity: 0;
+  }
+  .main-header :is(.main-navbar, .products-navbar) .links {
+    flex-direction: column;
+    margin: 0.5rem 0 2rem 0;
+  }
+  .main-header .jumbotron .texts {
+    margin: 0 0 0 2rem;
+  }
+  .main-header .jumbotron .texts span {
+    font-size: 0.75rem;
+    margin: 0 0 0.5rem 0;
+  }
+  .main-header .jumbotron .texts p {
+    font-size: 0.5rem;
   }
 }

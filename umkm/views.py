@@ -236,7 +236,7 @@ def manage_product(request, pk=None):
       return redirect("profile")
 
     else:
-      messages.error(request, "Terdapat kesalahan pada form. Periksa kembali.")
+      messages.error(request, "Terdapat kesalah`an pada form. Periksa kembali.")
       print("FORM ERRORS:", form.errors)
       print("FORMSET ERRORS:", formset.errors)
 
