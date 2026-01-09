@@ -2,7 +2,19 @@
 <section class="product-form">
   <article class="content">
     <a href="{% url 'profile' %}" class="back-btn"
-      ><i class="fa-solid fa-arrow-left"></i>Kembali ke halaman profil</a
+      ><a href="{% url 'frontpage' %}" class="back-btn">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        class="svg-25"
+      >
+        <path
+          fill-rule="evenodd"
+          d="M7.28 7.72a.75.75 0 0 1 0 1.06l-2.47 2.47H21a.75.75 0 0 1 0 1.5H4.81l2.47 2.47a.75.75 0 1 1-1.06 1.06l-3.75-3.75a.75.75 0 0 1 0-1.06l3.75-3.75a.75.75 0 0 1 1.06 0Z"
+          clip-rule="evenodd"
+        />
+      </svg>Kembali ke halaman profil</a
     >
     <h1 class="judul">
       {% if product %}Edit Produk{% else %}Tambah Produk Baru{% endif %}
@@ -16,7 +28,7 @@
           {% if product and product.image %}
           <img src="{{ product.image.url }}" alt="product-img" />
           {% else %}
-          <img src="/static/1.jpg" alt="product-img" />
+          <img src="/static/img/1.jpg" alt="product-img" />
           {% endif %}
           <label for="id_image">
             <i class="fa-solid fa-pen"></i>
@@ -24,12 +36,14 @@
           </label>
         </div>
         <div class="inputs">
-          <div class="input-box">{{ form.name.label_tag }} {{ form.name }}</div>
-          <div class="input-box">
-            {{ form.price.label_tag }} {{ form.price }}
-          </div>
-          <div class="input-box">
-            {{ form.category.label_tag }} {{ form.category }}
+          <div class="input-boxes">
+            <div class="input-box">{{ form.name.label_tag }} {{ form.name }}</div>
+            <div class="input-box">
+              {{ form.price.label_tag }} {{ form.price }}
+            </div>
+            <div class="input-box">
+              {{ form.category.label_tag }} {{ form.category }}
+            </div>
           </div>
           <div class="desc-box">
             {{ form.description.label_tag }} {{ form.description }}

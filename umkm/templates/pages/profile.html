@@ -1,9 +1,23 @@
 {% extends '../layout/base.html' %} {% block content %}
 <section class="profile">
   <article class="content">
-    <a href="{% url 'frontpage' %}" class="back-btn"
-      ><i class="fa-solid fa-arrow-left"></i>Kembali ke halaman depan</a
+    <a href="{% url 'frontpage' %}" class="back-btn">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        class="svg-25"
+      >
+        <path
+          fill-rule="evenodd"
+          d="M7.28 7.72a.75.75 0 0 1 0 1.06l-2.47 2.47H21a.75.75 0 0 1 0 1.5H4.81l2.47 2.47a.75.75 0 1 1-1.06 1.06l-3.75-3.75a.75.75 0 0 1 0-1.06l3.75-3.75a.75.75 0 0 1 1.06 0Z"
+          clip-rule="evenodd"
+        />
+      </svg>
+      Kembali ke halaman depan</a
     >
+
+    <!-- USER DETAILS -->
     <div class="details">
       <div class="img-box">
         {% if user.profile_image %}
@@ -15,7 +29,7 @@
         />
         {% else %}
         <img
-          src="/static/1.jpg"
+          src="/static/img/1.jpg"
           alt="Default Avatar"
           width="150"
           height="150"
@@ -68,64 +82,11 @@
       </div>
     </div>
 
-    <div class="edit-profile hidden">
-      <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <i class="fa-solid fa-xmark"></i>
-        <span>Ubah Profil</span>
-        <div class="main-details">
-          <div class="img-box">
-            {% if product.image %} {% if form.instance.image %}
-            <img src="{{ form.instance.image.url }}" alt="product-img" />
-            {% else %}
-            <img src="/static/1.jpg" alt="default-img" />
-            {% endif %} {% else %}
-            <img src="/static/1.jpg" alt="{{ product.name }}" />
-            {% endif %}
-            <label for="profile_image">
-              <i class="fa-solid fa-pen"></i>
-              <input
-                type="file"
-                id="profile_image"
-                name="profile_image"
-                autocomplete="off"
-              />
-            </label>
-          </div>
-          <div class="inputs">
-            <div class="input-container">
-              <div class="input-box">
-                {{ form.username.label_tag }} {{ form.username }}
-              </div>
-              <div class="input-box">
-                {{ form.email.label_tag }} {{ form.email }}
-              </div>
-              <div class="input-box">
-                {{ form.phone_number.label_tag }} {{ form.phone_number }}
-              </div>
-              <div class="input-box">
-                <label for="input_status">Status</label>
-                <select name="user_status" id="input_status" class="custom-select">
-                  <option value="active" {% if user.user_status == 'active' %}selected{% endif %}>Active</option>
-                  <option value="inactive" {% if user.user_status == 'inactive' %}selected{% endif %}>Inactive</option>
-                  <option value="suspended" {% if user.user_status == 'suspended' %}selected{% endif %}>Suspended</option>
-                </select>
-                <i class="fa-solid fa-chevron-down"></i>
-              </div>
-            </div>
-            <div class="input-box description-box">
-              {{ form.description.label_tag }} {{ form.description }}
-            </div>
-          </div>
-        </div>
-        <button id="saveBtn" type="submit">Simpan</button>
-      </form>
-    </div>
-
     {% if user.is_umkm %}
+    <!-- UMKM PRODUCTS -->
     <div class="my-products">
       <div class="head">
-        <h2>Produk Saya</h2>
+        <h2 class="underline-text">Produk Saya</h2>
         <a href="{% url 'add_product' %}">Tambah Produk</a>
       </div>
       <div class="product-list">
@@ -135,12 +96,10 @@
             >{{ product.category }}</span
           >
           <div class="image">
-            {% if product.image %} {% if form.image.value %}
-            <img src="{{ form.image.value.url }}" alt="product-img" />
+            {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" />
             {% else %}
-            <img src="/static/1.jpg" alt="product-img" />
-            {% endif %} {% else %}
-            <img src="/static/1.jpg" alt="{{ product.name }}" />
+            <img src="/static/img/1.jpg" alt="product-img" />
             {% endif %}
             <div class="overlay">{{ product.description }}</div>
           </div>
@@ -149,7 +108,18 @@
             <span class="harga">Rp{{ product.price }}</span>
             <p>{{ product.umkm_user_id.username }}</p>
             <span>
-              <i class="fa-solid fa-star"></i>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                class="svg-20"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
+                  clip-rule="evenodd"
+                />
+              </svg>
               {{ product.rating }} | {{ product.sold }} terjual
             </span>
             <div class="btn-container">
@@ -171,7 +141,8 @@
       </div>
     </div>
 
-    <section class="dashboard">
+    <!-- UMKM ANALYTICAL DASHBOARD -->
+    <div class="dashboard">
       <h2>Analisis UMKM</h2>
       <div class="metrics">
         <div class="metric-card">
@@ -193,9 +164,12 @@
       </div>
 
       <canvas id="topProductsChart" width="400" height="200"></canvas>
-    </section>
+      {% if user.is_umkm and dashboard.top_products %} {{
+      dashboard.top_products|json_script:"top-products-data" }} {% endif %}
+    </div>
     {% else %}
-    <section class="dashboard">
+    <!-- CUSTOMER ANALYTICAL DASHBOARD -->
+    <div class="dashboard">
       <h2>Aktivitas Belanja Saya</h2>
       <div class="metrics">
         <div class="metric-card">
@@ -215,38 +189,132 @@
           <p>{{ dashboard.favorite_category }}</p>
         </div>
       </div>
-    </section>
+    </div>
     {% endif %}
 
     <a href="/logout" class="logout-btn"
-      >Logout<i class="fa-solid fa-right-from-bracket"></i
-    ></a>
+      >Logout<svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        class="svg-20"
+      >
+        <path
+          fill-rule="evenodd"
+          d="M7.5 3.75A1.5 1.5 0 0 0 6 5.25v13.5a1.5 1.5 0 0 0 1.5 1.5h6a1.5 1.5 0 0 0 1.5-1.5V15a.75.75 0 0 1 1.5 0v3.75a3 3 0 0 1-3 3h-6a3 3 0 0 1-3-3V5.25a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3V9A.75.75 0 0 1 15 9V5.25a1.5 1.5 0 0 0-1.5-1.5h-6Zm10.72 4.72a.75.75 0 0 1 1.06 0l3 3a.75.75 0 0 1 0 1.06l-3 3a.75.75 0 1 1-1.06-1.06l1.72-1.72H9a.75.75 0 0 1 0-1.5h10.94l-1.72-1.72a.75.75 0 0 1 0-1.06Z"
+          clip-rule="evenodd"
+        />
+      </svg>
+    </a>
+
+    <!-- EDIT USER PROFILE -->
+    <div class="edit-profile hidden">
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <i class="fa-solid fa-xmark"></i>
+        <span>Ubah Profil</span>
+        <div class="main-details">
+          <div class="img-box">
+            {% if product.image %} {% if form.instance.image %}
+            <img src="{{ form.instance.image.url }}" alt="product-img" />
+            {% else %}
+            <img src="/static/img/1.jpg" alt="default-img" />
+            {% endif %} {% else %}
+            <img src="/static/img/1.jpg" alt="{{ product.name }}" />
+            {% endif %}
+            <label for="profile_image">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
+                <path
+                  d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32L19.513 8.2Z"
+                />
+              </svg>
+              <input
+                type="file"
+                id="profile_image"
+                name="profile_image"
+                autocomplete="off"
+              />
+            </label>
+          </div>
+          <div class="inputs">
+            <div class="input-box">
+              {{ form.username.label_tag }} {{ form.username }}
+            </div>
+            <div class="input-box">
+              {{ form.email.label_tag }} {{ form.email }}
+            </div>
+            <div class="input-box">
+              {{ form.phone_number.label_tag }} {{ form.phone_number }}
+            </div>
+            <div class="input-box">
+              <label for="input_status">Status</label>
+              <!--
+                <select name="user_status" id="input_status" class="custom-select">
+                  <option value="active" {% if user.user_status == 'active' %}selected{% endif %}>Active</option>
+                  <option value="inactive" {% if user.user_status == 'inactive' %}selected{% endif %}>Inactive</option>
+                  <option value="suspended" {% if user.user_status == 'suspended' %}selected{% endif %}>Suspended</option>
+                </select>
+                -->
+              <i class="fa-solid fa-chevron-down"></i>
+            </div>
+          </div>
+          <div class="input-box">
+            {{ form.description.label_tag }} {{ form.description }}
+          </div>
+        </div>
+        <button id="saveBtn" type="submit">Simpan</button>
+      </form>
+    </div>
   </article>
 </section>
 {% endblock %} {% block script %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
   document.addEventListener("DOMContentLoaded", () => {
-    {% if user.is_umkm and dashboard.top_products %}
-    const ctx = document.getElementById('topProductsChart');
-    const topProducts = {{ dashboard.top_products|json_script:"top-products" }};
-    const data = JSON.parse(document.getElementById('top-products').textContent);
+    /* CANVAS 
+      const canvas = document.querySelector("#topProductsChart");
+      const jsonEl = document.querySelector("#top-products-data");
 
-    new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: data.map(p => p.name),
-        datasets: [{
-          label: 'Total Terjual',
-          data: data.map(p => p.sold),
-          borderWidth: 1
-        }]
-      },
-      options: {
-        scales: { y: { beginAtZero: true } }
+      console.log("TEST!!!");
+      console.log(canvas, jsonEl);
+
+      if (!canvas || !jsonEl) return;
+
+      const topProducts = JSON.parse(jsonEl.textContent);
+
+      if (!Array.isArray(topProducts) || topProducts.length === 0) {
+        console.log("No top products data available.");
+        return;
       }
-    });
-    {% endif %}
+
+      const labels = topProducts.map((item) => item.name);
+      const quantities = topProducts.map((item) => item.sold);
+
+      new Chart(canvas.getContext("2d"), {
+        type: "bar",
+        data: {
+          labels,
+          datasets: [
+            {
+              label: "Total Terjual",
+              data: quantities,
+              borderWidth: 1,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: { beginAtZero: true },
+          },
+        },
+      });
+    */
 
     const editProfileForm = document.querySelector(".edit-profile");
     const exitForm = document.querySelector(".edit-profile i");
@@ -387,7 +455,7 @@
 
     const form = document.querySelector(".edit-profile form");
     form.addEventListener("submit", () => {
-      profileImage.src = profileImagePreview.src || "/static/1.jpg";
+      profileImage.src = profileImagePreview.src || "/static/img/1.jpg";
       lblUsername.textContent = inputUsername.value;
       lblEmail.textContent = inputEmail.value;
       lblPhone.textContent = inputPhoneNumber.value;

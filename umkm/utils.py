@@ -1,4 +1,3 @@
-# umkm/utils.py
 from users_db.models import Product, Order
 
 def get_umkm_dashboard_data(user):

@@ -4,11 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dapur UMKM</title>
-    <link rel="stylesheet" href="/static/main.css" />
+    <link rel="stylesheet" href="/static/css/main.css" />
   </head>
   <body>
     <div id="page-loader">
-      <img src="/static/logo.png" alt="Loading..." />
+      <img src="/static/img/logo.png" alt="Loading..." />
     </div>
 
     <!-- HEADER -->
@@ -17,7 +17,7 @@
       <nav class="main-navbar">
         <div class="logo">
           <div class="head">
-            <a href="/"><img src="/static/logo.png" alt="logo" /></a>
+            <a href="/"><img src="/static/img/logo.png" alt="logo" /></a>
             <a href="/">DAPURKU</a>
           </div>
           <svg
@@ -136,9 +136,7 @@
     <!-- JS -->
     <script>
       document.addEventListener("DOMContentLoaded", () => {
-        const navbar = document.querySelector(".main-navbar");
-        const jumbotron = document.querySelector(".jumbotron");
-
+        // LOADER
         window.addEventListener("load", () => {
           const loader = document.getElementById("page-loader");
           if (loader) {
@@ -148,23 +146,68 @@
           }
         });
 
-        if (navbar) {
-          const navbarHeight = navbar.offsetHeight;
+        // NAVBAR SCROLL
+        const navbar = document.querySelector(".main-navbar");
+        const jumbotron = document.querySelector(".jumbotron");
 
-          if (jumbotron)
-            jumbotron.style.height = `calc(100vh - ${navbarHeight}px)`;
+        if (!navbar) return;
 
-          window.addEventListener("scroll", () => {
-            if (window.scrollY >= 0) {
-              navbar.classList.add("scrolled");
-              if (jumbotron) jumbotron.style.height = `100vh`;
-            } else {
-              navbar.classList.remove("scrolled");
-              if (jumbotron)
-                jumbotron.style.height = `calc(100vh - ${navbarHeight}px)`;
-            }
-          });
+        const navbarHeight = navbar.offsetHeight;
+
+        if (jumbotron) {
+          jumbotron.style.height = `calc(100vh - ${navbarHeight}px)`;
         }
+
+        const handleScroll = () => {
+          const scrolled = window.scrollY > 10;
+
+          navbar.classList.toggle("scrolled", scrolled);
+
+          if (jumbotron) {
+            jumbotron.style.height = scrolled
+              ? "100vh"
+              : `calc(100vh - ${navbarHeight}px)`;
+          }
+        };
+
+        window.addEventListener("scroll", handleScroll, { passive: true });
+
+        // NAVBAR DROPDOWN TOGGLE
+
+        let isDrop = false;
+
+        const mainNavbar = document.querySelector(".main-navbar");
+        const profileBtn = document.querySelector(".main-navbar > a");
+        const dropBtn = mainNavbar.querySelector(".logo svg");
+        const navLinks = mainNavbar.querySelector(".links");
+
+        window.addEventListener("resize", () => {
+          if (window.innerWidth > 468) {
+            isDrop = false;
+            navLinks.style.opacity = "1";
+            profileBtn.style.opacity = "1";
+            navbar.style.height = "auto";
+          } else {
+            isDrop = true;
+            navLinks.style.opacity = "0";
+            profileBtn.style.opacity = "0";
+            mainNavbar.style.height = "74px";
+          }
+        });
+
+        dropBtn.addEventListener("click", () => {
+          if (!isDrop) {
+            isDrop = true;
+            navLinks.style.opacity = "0";
+            profileBtn.style.opacity = "0";
+            mainNavbar.style.height = "74px";
+          } else {
+            isDrop = false;
+            navLinks.style.opacity = "1";
+            profileBtn.style.opacity = "1";
+            mainNavbar.style.height = "222px";
+          }
+        });
       });
     </script>
     {% block script %}{% endblock %}

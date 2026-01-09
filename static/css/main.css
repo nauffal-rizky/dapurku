@@ -1,155 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap");
 
-/* 
-:root {
---color-primary: #ff7b00;
---color-secondary: #ffa94d;
---color-accent: #ffc107;
---color-bg: #fff;
---color-text: #333;
---color-muted: #777;
-
-
---font-base: 'Poppins', sans-serif;
---font-size-base: 16px;
---font-size-heading: 2rem;
-
-
---space-xs: 0.25rem;
---space-sm: 0.5rem;
---space-md: 1rem;
---space-lg: 2rem;
---space-xl: 4rem;
-
-
---radius-sm: 6px;
---radius-md: 12px;
---radius-lg: 20px;
-
-
---transition-base: all 0.3s ease-in-out;
-}
-
-*, *::before, *::after {
-box-sizing: border-box;
-margin: 0;
-padding: 0;
-}
-
-
-html {
-scroll-behavior: smooth;
-}
-
-
-body {
-font-family: var(--font-base);
-font-size: var(--font-size-base);
-color: var(--color-text);
-background-color: var(--color-bg);
-line-height: 1.6;
-}
-
-
-a {
-color: var(--color-primary);
-text-decoration: none;
-transition: var(--transition-base);
-}
-
-:root {
---color-primary: #ff7b00;
---color-secondary: #ffa94d;
---color-accent: #ffc107;
---color-bg: #fff;
---color-text: #333;
---color-muted: #777;
-
-
---font-base: 'Poppins', sans-serif;
---font-size-base: 16px;
---font-size-heading: 2rem;
-
-
---space-xs: 0.25rem;
---space-sm: 0.5rem;
---space-md: 1rem;
---space-lg: 2rem;
---space-xl: 4rem;
-
-
---radius-sm: 6px;
---radius-md: 12px;
---radius-lg: 20px;
-
-
---transition-base: all 0.3s ease-in-out;
-}
-
-*, *::before, *::after {
-box-sizing: border-box;
-margin: 0;
-padding: 0;
-}
-
-a:hover {
-color: var(--color-secondary);
-}
-
-img {
-max-width: 100%;
-display: block;
-}
-
-button {
-cursor: pointer;
-border: none;
-border-radius: var(--radius-md);
-background: var(--color-primary);
-color: white;
-padding: var(--space-sm) var(--space-md);
-transition: var(--transition-base);
-}
-
-button:hover {
-background: var(--color-secondary);
-}
-
-form {
-display: flex;
-flex-direction: column;
-gap: 1rem;
-}
-
-
-label {
-font-weight: 600;
-margin-bottom: 0.3rem;
-display: block;
-}
-
-
-input[type="text"],
-input[type="email"],
-input[type="password"],
-input[type="number"],
-textarea,
-select {
-width: 100%;
-padding: 0.6rem 0.8rem;
-border: 1px solid #ccc;
-border-radius: 0.3rem;
-transition: border 0.3s ease;
-}
-
-
-input:focus,
-textarea:focus,
-select:focus {
-border-color: #007bff;
-}
-*/
-
 :root {
   --warna-utama: #ff8210;
 
@@ -184,8 +34,8 @@ body.loginSignup {
 
 main {
   justify-content: center;
+  min-height: calc(100vh - 195px);
   gap: 5rem;
-  min-height: 100vh;
   padding: 5rem 0;
 }
 
@@ -200,7 +50,6 @@ label {
 input,
 select,
 textarea {
-  height: 100%;
   font-size: 1rem;
   padding: 0.75rem 1.25rem;
   border: 2px solid #ccc;
@@ -314,13 +163,13 @@ section {
   height: 50px;
   background-color: var(--warna-utama);
   color: var(--putih);
-  font-size: 1.25rem;
   border-radius: 50%;
   transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 .cartpage-btn:hover {
   transform: scale(1.1);
 }
+
 .svg-20 {
   width: 20px;
   height: 20px;
@@ -375,7 +224,7 @@ section {
 /* HEADER /n*/
 .main-header {
   background-color: var(--hitam);
-  background-image: url(/static/food.jpg);
+  background-image: url(/static/img/food.jpg);
   background-size: cover;
   background-repeat: no-repeat;
 }
@@ -715,6 +564,7 @@ section,
 .order-info .products .product .desc,
 .desc-box,
 .detail-product .content .desc,
+.product-form .content form .main-details .input-boxes,
 .connects .informations,
 .cartpage .content .cart-products,
 .cartpage .content .cart-products .product-info .desc,
@@ -730,6 +580,7 @@ footer,
 .detail-content,
 .umkm-content,
 .other-products,
+.profile .content .dashboard,
 main {
   display: flex;
   flex-direction: column;
@@ -793,7 +644,7 @@ main {
 }
 .product-list {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-columns: repeat(4, 1fr);
   gap: 0.75rem;
 }
 .product-list.empty {
@@ -816,6 +667,7 @@ main {
   right: 0.5rem;
   background-color: var(--warna-utama);
   color: var(--putih);
+  font-size: 1rem;
   padding: 0.25rem 0.5rem;
   text-transform: capitalize;
   font-size: 0.75rem;
@@ -863,7 +715,7 @@ main {
   opacity: 1;
 }
 .product-item .desc {
-  padding: 0.75rem 1.2rem;
+  padding: 0.75rem 1.25rem;
 }
 .product-item .desc span:nth-child(2) {
   font-weight: bold;
@@ -879,13 +731,11 @@ main {
   color: var(--abuabu);
 }
 .product-item .desc span svg {
-  /* color: #ffdf00; */
   color: var(--yellow);
 }
 .product-item .desc .btn-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 0.75rem;
   margin: 1rem 0 0 0;
 }
@@ -893,6 +743,7 @@ main {
   color: var(--putih);
   font-size: 1rem;
   font-weight: 600;
+  text-align: center;
   padding: 0.5rem 0.75rem;
   border-radius: 5px;
 }
@@ -927,7 +778,6 @@ main {
 .filter-search {
   display: grid;
   grid-template-columns: 1fr auto;
-  align-items: center;
   gap: 0.5rem;
 }
 :is(.search-bar, .filter-bar) {
@@ -946,12 +796,14 @@ main {
   position: absolute;
   top: 50%;
   right: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background-color: #fff;
-  font-size: 1.25rem;
   border: none;
   transform: translateY(-50%);
 }
-:is(.search-bar, .filter-bar) button i {
+:is(.search-bar, .filter-bar) button svg {
   color: var(--warna-utama);
 }
 .search-bar {
@@ -1928,7 +1780,17 @@ main {
   font-weight: 600;
   font-size: 2.5rem;
 }
+.contact-form form {
+  gap: 0.5rem;
+}
+.contact-form form .input-box {
+  gap: 0.5rem;
+  margin: 0;
+}
 .contact-form form button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   width: fit-content;
   background-color: var(--warna-utama);
   color: var(--putih);
@@ -1953,7 +1815,7 @@ main {
   display: grid;
   grid-template-columns: auto 1fr;
   gap: 1.5rem;
-  margin: 0 0 3rem 0;
+  margin: 0 auto 3rem auto;
 }
 .profile .content .details .desc {
   grid-area: desc;
@@ -2006,6 +1868,9 @@ main {
 }
 .profile .content .details .desc .col .row {
   gap: 0.5rem;
+}
+.profile .content .details .desc .col .row:last-of-type {
+  align-items: flex-start;
 }
 .profile .content .details .message-box {
   grid-area: message;
@@ -2074,7 +1939,7 @@ main {
 }
 .profile .content .edit-profile form {
   position: relative;
-  width: 900px;
+  max-width: 90%;
   background-color: var(--putih);
   padding: 1.5rem 2rem;
   border-radius: 1rem;
@@ -2090,7 +1955,6 @@ main {
   color: var(--warna-utama);
   font-size: 2rem;
   font-weight: 600;
-  margin: 0 0 1rem 0;
 }
 .profile .content .details .img-box {
   position: relative;
@@ -2106,11 +1970,6 @@ main {
   position: relative;
   margin: 0 auto;
 }
-:is(.profile .content .edit-profile, .product-form .content) form .img-box img {
-  width: 300px;
-  height: 300px;
-  border-radius: 50%;
-}
 :is(.profile .content .edit-profile, .product-form .content)
   form
   .img-box
@@ -2119,7 +1978,7 @@ main {
   top: 0;
   right: 0;
   width: 100%;
-  height: calc(100% - 4.8px);
+  height: 100%;
 }
 :is(.profile .content .edit-profile, .product-form .content)
   form
@@ -2128,19 +1987,20 @@ main {
   height: fit-content;
   opacity: 0;
 }
-:is(.profile .content .edit-profile, .product-form .content) form .img-box i {
+:is(.profile .content .edit-profile, .product-form .content) form .img-box svg {
   float: right;
+  width: 30px;
   background-color: var(--warna-utama);
   color: var(--putih);
   margin: 0.5rem 0.5rem 0 0;
-  padding: 0.75rem;
+  padding: 0.25rem;
   border-radius: 50%;
 }
 :is(.profile .content .edit-profile, .product-form .content)
   form
   .img-box
   label:active
-  i {
+  svg {
   background-color: var(--putih);
   color: var(--warna-utama);
 }
@@ -2150,7 +2010,7 @@ main {
   margin: 0;
 }
 .profile .content .edit-profile form .input-box select {
-  height: 59.2px;
+  height: 48.8px;
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -2196,9 +2056,10 @@ main {
   transition: 0.3s;
 }
 .profile .content .dashboard {
-  background: #f9f9f9;
-  margin: 1.5rem 0 0 0;
-  padding: 4.5rem 3rem 3rem 3rem;
+  gap: 1.5rem;
+  background-color: #f9f9f9;
+  margin: 3rem 0 0 0;
+  padding: 4rem 3rem 3rem 3rem;
   border-radius: 16px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
@@ -2220,7 +2081,7 @@ main {
   font-size: 1rem;
 }
 .profile .content .dashboard .metrics .metric-card p {
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   font-weight: 600;
   color: #222;
 }
@@ -2231,39 +2092,69 @@ main {
   margin: 1rem 0 3rem 0;
 }
 .edit-profile form .main-details {
-  margin: 1.5rem 0 1rem 0;
+  margin: 1rem 0;
 }
 :is(.edit-profile, .product-form .content) form .main-details {
   display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 1.5rem;
+  grid-template-columns: 177.6px 1fr;
+  grid-template-areas:
+    "img-box inputs"
+    "img-box inputs"
+    "textarea textarea";
+  gap: 0.5rem 1rem;
 }
 :is(.edit-profile, .product-form .content) form .main-details .img-box {
-  margin: 0;
+  grid-area: img-box;
+  width: 100%;
+  height: 177.6px;
 }
 :is(.edit-profile, .product-form .content) form .main-details .img-box img {
+  width: 100%;
+  height: 100%;
   border-radius: 10px;
 }
-.edit-profile form .main-details .inputs .input-container {
+.edit-profile form .main-details .inputs {
+  grid-area: inputs;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.5rem 0.75rem;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
 }
 .product-form .content form .main-details .inputs {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 0.5rem 0.75rem;
+  grid-template-areas:
+    "inputBox descBox"
+    "inputBox descBox"
+    "checkBox checkBox";
+  gap: 0.5rem;
 }
-.product-form
-  .content
+.edit-profile form .main-details .input-box {
+  margin: 0;
+}
+.product-form .content form .main-details .input-boxes {
+  gap: 0.5rem;
+}
+.product-form .content form .main-details .input-boxes .input-box {
+  grid-area: inputBox;
+  margin: 0;
+}
+.product-form .content form .main-details .desc-box {
+  grid-area: descBox;
+}
+.product-form .content form .main-details .desc-box textarea {
+  height: 100%;
+}
+.product-form .content form .main-details .check-box {
+  grid-area: checkBox;
+}
+:is(.edit-profile, .product-form .content) form .main-details > .input-box {
+  grid-area: textarea;
+}
+:is(.edit-profile, .product-form .content)
   form
   .main-details
-  .inputs
-  :is(.input-box:first-of-type, .desc-box) {
-  grid-column: span 2;
-}
-.product-form .content form .inputs .input-box {
-  margin: 0;
+  > .input-box
+  textarea {
+  height: 200px;
 }
 .product-form .content form .variant-container .head {
   display: flex;
@@ -2449,18 +2340,80 @@ footer .contact .row {
     grid-template-columns: repeat(4, 1fr);
     width: 100%;
   }
+
+  .connects .desc span:first-of-type {
+    font-size: 1.5rem;
+  }
+  .contact-form {
+    gap: 0.5rem;
+  }
+  .contact-form span {
+    font-size: 2rem;
+  }
   .contact .content {
     gap: 2rem;
+  }
+
+  .profile .content .details {
+    width: 700px;
+    margin: 0 auto 2.5rem auto;
+  }
+  .profile .content .details .img-box img,
+  .umkm-info img {
+    width: 300px;
+    height: 300px;
+  }
+  .profile .content .details .desc .head h1,
+  .umkm-info .desc .head h1 {
+    font-size: 2.5rem;
+  }
+  :is(.profile .content .details, .umkm-info) .desc .col {
+    gap: 0.5rem;
+  }
+  .profile .content .details .desc span,
+  .umkm-info .desc span {
+    font-size: 1.25rem;
+  }
+  .profile .content .details .desc span.underline-text,
+  .umkm-info .desc span.underline-text {
+    font-size: 1rem;
+  }
+  .products.all h2 {
+    font-size: 2.5rem;
+  }
+
+  :is(.edit-profile, .product-form .content) form .main-details .inputs {
+    grid-template-columns: 1fr;
+  }
+
+  .product-list {
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 @media (max-width: 768px) {
   section {
     gap: 2.5rem;
   }
+
+  main {
+    padding: 4rem 0;
+  }
+
+  label {
+    font-size: 1rem;
+  }
+
+  .underline-text::after {
+    height: 0.1rem;
+  }
+
+  .back-btn {
+    font-size: 1rem;
+  }
+
   h1,
   .judul,
-  .about .content aside h2,
-  .products.all h2 {
+  .about .content aside h2 {
     font-size: 2.5rem;
   }
   h2 {
@@ -2529,18 +2482,22 @@ footer .contact .row {
   }
   .short_about .content {
     width: 600px;
+    gap: 1.5rem;
   }
   .short_about .content img {
     height: 200px;
   }
   .product-list {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
   }
-  .product-list .product-item:last-of-type {
-    display: none;
+  .products.all h2 {
+    font-size: 2rem;
+  }
+  .product-item .desc {
+    padding: 0.5rem 1rem;
   }
   .product-item .image img {
-    height: 250px;
+    height: 150px;
   }
   .long_about .content .intro .head {
     margin: 0 0 1rem 0;
@@ -2581,37 +2538,28 @@ footer .contact .row {
   }
   .search-bar input,
   .filter-bar select {
-    font-size: 0.9rem;
+    font-size: 0.75rem;
     padding: 0.75rem 1rem;
   }
   .search-bar button,
   .filter-bar button {
     right: 1rem;
-    font-size: 1rem;
   }
   .filter-bar {
     width: 170px;
   }
-  .products.all .content .all-products {
-    gap: 4rem;
-  }
+
   .contact .content {
     grid-template-columns: 1fr;
   }
   .contact .content .connects {
     grid-template-columns: 1fr 200px;
-  }
-  .connects .informations .row i,
-  .connects .desc span:first-of-type {
-    font-size: 1.5rem;
+    gap: 1rem;
   }
   .connects .informations .row {
     gap: 1rem;
   }
-  .connects .informations,
-  form {
-    gap: 0.75rem;
-  }
+
   .cartpage .content > .desc {
     padding: 1.5rem;
   }
@@ -2664,6 +2612,65 @@ footer .contact .row {
     font-size: 1rem;
     padding: 0.5rem 1.25rem;
   }
+
+  .profile .content .details {
+    width: 500px;
+    max-width: 100%;
+    gap: 1rem;
+    margin: 0 auto 2rem auto;
+  }
+  .profile .content .details .desc span.underline-text {
+    font-size: 0.75rem;
+  }
+  .profile .content .details .img-box img,
+  .umkm-info img {
+    width: 200px;
+    height: 200px;
+  }
+  .profile .content .details .desc .head h1,
+  .umkm-info .desc .head h1 {
+    font-size: 2rem;
+  }
+  .profile .content .details .desc span,
+  .umkm-info .desc span,
+  .profile .content .details #editBtn,
+  .profile .content .my-products .head a {
+    font-size: 1rem;
+  }
+  .profile .content .my-products .head a {
+    padding: 0 1rem;
+  }
+  .product-item .desc .btn-container {
+    gap: 0.5rem;
+    margin: 0.75rem 0 0 0;
+  }
+  :is(.profile .content .details, .umkm-info) .desc .col {
+    margin: 0.25rem 0 1.25rem 0;
+  }
+  .profile .content .dashboard {
+    gap: 1rem;
+    padding: 3rem 2rem 2rem 2rem;
+  }
+  .profile .content .dashboard .metrics {
+    gap: 0.5rem;
+  }
+  .profile .content .dashboard .metrics .metric-card h3 {
+    font-size: 0.75rem;
+  }
+  .profile .content .dashboard .metrics .metric-card p {
+    font-size: 1.25rem;
+  }
+  .profile .content .logout-btn {
+    margin: 1.5rem 0 0 auto;
+  }
+
+  .product-item .desc span {
+    font-size: 0.75rem;
+  }
+  .product-item .category {
+    font-size: 0.75rem;
+  }
+
   footer {
     gap: 1rem;
     padding: 2rem 0;
@@ -2673,13 +2680,32 @@ footer .contact .row {
   }
 }
 @media (max-width: 576px) {
+  .cartpage-btn {
+    width: 40px;
+    height: 40px;
+  }
+  :is(.cartpage-btn, .back-btn) svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .back-btn {
+    gap: 0.25rem;
+    font-size: 0.75rem;
+    margin: 0 0 0.5rem 0;
+  }
+
   section {
     gap: 2rem;
   }
+
+  main {
+    padding: 3rem 0;
+  }
+
   h1,
   .judul,
-  .about .content aside h2,
-  .products.all h2 {
+  .about .content aside h2 {
     font-size: 2rem;
   }
   h2 {
@@ -2706,13 +2732,16 @@ footer .contact .row {
   }
 
   p,
+  input,
+  textarea,
+  select,
   :is(.login, .signup) .content > span,
   .login-btn,
   .signup-btn,
   .short_about .content aside span,
   .product-item .image .overlay,
   .button-lihat-produk {
-    font-size: 0.9rem;
+    font-size: 0.75rem;
   }
 
   .main-header {
@@ -2740,6 +2769,9 @@ footer .contact .row {
     margin: 0 0 0 3rem;
   }
 
+  .short_about .content {
+    gap: 1rem;
+  }
   .short_about .content img {
     height: 150px;
   }
@@ -2750,26 +2782,24 @@ footer .contact .row {
     grid-template-columns: repeat(2, 1fr);
     gap: 0.5rem;
   }
+  .products.all h2 {
+    font-size: 1.5rem;
+  }
   .product-list .product-item:nth-of-type(3) {
     display: none;
   }
   .product-item .image img {
-    height: 150px;
+    height: 100px;
   }
   .product-item .desc {
-    padding: 0.5rem 1rem;
-  }
-  .product-item .desc span {
-    font-size: 0.9rem;
+    padding: 0.25rem 0.75rem;
   }
   .product-item .desc span:last-of-type {
-    font-size: 0.75rem;
+    gap: 0.25rem;
   }
   .product-item .desc p {
+    font-size: 0.5rem;
     margin: 0.3rem 0;
-  }
-  .products.all .product-list {
-    grid-template-columns: repeat(2, 1fr);
   }
   .button-lihat-produk {
     margin: 1.5rem 0 0 0;
@@ -2812,20 +2842,24 @@ footer .contact .row {
   }
   .search-bar input,
   .filter-bar select {
-    font-size: 0.75rem;
     padding: 0.5rem 1rem;
   }
   .search-bar button,
   .filter-bar button {
     right: 0.8rem;
-    font-size: 0.9rem;
+  }
+  .search-bar button svg,
+  .filter-bar button svg {
+    width: 15px;
+    height: 15px;
   }
   .filter-bar {
     width: 140px;
   }
   .products.all .content .all-products {
-    gap: 3rem;
+    gap: 1.5rem;
   }
+
   .contact .content {
     gap: 1.5rem;
   }
@@ -2834,11 +2868,14 @@ footer .contact .row {
   }
   .contact .content .connects {
     grid-template-columns: 1fr;
-    gap: 1rem;
+    gap: 0.5rem;
+  }
+  .connects .desc span:first-of-type {
+    font-size: 1.25rem;
   }
   .connects .desc span:last-of-type,
   .connects .informations .row .col span:last-of-type {
-    font-size: 0.9rem;
+    font-size: 0.75rem;
   }
   .connects .informations .row {
     gap: 0.75rem;
@@ -2851,9 +2888,16 @@ footer .contact .row {
   .contact-form form button {
     font-size: 1rem;
   }
+  .contact-form span {
+    font-size: 1.5rem;
+  }
+  .contact-form form {
+    gap: 0.25rem;
+  }
   .contact-form form button {
     padding: 0.5rem 1rem;
   }
+
   .cartpage .content > .desc {
     padding: 1.5rem 1rem;
   }
@@ -2893,16 +2937,80 @@ footer .contact .row {
     font-size: 0.9rem;
     padding: 0.3rem 0.75rem;
   }
+
+  .profile .content .details {
+    gap: 0.75rem;
+    width: 400px;
+    margin: 0 auto 1.5rem auto;
+  }
+  .profile .content .details .desc .col .row {
+    gap: 0.25rem;
+  }
+  .profile .content .details .desc .head h1,
+  .umkm-info .desc .head h1 {
+    font-size: 1.5rem;
+  }
+  .profile .content .details .desc span,
+  .umkm-info .desc span,
+  .profile .content .my-products .head a,
+  .umkm-info .desc span.underline-text,
+  .product-item .desc .btn-container a {
+    font-size: 0.75rem !important;
+  }
+  .profile .content .details .desc span.underline-text {
+    font-size: 0.5rem !important;
+  }
+  .product-item .desc .btn-container {
+    gap: 0.25rem;
+  }
+  .product-item .desc .btn-container a {
+    padding: 0.25rem 0.5rem;
+  }
+  .profile .content .details #editBtn {
+    font-size: 0.75rem;
+    padding: 0.25rem 0;
+  }
+  :is(.profile .content .details, .umkm-info) .desc .col {
+    margin: 0 0 0.75rem 0;
+  }
+  .profile .content .details .img-box img,
+  .umkm-info img {
+    width: 150px;
+    height: 150px;
+  }
+  .profile .content .dashboard {
+    gap: 0.75rem;
+    padding: 2rem 1rem 1rem 1rem;
+  }
+  .profile .content .logout-btn {
+    font-size: 0.75rem;
+    margin: 1rem 0 0 auto;
+    padding: 0.25rem 0.75rem;
+  }
+  .product-item .desc span,
+  .product-item .category {
+    font-size: 0.5rem;
+  }
+  .product-item .desc span svg {
+    width: 15px;
+    height: 15px;
+  }
+
   footer {
     gap: 0.5rem;
+    padding: 1.5rem 0;
+  }
+  footer span {
+    font-size: 0.75rem;
+  }
+  footer .contact .row svg {
+    width: 20px;
+    height: 20px;
   }
   footer .contact {
     flex-direction: column;
     align-items: center;
     gap: 0.5rem;
-  }
-  footer span {
-    font-size: 0.9rem;
   }
 }
 @media (max-width: 468px) {
@@ -2911,6 +3019,10 @@ footer .contact .row {
   .about .content aside h2,
   .products.all h2 {
     font-size: 1.5rem;
+  }
+
+  main {
+    padding: 2rem 0;
   }
 
   .main-header {
@@ -2941,5 +3053,25 @@ footer .contact .row {
   }
   .main-header .jumbotron .texts p {
     font-size: 0.5rem;
+  }
+
+  .products.all .content .all-products {
+    gap: 1rem;
+  }
+  .product-item .desc span:last-of-type {
+    font-size: 0.5rem;
+  }
+  .product-item .desc span svg {
+    width: 15px;
+    height: 15px;
+  }
+  .products.all .product-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .filter-search {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr auto;
+    justify-items: end;
   }
 }
