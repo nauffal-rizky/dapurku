@@ -1,7 +1,7 @@
 {% extends '../layout/base.html' %} {% block content %}
 <section class="profile">
   <article class="content">
-    <a href="{% url 'frontpage' %}" class="back-btn">
+    <a href="{% url 'products' %}" class="back-btn">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
@@ -252,17 +252,63 @@
             </div>
             <div class="input-box">
               <label for="input_status">Status</label>
-              <!--
-                <select name="user_status" id="input_status" class="custom-select">
-                  <option value="active" {% if user.user_status == 'active' %}selected{% endif %}>Active</option>
-                  <option value="inactive" {% if user.user_status == 'inactive' %}selected{% endif %}>Inactive</option>
-                  <option value="suspended" {% if user.user_status == 'suspended' %}selected{% endif %}>Suspended</option>
-                </select>
-                -->
-              <i class="fa-solid fa-chevron-down"></i>
+              <select
+                name="user_status"
+                id="input_status"
+                class="custom-select"
+              >
+                <option
+                  value="active"
+                  {%
+                  if
+                  user.user_status=""
+                  ="active"
+                  %}selected{%
+                  endif
+                  %}
+                >
+                  Active
+                </option>
+                <option
+                  value="inactive"
+                  {%
+                  if
+                  user.user_status=""
+                  ="inactive"
+                  %}selected{%
+                  endif
+                  %}
+                >
+                  Inactive
+                </option>
+                <option
+                  value="suspended"
+                  {%
+                  if
+                  user.user_status=""
+                  ="suspended"
+                  %}selected{%
+                  endif
+                  %}
+                >
+                  Suspended
+                </option>
+              </select>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                class="svg-20"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M12.53 16.28a.75.75 0 0 1-1.06 0l-7.5-7.5a.75.75 0 0 1 1.06-1.06L12 14.69l6.97-6.97a.75.75 0 1 1 1.06 1.06l-7.5 7.5Z"
+                  clip-rule="evenodd"
+                />
+              </svg>
             </div>
           </div>
-          <div class="input-box">
+          <div class="desc-box">
             {{ form.description.label_tag }} {{ form.description }}
           </div>
         </div>
@@ -340,7 +386,7 @@
     });
 
     const profileImagePreview = document.querySelector(
-      ".edit-profile .img-box img"
+      ".edit-profile .img-box img",
     );
     const inputProfileImage = document.querySelector("#profile_image");
     const profileImage = document.querySelector(".details .img-box img");
