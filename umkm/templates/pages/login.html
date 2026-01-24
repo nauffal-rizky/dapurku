@@ -33,14 +33,15 @@
       Belum memiliki akun?
       <a href="/signup">Daftar</a>
     </span>
+
     {% if form.errors %}
-    <ul class="error-list">
+    <div class="error-list">
       {% for field in form %} {% for error in field.errors %}
-      <li>{{ field.label }}: {{ error }}</li>
+      <span>{{ field.label }}: {{ error }}</span>
       {% endfor %} {% endfor %} {% for error in form.non_field_errors %}
-      <li>{{ error }}</li>
+      <span>{{ error }}</span>
       {% endfor %}
-    </ul>
+    </div>
     {% endif %}
   </article>
 </section>

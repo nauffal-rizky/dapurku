@@ -16,25 +16,22 @@ mummiew - annanendra020422
 
 # UMKM Acc`s
 1. NaufalNR - N@uff@l2oo5
-2. DwiHanda - 
+2. DwiHanda - dwih@nd@123
+3. Keitora - kur0w@123
 
 
 
 
 
 |===================== To-do List =====================|
-- Buat UMKM hanya bisa membeli produk UMKM lain, bukan miliknya sendiri
+- Hilangkan fitur varian di "product-form, product-detail, cartpage, orderpage" dan database
+- Perbaiki design halaman Cart
+- Perbaiki tampilan "produk saya" halaman profil user
 
 - Membuat Payment Gateway: Gopay, OVO, Dana
-- Buat Cartpage dan Order page bisa membedakan varian
 - Buat Pop-up message untuk setiap error/pesan!
-- Buat Tambah Produk dapat dilakukan tanpa menambahkan Varian Produk
-- Buat Edit Produk dapat dilakukan tanpa ada error soal ID produk/variant produk
-- Payment Gateway (OTP/Code)
 - Buat fitur "Ada sekian produk di dalam keranjang anda" berjalan pada halaman Cart
 - Tambahkan fitur "Hapus product belanjaan" pada halaman Cart
-- Perbaiki design halaman Cart
-- Perbaiki tampilan profil user
 - Membuat halaman utama adalah halaman products layaknya E-Commerce, seperti Shopee, Tokopedia, dsb ✔
 - Membuat fitur "Tambah Varian" berjalan dengan lancar di halaman add product 
 - Membuat fitur "Varian" berjalan dengan lancar di halaman edit product

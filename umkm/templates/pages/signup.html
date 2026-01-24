@@ -98,14 +98,29 @@
       </div>
     </form>
     <span>Sudah memiliki akun? <a href="/login">Login</a></span>
+
+    <div class="error-list">
+      <span
+        >Terjadi kesalahan pada pengisian form! Terjadi kesalahan pada pengisian
+        form! Terjadi kesalahan pada pengisian form!</span
+      >
+      <span
+        >Terjadi kesalahan pada pengisian form! Terjadi kesalahan pada pengisian
+        form! Terjadi kesalahan pada pengisian form!</span
+      >
+      <span
+        >Terjadi kesalahan pada pengisian form! Terjadi kesalahan pada pengisian
+        form! Terjadi kesalahan pada pengisian form!</span
+      >
+    </div>
     {% if form.errors %}
-    <ul class="error-list">
+    <div class="error-list">
       {% for field in form %} {% for error in field.errors %}
-      <li>{{ field.label }}: {{ error }}</li>
+      <span>{{ field.label }}: {{ error }}</span>
       {% endfor %} {% endfor %} {% for error in form.non_field_errors %}
-      <li>{{ error }}</li>
+      <span>{{ error }}</span>
       {% endfor %}
-    </ul>
+    </div>
     {% endif %}
   </article>
 </section>

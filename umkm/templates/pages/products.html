@@ -104,7 +104,7 @@
 
     const getVisibleProducts = () =>
       Array.from(products).filter(
-        (product) => !product.classList.contains("hidden")
+        (product) => !product.classList.contains("hidden"),
       );
 
     const updateNoProductsMessage = (query, category) => {
@@ -159,6 +159,18 @@
         }
       });
     };
+
+    /* HARGA */
+    const productPrices = document.querySelectorAll(".harga");
+    productPrices.forEach((productPrice) => {
+      const productPriceValue = productPrice.textContent;
+      const formattedPrice = new Intl.NumberFormat("id-ID", {
+        style: "currency",
+        currency: "IDR",
+        minimumFractionDigits: 0,
+      }).format(parseFloat(productPriceValue.replace(/[^0-9.-]+/g, "")));
+      productPrice.textContent = formattedPrice;
+    });
   });
 </script>
 {% endblock %}

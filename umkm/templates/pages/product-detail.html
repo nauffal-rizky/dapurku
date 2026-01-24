@@ -2,8 +2,20 @@
 <section class="detail-product">
   <div class="content">
     <a href="{% url 'products' %}" class="back-btn">
-      <i class="fa-solid fa-arrow-left"></i>Kembali ke halaman produk
-    </a>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        class="svg-25"
+      >
+        <path
+          fill-rule="evenodd"
+          d="M7.28 7.72a.75.75 0 0 1 0 1.06l-2.47 2.47H21a.75.75 0 0 1 0 1.5H4.81l2.47 2.47a.75.75 0 1 1-1.06 1.06l-3.75-3.75a.75.75 0 0 1 0-1.06l3.75-3.75a.75.75 0 0 1 1.06 0Z"
+          clip-rule="evenodd"
+        />
+      </svg>
+      Kembali ke halaman depan</a
+    >
 
     <div class="detail-content">
       <div class="product-information">
@@ -11,14 +23,14 @@
           {% if product.image %}
           <img src="{{ product.image.url }}" alt="{{ product.name }}" />
           {% else %}
-          <img src="{% static '1.jpg' %}" alt="default image" />
+          <img src="{% static '/img/1.jpg' %}" alt="default image" />
           {% endif %}
 
           <div class="overlays">
             {% for i in "123456" %} {% if product.image %}
             <img src="{{ product.image.url }}" alt="{{ product.name }}" />
             {% else %}
-            <img src="{% static '1.jpg' %}" alt="default image" />
+            <img src="{% static '/img/1.jpg' %}" alt="default image" />
             {% endif %} {% endfor %}
           </div>
         </div>
@@ -33,7 +45,18 @@
 
             <p>
               Terjual <span>{{ soldProducts.stock }}</span> |
-              <i class="fa-solid fa-star"></i>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                class="svg-20"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
+                  clip-rule="evenodd"
+                />
+              </svg>
               <span>5</span><span>(166 Rating)</span>
             </p>
           </div>
@@ -49,7 +72,9 @@
           <div class="variants">
             <span
               >Pilih varian produk:
-              <span class="underline-text">{{ product.variants.first.name }}</span></span
+              <span class="underline-text"
+                >{{ product.variants.first.name }}</span
+              ></span
             >
             <div class="variant-container">
               {% for variant in product.variants.all %}
@@ -70,16 +95,19 @@
           <div class="line"></div>
 
           <div class="product-amount">
+            {% if product.umkm_user_id.username != user.username %}
             <div class="counter">
               <button type="button" class="decrease-btn">-</button>
               <input type="text" maxlength="3" value="0" required />
               <button type="button" class="increase-btn">+</button>
             </div>
+            {% endif %}
             <span class="stock">
               Stok: <span>Sisa {{ product.stock }}</span>
             </span>
           </div>
 
+          {% if product.umkm_user_id.username != user.username %}
           <div class="total">
             <span class="subTotal">Subtotal</span>
             <span>Rp0</span>
@@ -106,7 +134,7 @@
               <a href="{% url 'order' %}">Beli</a>
             </div>
           </form>
-          </div>
+          {% endif %}
         </div>
       </div>
 
@@ -124,7 +152,7 @@
               {% if item.image %}
               <img src="{{ item.image.url }}" alt="{{ item.name }}" />
               {% else %}
-              <img src="{% static '1.jpg' %}" alt="default image" />
+              <img src="{% static '/img/1.jpg' %}" alt="default image" />
               {% endif %}
               <div class="overlay">{{ item.description }}</div>
             </div>
@@ -153,7 +181,7 @@
               {% if item.image %}
               <img src="{{ item.image.url }}" alt="{{ item.name }}" />
               {% else %}
-              <img src="{% static '1.jpg' %}" alt="default image" />
+              <img src="{% static '/img/1.jpg' %}" alt="default image" />
               {% endif %}
               <div class="overlay">{{ item.description }}</div>
             </div>
@@ -207,7 +235,7 @@
     }
 
     const price = document.querySelector(".price");
-    const subTotal = document.querySelector('.subTotal')
+    const subTotal = document.querySelector(".subTotal");
     const counterInput = document.querySelector(".counter input");
     const increaseBtn = document.querySelector(".increase-btn");
     const decreaseBtn = document.querySelector(".decrease-btn");
@@ -218,7 +246,7 @@
         parseInt(
           document
             .querySelector(".stock span:last-child")
-            .textContent.replace("Sisa ", "")
+            .textContent.replace("Sisa ", ""),
         ) || 0,
     };
 
@@ -226,7 +254,7 @@
       const total = document.querySelector(".total span:last-child");
       const quantity = parseInt(counterInput.value) || 0;
       const priceValue = parseInt(
-        product.price.replace("Rp", "").replace(/\./g, "")
+        product.price.replace("Rp", "").replace(/\./g, ""),
       );
       total.textContent =
         quantity > 0
@@ -234,24 +262,26 @@
           : "Rp0";
     };
 
-    counterInput.addEventListener("input", () => {
-      counterInput.value = counterInput.value.replace(/\D/g, "");
-      let value = parseInt(counterInput.value) || 0;
-      if (value > product.stock) counterInput.value = product.stock;
-      updateTotal();
-    });
+    if (counterInput && increaseBtn && decreaseBtn) {
+      counterInput.addEventListener("input", () => {
+        counterInput.value = counterInput.value.replace(/\D/g, "");
+        let value = parseInt(counterInput.value) || 0;
+        if (value > product.stock) counterInput.value = product.stock;
+        updateTotal();
+      });
 
-    increaseBtn.addEventListener("click", () => {
-      let value = parseInt(counterInput.value) || 0;
-      if (value < product.stock) counterInput.value = value + 1;
-      updateTotal();
-    });
+      increaseBtn.addEventListener("click", () => {
+        let value = parseInt(counterInput.value) || 0;
+        if (value < product.stock) counterInput.value = value + 1;
+        updateTotal();
+      });
 
-    decreaseBtn.addEventListener("click", () => {
-      let value = parseInt(counterInput.value) || 0;
-      if (value > 0) counterInput.value = value - 1;
-      updateTotal();
-    });
+      decreaseBtn.addEventListener("click", () => {
+        let value = parseInt(counterInput.value) || 0;
+        if (value > 0) counterInput.value = value - 1;
+        updateTotal();
+      });
+    }
 
     const form = document.querySelector('form[action*="add_to_cart"]');
     const quantityField = document.querySelector('input[name="quantity"]');
@@ -263,9 +293,9 @@
     }
 
     const formattedPrice = parseInt(
-      price.textContent.replace("Rp", "").replace(".00", "")
+      price.textContent.replace("Rp", "").replace(".00", ""),
     ).toLocaleString("id-ID");
-    price.textContent = `Rp${formattedPrice}`;
+    price.textContent = `Rp ${formattedPrice}`;
   });
 </script>
 {% endblock %}

@@ -105,7 +105,7 @@
           </div>
           <div class="desc">
             <span class="nama">{{ product.name }}</span>
-            <span class="harga">Rp{{ product.price }}</span>
+            <span class="harga">{{ product.price }}</span>
             <p>{{ product.umkm_user_id.username }}</p>
             <span>
               <svg
@@ -321,7 +321,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
   document.addEventListener("DOMContentLoaded", () => {
-    /* CANVAS 
+    /* CANVAS
       const canvas = document.querySelector("#topProductsChart");
       const jsonEl = document.querySelector("#top-products-data");
 
@@ -362,6 +362,7 @@
       });
     */
 
+    /* EDIT PROFILE */
     const editProfileForm = document.querySelector(".edit-profile");
     const exitForm = document.querySelector(".edit-profile i");
     const editButton = document.querySelector("#editBtn");
@@ -426,6 +427,7 @@
 
     const inputs = document.querySelectorAll(".input-box > input");
 
+    /* INPUTS */
     const MAX_LENGTHS = {
       username: 10,
       email: 30,
@@ -507,6 +509,18 @@
       lblPhone.textContent = inputPhoneNumber.value;
       lblStatus.textContent = inputUserStatus.value;
       lblDescription.textContent = inputUserDescription.value;
+    });
+
+    /* HARGA */
+    const productPrices = document.querySelectorAll(".harga");
+    productPrices.forEach((productPrice) => {
+      const productPriceValue = productPrice.textContent;
+      const formattedPrice = new Intl.NumberFormat("id-ID", {
+        style: "currency",
+        currency: "IDR",
+        minimumFractionDigits: 0,
+      }).format(parseFloat(productPriceValue.replace(/[^0-9.-]+/g, "")));
+      productPrice.textContent = formattedPrice;
     });
   });
 </script>
