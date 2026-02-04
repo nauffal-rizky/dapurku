@@ -1,9 +1,136 @@
 {% extends '../layout/base.html' %}{% block content %}
 <section class="cartpage">
-  <div class="content">
-    <a href="{% url 'products' %}" class="back-btn"
-      ><i class="fa-solid fa-arrow-left"></i>Kembali ke halaman produk</a
+  <article class="content">
+    <!-- UPDATE ADDRESS POPUP -->
+    <div class="popup-prompt hidden">
+      <div class="popup-box">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          class="svg-20"
+          id="close-popup"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z"
+            clip-rule="evenodd"
+          />
+        </svg>
+        <span>Perbarui Alamat</span>
+        <form method="POST">
+          {% csrf_token %}
+          <div class="inputs">
+            <div class="input-box">
+              <label for="inputStreet">Jalan</label>
+              <input
+                type="text"
+                name="street"
+                id="inputStreet"
+                placeholder="Jalan..."
+                required
+                autocomplete="off"
+              />
+            </div>
+            <div class="input-box">
+              <label for="inputHouseNo">Nomor Rumah</label>
+              <input
+                type="text"
+                name="house_no"
+                id="inputHouseNo"
+                placeholder="Nomor Rumah..."
+                autocomplete="off"
+              />
+            </div>
+            <div class="input-box">
+              <label for="inputRtRw">RT/RW</label>
+              <input
+                type="text"
+                name="rtrw"
+                id="inputRtRw"
+                placeholder="RT/RW..."
+                autocomplete="off"
+              />
+            </div>
+            <div class="input-box">
+              <label for="inputKelurahan">Kelurahan</label>
+              <input
+                type="text"
+                name="kelurahan"
+                id="inputKelurahan"
+                placeholder="Kelurahan/Desa..."
+                required
+                autocomplete="off"
+              />
+            </div>
+            <div class="input-box">
+              <label for="inputKecamatan">Kecamatan</label>
+              <input
+                type="text"
+                name="kecamatan"
+                id="inputKecamatan"
+                placeholder="Kecamatan..."
+                required
+                autocomplete="off"
+              />
+            </div>
+            <div class="input-box">
+              <label for="inputKota">Kota</label>
+              <input
+                type="text"
+                name="city"
+                id="inputKota"
+                placeholder="Kota/Kabupaten..."
+                required
+                autocomplete="off"
+              />
+            </div>
+            <div class="input-box">
+              <label for="inputProvince">Provinsi</label>
+              <input
+                type="text"
+                name="province"
+                id="inputProvince"
+                placeholder="Provinsi..."
+                required
+                autocomplete="off"
+              />
+            </div>
+            <div class="input-box">
+              <label for="inputPostalCode">Kode Pos</label>
+              <input
+                type="text"
+                name="postal_code"
+                id="inputPostalCode"
+                placeholder="Kode Pos..."
+                required
+                autocomplete="off"
+              />
+            </div>
+          </div>
+          <button type="submit">Simpan Perubahan</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- BACK BUTTON -->
+    <a href="{% url 'products' %}" class="back-btn">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        class="svg-25"
+      >
+        <path
+          fill-rule="evenodd"
+          d="M7.28 7.72a.75.75 0 0 1 0 1.06l-2.47 2.47H21a.75.75 0 0 1 0 1.5H4.81l2.47 2.47a.75.75 0 1 1-1.06 1.06l-3.75-3.75a.75.75 0 0 1 0-1.06l3.75-3.75a.75.75 0 0 1 1.06 0Z"
+          clip-rule="evenodd"
+        />
+      </svg>
+      Kembali ke halaman depan</a
     >
+
+    <!-- HEADER -->
     <div class="desc">
       <span
         >Ada <span class="amount">sekian</span> produk di keranjang belanja
@@ -11,82 +138,265 @@
       >
       <label class="select-all"
         ><input type="checkbox" name="" />
-        <div class="checkbox"><i class="fa-solid fa-check"></i></div>
+        <div class="checkbox">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            class="size-6"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M19.916 4.626a.75.75 0 0 1 .208 1.04l-9 13.5a.75.75 0 0 1-1.154.114l-6-6a.75.75 0 0 1 1.06-1.06l5.353 5.353 8.493-12.74a.75.75 0 0 1 1.04-.207Z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </div>
         Pilih semua</label
       >
     </div>
+
+    <!-- PRODUCTS -->
     <div class="cart-products">
       {% for item in cart_items %}
       <div class="product-info">
-        <label>
-          <input type="checkbox" />
-          <div class="checkbox"><i class="fa-solid fa-check"></i></div>
-        </label>
-        <div class="purchase-details">
-          {% if item.product.image %}
-          <img
-            src="{{ item.product.image.url }}"
-            alt="{{ item.product.name }}"
-          />
-          {% else %}
-          <img src="/static/1.jpg" alt="default image" />
-          {% endif %}
+        <input type="hidden" name="cart_item_id" value="{{ item.id }}" />
 
-          <div class="desc">
-            <span>{{ item.product.name }}</span>
-            {% if item.variant %}
-            <span>Varian: {{ item.variant.name }}</span>
-            {% endif %}
-            <span>Harga satuan: Rp {{ item.product.price|floatformat:0 }}</span>
+        <label>
+          <input
+            type="checkbox"
+            name="selected_items"
+            value="{{ item.id }}"
+            checked
+          />
+          <div class="checkbox">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              class="size-6"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M19.916 4.626a.75.75 0 0 1 .208 1.04l-9 13.5a.75.75 0 0 1-1.154.114l-6-6a.75.75 0 0 1 1.06-1.06l5.353 5.353 8.493-12.74a.75.75 0 0 1 1.04-.207Z"
+                clip-rule="evenodd"
+              />
+            </svg>
           </div>
-          <div class="stock">
-            <i class="fa-solid fa-circle"></i>
-            <span>Stok: {{ item.product.stock }}</span>
-          </div>
-          <div class="quantity">
-            <button><i class="fa-solid fa-minus"></i></button>
-            <span>{{ item.quantity }}</span>
-            <button><i class="fa-solid fa-plus"></i></button>
-          </div>
-          <span class="total-price"
-            >Rp {{ item.total_price|floatformat:0 }}</span
-          >
+        </label>
+
+        {% if item.product.image %}
+        <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" />
+        {% else %}
+        <img src="/static/img/1.jpg" alt="default image" />
+        {% endif %}
+
+        <div class="desc">
+          <span>{{ item.product.name }}</span>
+          <span>{{ item.product.price|floatformat:0 }}/pcs</span>
         </div>
-      </div>
-      {% empty %}
-      <p>Keranjang belanja Anda kosong.</p>
-      {% endfor %}
-    </div>
-    <div class="spanBtn">
-      <span>Sub Total: <span class="subtotal underline-text">0</span></span>
-      <div class="btn-container">
-        <a href="{% url 'products' %}">Kembali belanja</a>
-        <form
-          action="{% url 'create_order' %}"
-          method="post"
-          style="display: inline"
-        >
+        <div class="stock">
+          <div class="circle"></div>
+          <span>Stok: {{ item.product.stock }}</span>
+        </div>
+        <div class="quantity">
+          <button>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              class="svg-20"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M4.25 12a.75.75 0 0 1 .75-.75h14a.75.75 0 0 1 0 1.5H5a.75.75 0 0 1-.75-.75Z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </button>
+          <span>{{ item.quantity }}</span>
+          <button>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              class="svg-20"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M12 3.75a.75.75 0 0 1 .75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5a.75.75 0 0 1 .75-.75Z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </button>
+        </div>
+        <span class="total-price">Rp {{ item.total_price|floatformat:0 }}</span>
+        <!-- DELETE BUTTON -->
+        <form action="{% url 'delete_cart_item' item.id %}" method="POST">
           {% csrf_token %}
-          <button type="submit" class="pesan-btn">Pesan</button>
+          <button type="submit">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              class="svg-20"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M16.5 4.478v.227a48.816 48.816 0 0 1 3.878.512.75.75 0 1 1-.256 1.478l-.209-.035-1.005 13.07a3 3 0 0 1-2.991 2.77H8.084a3 3 0 0 1-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 0 1-.256-1.478A48.567 48.567 0 0 1 7.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 0 1 3.369 0c1.603.051 2.815 1.387 2.815 2.951Zm-6.136-1.452a51.196 51.196 0 0 1 3.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 0 0-6 0v-.113c0-.794.609-1.428 1.364-1.452Zm-.355 5.945a.75.75 0 1 0-1.5.058l.347 9a.75.75 0 1 0 1.499-.058l-.346-9Zm5.48.058a.75.75 0 1 0-1.498-.058l-.347 9a.75.75 0 0 0 1.5.058l.345-9Z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </button>
         </form>
       </div>
+      {% empty %}
+      <p class="no-products">Keranjang belanja Anda kosong.</p>
+      {% endfor %}
     </div>
-  </div>
+
+    <!-- ADDRESS SECTION (if address exists) -->
+    <div class="address-section">
+      <h2>Alamat Pengiriman:</h2>
+      {% if user.addresses.exists %}
+      <div class="address-list">
+        {% for addr in addresses %}
+        <div class="address-item">
+          <div class="full-address">
+            <span id="lblStreet">{{ addr.street }}</span>,
+            <span id="lblHouseNo">{{ addr.house_no }}</span>,
+            <span id="lblRtRw">{{ addr.rtrw }}</span>,
+            <span id="lblKelurahan">{{ addr.kelurahan }}</span>,
+            <span id="lblKecamatan">{{ addr.kecamatan }}</span>,
+            <span id="lblCity">{{ addr.city }}</span>,
+            <span id="lblProvince">{{ addr.province }}</span>,
+            <span id="lblPostalCode">{{ addr.postal_code }}</span>
+          </div>
+          <div class="btn-container">
+            <button type="button" class="update-btn" data-id="{{ addr.id }}">
+              Ubah
+            </button>
+            <form action="{% url 'delete_address' addr.id %}" method="POST">
+              {% csrf_token %}
+              <button
+                type="submit"
+                onclick="return confirm('Hapus alamat ini?');"
+              >
+                Hapus
+              </button>
+            </form>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <form class="address-form" method="POST" action="{% url 'add_address' %}">
+        {% csrf_token %}
+        <div class="inputs">
+          <input
+            type="text"
+            name="street"
+            placeholder="Jalan..."
+            required
+            autocomplete="off"
+          />
+          <input
+            type="text"
+            name="house_no"
+            placeholder="Nomor Rumah..."
+            autocomplete="off"
+          />
+          <input
+            type="text"
+            name="rtrw"
+            placeholder="RT/RW..."
+            autocomplete="off"
+          />
+          <input
+            type="text"
+            name="kelurahan"
+            placeholder="Kelurahan/Desa..."
+            required
+            autocomplete="off"
+          />
+          <input
+            type="text"
+            name="kecamatan"
+            placeholder="Kecamatan..."
+            required
+            autocomplete="off"
+          />
+          <input
+            type="text"
+            name="city"
+            placeholder="Kota/Kabupaten..."
+            required
+            autocomplete="off"
+          />
+          <input
+            type="text"
+            name="province"
+            placeholder="Provinsi..."
+            required
+            autocomplete="off"
+          />
+          <input
+            type="text"
+            name="postal_code"
+            placeholder="Kode Pos..."
+            required
+            autocomplete="off"
+          />
+        </div>
+        <button type="submit">Simpan Alamat</button>
+      </form>
+      {% endif %}
+    </div>
+
+    <!-- SUBTOTAL & BUTTONS -->
+    <div class="spanBtn">
+      <span>Sub Total: <span class="subtotal underline-text">0</span></span>
+      <form
+        action="{% url 'create_order' %}"
+        method="POST"
+        class="btn-container"
+      >
+        {% csrf_token %}
+        <a href="{% url 'products' %}">Kembali belanja</a>
+        <button type="submit" class="pesan-btn">Pesan</button>
+      </form>
+    </div>
+
+    <!-- ADDRESS SECTION (if address don't exists) -->
+
+    <!-- ERROR MANAGEMENT -->
+    {% if messages %}
+    <div class="error-list">
+      {% for message in messages %}
+      <span class="{% if message.tags %}{{ message.tags }}{% endif %}"
+        >{{ message }}</span
+      >
+      {% endfor %}
+    </div>
+    {% endif %}
+  </article>
 </section>
 {% endblock %} {% block script %}
 <script>
   document.addEventListener("DOMContentLoaded", () => {
     const products = document.querySelectorAll(
-      ".cartpage .content .cart-products .product-info"
+      ".cartpage .content .cart-products .product-info",
     );
     const amount = document.querySelector(".cartpage .content .desc .amount");
     amount.textContent = products.length;
 
     const selectAllCheckbox = document.querySelector(".select-all input");
+    selectAllCheckbox.checked = true;
     const itemCheckboxes = document.querySelectorAll(
-      ".product-info label input"
+      ".product-info label input",
     );
 
+    /* CHECKBOXES */
     selectAllCheckbox.addEventListener("change", () => {
       itemCheckboxes.forEach((checkbox) => {
         checkbox.checked = selectAllCheckbox.checked;
@@ -94,31 +404,113 @@
     });
 
     itemCheckboxes.forEach((checkbox) => {
+      checkbox.checked = true;
+
       checkbox.addEventListener("change", () => {
         if (!checkbox.checked) {
           selectAllCheckbox.checked = false;
         } else {
           const allChecked = Array.from(itemCheckboxes).every(
-            (cb) => cb.checked
+            (cb) => cb.checked,
           );
           selectAllCheckbox.checked = allChecked;
         }
       });
     });
 
-    const minusButtons = document.querySelectorAll(
-      ".quantity button:first-of-type"
-    );
-    const plusButtons = document.querySelectorAll(
-      ".quantity button:last-of-type"
-    );
+    /* QUANTITY */
     const quantitySpans = document.querySelectorAll(".quantity span");
     const totalPriceSpans = document.querySelectorAll(".total-price");
+    /* FORMAT RUPIAH */
+    totalPriceSpans.forEach((span) => {
+      const priceText = span.textContent.replace("Rp ", "");
+      const priceValue = parseInt(priceText);
+      span.textContent = `Rp ${priceValue.toLocaleString("id-ID")}`;
+    });
     const unitPriceSpans = document.querySelectorAll(
-      ".purchase-details .desc span:nth-of-type(3)"
+      ".purchase-details .desc span:nth-of-type(2)",
     );
+
+    /* FORMAT RUPIAH */
+    unitPriceSpans.forEach((span) => {
+      const priceText = span.textContent.replace("/pcs", "");
+      const priceValue = parseInt(priceText);
+      span.textContent = `${priceValue.toLocaleString("id-ID")}/pcs`;
+    });
     const subtotalSpan = document.querySelector(".subtotal");
 
+    /* +- Btns */
+    const minusButtons = document.querySelectorAll(
+      ".quantity button:first-of-type",
+    );
+    minusButtons.forEach((button, index) => {
+      button.addEventListener("click", () => {
+        let quantity = parseInt(quantitySpans[index].textContent);
+
+        if (quantity == 1) return;
+
+        quantity--;
+
+        quantitySpans[index].textContent = quantity;
+
+        // Inside the plus/minus event listeners, after updating quantitySpans[index]
+        fetch(`/update-cart-item/${item.id}/`, {
+          // You'll need a new URL/view for this
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": "{{ csrf_token }}", // Add CSRF token
+          },
+          body: JSON.stringify({ quantity: quantity }),
+        });
+
+        const unitPriceText = unitPriceSpans[index].textContent
+          .replace("Harga satuan: Rp ", "")
+          .replace(/\./g, "");
+        const unitPrice = parseInt(unitPriceText);
+        const totalPrice = unitPrice * quantity;
+        totalPriceSpans[index].textContent = `Rp ${totalPrice.toLocaleString(
+          "id-ID",
+        )}`;
+        console.log(totalPriceSpans[index]);
+        updateSubtotal();
+      });
+    });
+
+    const plusButtons = document.querySelectorAll(
+      ".quantity button:last-of-type",
+    );
+    plusButtons.forEach((button, index) => {
+      button.addEventListener("click", () => {
+        let quantity = parseInt(quantitySpans[index].textContent);
+        quantity++;
+
+        quantitySpans[index].textContent = quantity;
+
+        // Inside the plus/minus event listeners, after updating quantitySpans[index]
+        fetch(`/update-cart-item/${item.id}/`, {
+          // You'll need a new URL/view for this
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": "{{ csrf_token }}", // Add CSRF token
+          },
+          body: JSON.stringify({ quantity: quantity }),
+        });
+
+        const unitPriceText = unitPriceSpans[index].textContent
+          .replace("Harga satuan: Rp ", "")
+          .replace(/\./g, "");
+        const unitPrice = parseInt(unitPriceText);
+        const totalPrice = unitPrice * quantity;
+        totalPriceSpans[index].textContent = `Rp ${totalPrice.toLocaleString(
+          "id-ID",
+        )}`;
+        updateSubtotal();
+      });
+    });
+
+    /* UPDATE SUBTOTAL */
     const updateSubtotal = () => {
       let subtotal = 0;
       totalPriceSpans.forEach((span) => {
@@ -130,42 +522,65 @@
       subtotalSpan.textContent = `Rp${subtotal.toLocaleString("id-ID")}`;
     };
 
-    minusButtons.forEach((button, index) => {
-      button.addEventListener("click", () => {
-        let quantity = parseInt(quantitySpans[index].textContent);
-        if (quantity > 1) {
-          quantity--;
-          quantitySpans[index].textContent = quantity;
-          const unitPriceText = unitPriceSpans[index].textContent
-            .replace("Harga satuan: Rp ", "")
-            .replace(/\./g, "");
-          const unitPrice = parseInt(unitPriceText);
-          const totalPrice = unitPrice * quantity;
-          totalPriceSpans[index].textContent = `Rp ${totalPrice.toLocaleString(
-            "id-ID"
-          )}`;
-          updateSubtotal();
-        }
-      });
-    });
-    plusButtons.forEach((button, index) => {
-      button.addEventListener("click", () => {
-        let quantity = parseInt(quantitySpans[index].textContent);
-        quantity++;
-        quantitySpans[index].textContent = quantity;
-        const unitPriceText = unitPriceSpans[index].textContent
-          .replace("Harga satuan: Rp ", "")
-          .replace(/\./g, "");
-        const unitPrice = parseInt(unitPriceText);
-        const totalPrice = unitPrice * quantity;
-        totalPriceSpans[index].textContent = `Rp ${totalPrice.toLocaleString(
-          "id-ID"
-        )}`;
-        updateSubtotal();
-      });
+    updateSubtotal();
+
+    /* STOCK */
+    const stocks = document.querySelectorAll(".stock");
+    stocks.forEach((stock) => {
+      const stockText = stock.textContent.replace("Stok: ", "");
+      const stockValue = parseInt(stockText);
+      const circle = stock.querySelector(".circle");
+
+      if (stockValue <= 5) {
+        circle.classList.add("almost_run_out");
+      } else {
+        circle.classList.add("stocked");
+      }
     });
 
-    updateSubtotal();
+    /* UPDATE ADDRESS */
+    const inputStreet = document.getElementById("inputStreet");
+    const inputHouseNo = document.getElementById("inputHouseNo");
+    const inputRtRw = document.getElementById("inputRtRw");
+    const inputKelurahan = document.getElementById("inputKelurahan");
+    const inputKecamatan = document.getElementById("inputKecamatan");
+    const inputKota = document.getElementById("inputKota");
+    const inputProvince = document.getElementById("inputProvince");
+    const inputPostalCode = document.getElementById("inputPostalCode");
+
+    const lblStreet = document.getElementById("lblStreet");
+    const lblHouseNo = document.getElementById("lblHouseNo");
+    const lblRtRw = document.getElementById("lblRtRw");
+    const lblKelurahan = document.getElementById("lblKelurahan");
+    const lblKecamatan = document.getElementById("lblKecamatan");
+    const lblCity = document.getElementById("lblCity");
+    const lblProvince = document.getElementById("lblProvince");
+    const lblPostalCode = document.getElementById("lblPostalCode");
+
+    const popup = document.querySelector(".popup-prompt");
+    document.querySelectorAll(".update-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const addrId = btn.dataset.id;
+        const form = popup.querySelector("form");
+        form.action = `{% url 'update_address' 0 %}`.replace("0", addrId);
+
+        inputStreet.value = lblStreet.textContent.trim();
+        inputHouseNo.value = lblHouseNo.textContent.trim();
+        inputRtRw.value = lblRtRw.textContent.trim();
+        inputKelurahan.value = lblKelurahan.textContent.trim();
+        inputKecamatan.value = lblKecamatan.textContent.trim();
+        inputKota.value = lblCity.textContent.trim();
+        inputProvince.value = lblProvince.textContent.trim();
+        inputPostalCode.value = lblPostalCode.textContent.trim();
+
+        popup.classList.remove("hidden");
+      });
+    });
+    document
+      .querySelector(".popup-prompt .popup-box svg")
+      .addEventListener("click", () => {
+        popup.classList.add("hidden");
+      });
   });
 </script>
 {% endblock %}

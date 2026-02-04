@@ -144,3 +144,22 @@ MEDIA_ROOT = BASE_DIR / "media"
 # AUTO FIELD
 # ========================
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+# ========================
+# MIDTRANS PAYMENT GATEWAY
+# ========================
+MIDTRANS_SERVER_KEY = os.getenv('MIDTRANS_SERVER_KEY')  # From MidTrans dashboard
+MIDTRANS_CLIENT_KEY = os.getenv('MIDTRANS_CLIENT_KEY')
+MIDTRANS_IS_PRODUCTION = False  # Set to True for live
+
+# ========================
+# EMAIL CONFIGURATION 
+# ========================
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = '@gmail.com'  # Your sending email
+EMAIL_HOST_PASSWORD = 'your_app_password'  # Use app password for Gmail
+DEFAULT_FROM_EMAIL = 'your_email@gmail.com'

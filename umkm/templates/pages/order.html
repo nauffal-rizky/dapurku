@@ -1,64 +1,67 @@
 {% extends '../layout/base.html' %} {% block content %}
 <section class="order">
   <article class="content">
-    <a href="{% url 'products' %}" class="back-btn">
-      <i class="fa-solid fa-arrow-left"></i> Kembali ke halaman produk
-    </a>
+    <a href="{% url 'cart' %}" class="back-btn">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        class="svg-25"
+      >
+        <path
+          fill-rule="evenodd"
+          d="M7.28 7.72a.75.75 0 0 1 0 1.06l-2.47 2.47H21a.75.75 0 0 1 0 1.5H4.81l2.47 2.47a.75.75 0 1 1-1.06 1.06l-3.75-3.75a.75.75 0 0 1 0-1.06l3.75-3.75a.75.75 0 0 1 1.06 0Z"
+          clip-rule="evenodd"
+        />
+      </svg>
+      Kembali ke keranjang</a
+    >
 
-    {% for order in orders %}
-    <div class="order-info">
-      <h2>Pesanan #{{ order.id }} — {{ order.status }}</h2>
-      <p><small>{{ order.created_at|date:"d M Y, H:i" }}</small></p>
-
-      <div class="products">
-        {% for item in order.items.all %}
-        <div class="product">
-          {% if item.product.image %}
-          <img
-            src="{{ item.product.image.url }}"
-            alt="{{ item.product.name }}"
-          />
+    <div class="order-list">
+      <div class="order-container">
+        <div class="order-info">
           <div class="desc">
-            <span>{{ item.product.name }}</span>
-            {% if item.variant %}
-            <span>Varian: {{ item.variant.name }}</span>
-            {% endif %}
-            <span>Jumlah: {{ item.quantity }}</span>
-            <span>Harga: Rp {{ item.price|floatformat:0 }}</span>
-            <span>Total: Rp {{ item.get_total|floatformat:0 }}</span>
+            <h2>Pesanan #{{ item.product.id }}</h2>
+            <p><small>{{ product.created_at|date:"d M Y, H:i" }}</small></p>
           </div>
-          {% else %}
-          <img src="/static/1.jpg" alt="default image" />
-          <div class="desc">
-            <div class="order-name-variant">
-              <span class="order-product-name">{{ item.product.name }}</span>
-              {% if item.variant %}
-              <span
-                >Varian:
-                <span class="underline-text"
-                  >{{ item.variant.name }}</span
-                ></span
-              >
+
+          <div class="products">
+            {% for item in products %}
+            <div class="product">
+              {% if item.product.image %}
+              <img
+                src="{{ item.product.image.url }}"
+                alt="{{ item.product.name }}"
+              />
+              {% else %}
+              <img src="/static/img/1.jpg" alt="default image" />
               {% endif %}
-            </div>
-            <div class="quantity-price-total">
-              <span>Harga: Rp {{ item.price|floatformat:0 }}</span>
-              <span>Jumlah: {{ item.quantity }}</span>
-              <span>Total: Rp {{ item.get_total|floatformat:0 }}</span>
+              <div class="desc">
+                <span class="product-name">{{ item.product.name }}</span>
+                <span class="product-quantity"
+                  >Jumlah: {{ item.product.quantity }}</span
+                >
+                <span class="product-price"
+                  >Harga: Rp {{ item.product.price|floatformat:0 }}</span
+                >
+                <span class="total"
+                  >Total: Rp {{ item.total_price|floatformat:0 }}</span
+                >
+              </div>
+              {% empty %}
+              <p>Belum ada pesanan.</p>
+              {% endfor %}
             </div>
           </div>
-          {% endif %}
         </div>
-        {% endfor %}
+        <div class="order-summary">
+          <strong
+            >Total Harga: Rp {{ product.total_price|floatformat:0 }}</strong
+          >
+          <button class="checkout-btn">Beli</button>
+        </div>
       </div>
     </div>
-    <div class="order-summary">
-      <strong>Total Harga: Rp {{ order.total_price|floatformat:0 }}</strong>
-      <button class="checkout-btn">Beli</button>
-    </div>
-    {% empty %}
-    <p>Belum ada pesanan.</p>
-    {% endfor %}
   </article>
 </section>
 {% endblock %} {% block script %}

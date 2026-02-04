@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.forms import inlineformset_factory
-from .models import CustomUser, Product, ProductVariant
+from .models import CustomUser, Product
 
 class RegisterForm(UserCreationForm):
   email = forms.EmailField(required=True)
@@ -34,35 +34,11 @@ class RegisterForm(UserCreationForm):
 class ProductForm(forms.ModelForm):
   class Meta:
     model = Product
-    fields = ['name', 'description', 'price', 'image', 'category', 'is_available']
+    fields = ['name', 'description', 'price', 'image', 'category', 'stock', 'is_available']
     widgets = {
       'description': forms.Textarea(attrs={'rows': 3}),
       'price': forms.NumberInput(attrs={'step': '0.01'}),
     }
-
-class ProductVariantForm(forms.ModelForm):
-  class Meta:
-    model = ProductVariant
-    fields = ['name', 'additional_price', 'stock']
-    widgets = {
-      'additional_price': forms.NumberInput(attrs={'step': '0.01'}),
-    }
-
-  def __init__(self, *args, **kwargs):
-    super().__init__(*args, **kwargs)
-
-    self.fields['name'].required = False
-    self.fields['additional_price'].required = False
-    self.fields['stock'].required = False
-
-ProductVariantFormSet = inlineformset_factory(
-  Product,
-  ProductVariant,
-  form=ProductVariantForm,
-  extra=1,
-  can_delete=True
-)
-
 
 class ProfileUpdateForm(forms.ModelForm):
   class Meta:

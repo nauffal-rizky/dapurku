@@ -1,0 +1,17 @@
+{% extends '../layout/base.html' %}{% block content %}
+<section class="order-confirmation-email">
+  <article class="content">
+    <h1>Pesanan Anda Telah Dibuat</h1>
+    <p>Halo {{ user.username }},</p>
+    <p>Pesanan #{ order.id } telah dibuat dengan total Rp {{ total_price }}.</p>
+    <ul>
+      {% for item in items %}
+      <li>
+        {{ item.product.name }} - {{ item.quantity }} x Rp {{ item.price }}
+      </li>
+      {% endfor %}
+    </ul>
+    <p>Silakan selesaikan pembayaran melalui MidTrans.</p>
+  </article>
+</section>
+{% endblock %}

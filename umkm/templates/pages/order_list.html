@@ -1,0 +1,52 @@
+{% extends '../layout/base.html' %}{% block content %}
+<section class="order-confirmation-email">
+  <article class="content">
+    <div class="container mt-5">
+      <h1>Daftar Pesanan Anda</h1>
+      {% if orders %}
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>ID Pesanan</th>
+            <th>Total Harga</th>
+            <th>Status</th>
+            <th>Tanggal Dibuat</th>
+            <th>ID Transaksi MidTrans</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for order in orders %}
+          <tr>
+            <td>{{ order.id }}</td>
+            <td>Rp {{ order.total_price }}</td>
+            <td>
+              <span
+                class="badge {% if order.status == 'Paid' %}bg-success {% elif order.status == 'Pending' %}bg-warning {% else %}bg-danger{% endif %}"
+              >
+                {{ order.status }}
+              </span>
+            </td>
+            <td>{{ order.created_at|date:"d M Y, H:i" }}</td>
+            <td>{{ order.midtrans_transaction_id|default:"N/A" }}</td>
+            <td>
+              <a
+                href="{% url 'order_detail' order.id %}"
+                class="btn btn-primary btn-sm"
+                >Lihat Detail</a
+              >
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <p>Anda belum memiliki pesanan.</p>
+      {% endif %}
+      <a href="{% url 'cart' %}" class="btn btn-secondary"
+        >Kembali ke Keranjang</a
+      >
+    </div>
+  </article>
+</section>
+{% endblock %}

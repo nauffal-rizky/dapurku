@@ -18,32 +18,140 @@ mummiew - annanendra020422
 1. NaufalNR - N@uff@l2oo5
 2. DwiHanda - dwih@nd@123
 3. Keitora - kur0w@123
+4. Puput Camilan - t3m3nb00b13
 
 
 
 
 
 |===================== To-do List =====================|
-- Hilangkan fitur varian di "product-form, product-detail, cartpage, orderpage" dan database
-- Perbaiki design halaman Cart
-- Perbaiki tampilan "produk saya" halaman profil user
+- Buat hapus cart product jadi menggunakan AJAX
+- Buat ubah address jadi menggunakan AJAX
+- Buat hapus address jadi menggunakan AJAX
+- Masukkan email dapurku di settings.py
+- Sambungkan Contact page dengan email dapurku
 
-- Membuat Payment Gateway: Gopay, OVO, Dana
-- Buat Pop-up message untuk setiap error/pesan!
-- Buat fitur "Ada sekian produk di dalam keranjang anda" berjalan pada halaman Cart
-- Tambahkan fitur "Hapus product belanjaan" pada halaman Cart
-- Membuat halaman utama adalah halaman products layaknya E-Commerce, seperti Shopee, Tokopedia, dsb ✔
-- Membuat fitur "Tambah Varian" berjalan dengan lancar di halaman add product 
-- Membuat fitur "Varian" berjalan dengan lancar di halaman edit product
-- Tampilkan varian-varian produk sesuai dengan produk di halaman detail product
-- Buat proses menambahkan ke keranjang saat user click keranjang pada halaman detail product
-- Manajemen Produk
-- Manajemen Pesanan
-- Manajemen Analasis
+- Hosting
+- Membuat produk bisa di share ke sosmed
+- Manajemen Analisis pada halaman Profile
+- Integrasi Medsos bagian TikTok bagaimana?
 
 ================== Screenshot Checklist ==================
-- Cart Page 
-- Order page 
+- Contact Page
+- Cart Page
+- Order Page
+- Manajemen Pelanggan (Profile UMKM)
+- Order (Payment Gateway)
 - UMKM Profile & Product Analytic per Product in Product 
 - UMKM Profile & Product Analytic All Product in User Profile Page 
 - Payment Gateway (OTP/Code)
+- Manajemen Pesanan (Analisis di profile, notif ke pembeli, log histori)
+- Manajemen Pemasaran (produk bisa di share ke sosmed)
+- Modul Analisis Data Penjualan
+
+How to integrate my contact page to my email, so users who visit my website can contact me via email?
+
+Below is my `contact.html` code:
+{% extends '../layout/base.html' %} {% block content %}
+<section class="contact">
+  <article class="content">
+    <div class="connects">
+      <div class="desc">
+        <span>Hubungi Kami!</span>
+        <span>
+          Kami sangat senang mendengar kabar dari Anda! Baik itu pertanyaan,
+          masukan, atau sekadar ingin menyapa, tim kami siap untuk terhubung.
+          Jangan ragu untuk menghubungi kami kapan saja—kami selalu senang
+          mendukung, mendengarkan, dan berkembang bersama. Suara Anda berarti
+          bagi kami, dan kami antusias membangun hubungan yang bermakna dengan
+          Anda. Mari tetap terhubung!
+        </span>
+      </div>
+      <div class="informations">
+        <div class="row">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            class="svg-20"
+          >
+            <path
+              d="M1.5 8.67v8.58a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3V8.67l-8.928 5.493a3 3 0 0 1-3.144 0L1.5 8.67Z"
+            />
+            <path
+              d="M22.5 6.908V6.75a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3v.158l9.714 5.978a1.5 1.5 0 0 0 1.572 0L22.5 6.908Z"
+            />
+          </svg>
+
+          <div class="col">
+            <span>E-mail</span>
+            <span>contact@dapurku.store</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="contact-form">
+      <span>Pertanyaan atau Masukan?</span>
+      <form action="">
+        <div class="input-box">
+          <label for="nama-input">Nama</label>
+          <input
+            type="text"
+            id="nama-input"
+            autocomplete="off"
+            placeholder="Masukkan nama..."
+            required
+          />
+        </div>
+        <div class="input-box">
+          <label for="email-input">E-mail</label>
+          <input
+            type="email"
+            id="email-input"
+            autocomplete="off"
+            placeholder="Masukkan e-mail..."
+            required
+          />
+        </div>
+        <div class="desc-box">
+          <label for="message-input">Pesan</label>
+          <textarea
+            id="message-input"
+            placeholder="Tulis pesan..."
+            required
+          ></textarea>
+        </div>
+        <button>
+          Submit<svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            class="svg-20"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M13.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L11.69 12 4.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z"
+              clip-rule="evenodd"
+            />
+            <path
+              fill-rule="evenodd"
+              d="M19.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 1 1-1.06-1.06L17.69 12l-6.97-6.97a.75.75 0 0 1 1.06-1.06l7.5 7.5Z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </button>
+      </form>
+    </div>
+  </article>
+</section>
+{% endblock %}
+
+Below is my `views.py` code:
+@login_required(login_url = 'login')
+def contactPage(request):
+  page = "contact"
+  
+  contents = {'page': page, 'plain_page': page in plain_pages}
+  return render(request, './pages/contact.html', contents)
+
+Give step-by-step on how to hosting my Django + JavaScript project

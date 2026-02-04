@@ -22,12 +22,22 @@ urlpatterns = [
   path("umkm/product/<int:pk>/delete/", views.delete_product, name="delete_product"),
 
   path('order/', views.orderPage, name = "order"),
-  path('order/create/', views.create_order, name='create_order'),
+  path('order/list/', views.order_list, name='order_list'),
+  path('order/list/<int:order_id>/', views.order_detail, name='order_detail'),
   
   path('cartpage/', views.cartPage, name = "cart"),
-  path('cart/add/<int:product_id>/', views.add_to_cart, name='add_to_cart'),
+  path('cartpage/add/<int:product_id>/', views.add_to_cart, name='add_to_cart'),
+  path('update-cart-item/<int:item_id>/', views.update_cart_item, name='update_cart_item'),
+  path('cartpage/delete_item/<int:cart_item_id>/', views.delete_cart_item, name='delete_cart_item'),
+  path('cartpage/create_order/', views.create_order, name='create_order'),
 
   path("contact/", views.contactPage, name="contact"),
+
+  path("address/add/", views.add_address, name="add_address"),
+  path("address/update/<int:address_id>/", views.update_address, name="update_address"),
+  path("address/delete/<int:address_id>/", views.delete_address, name="delete_address"),
+
+  path('midtrans/webhook/', views.midtrans_webhook, name='midtrans_webhook')
 ]
 
 if settings.DEBUG:

@@ -43,6 +43,57 @@ main {
   display: none !important;
 }
 
+.popup-prompt {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+  z-index: 10;
+}
+.popup-prompt .popup-box {
+  position: relative;
+  min-width: 350px;
+  max-width: 700px;
+  background-color: var(--putih);
+  border: 2px solid var(--red);
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0px 4px 8px rgba(51, 51, 51, 0.1);
+}
+.popup-prompt .popup-box svg {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  color: var(--red);
+}
+.popup-prompt .popup-box span {
+  display: inline-block;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
+}
+.popup-prompt .popup-box button {
+  width: 100%;
+  background-color: var(--red);
+  color: var(--putih);
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 1rem 0 0 0;
+  padding: 0.5rem 0;
+  border: 2px solid var(--red);
+  border-radius: 5px;
+}
+.popup-prompt .popup-box .inputs {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+}
+
 label {
   font-size: 1.25rem;
   font-weight: 600;
@@ -74,7 +125,7 @@ select {
 }
 select ~ svg {
   position: absolute;
-  top: 58px;
+  top: 53px;
   right: 1.25rem;
   pointer-events: none;
   transform: translateY(-50%);
@@ -221,18 +272,6 @@ section {
     opacity: 0.5;
     transform: scale(0.95);
   }
-}
-
-.no-products {
-  grid-column: span 4;
-  background-color: var(--red);
-  color: var(--putih);
-  font:
-    600 1.5rem var(--font-utama),
-    sans-serif;
-  text-align: center;
-  padding: 2rem 0;
-  border-radius: 15px;
 }
 
 /* HEADER */
@@ -437,14 +476,15 @@ section {
 :is(.login, .signup) .content > span a:hover {
   text-decoration: underline;
 }
+.profile .content .edit-profile form .input-box,
+.edit-profile form .main-details .input-box,
+.product-form .content form .main-details .inputs .input-box,
 :is(.login, .signup) .content form .input-box {
   position: relative;
-  gap: 0.5rem;
-  margin: 0;
 }
-:is(.login, .signup) .content form .input-box i {
+:is(.login, .signup) .content form .input-box svg {
   position: absolute;
-  top: calc(50% + 9px);
+  top: calc(50% + 6px);
   right: 1.25rem;
 }
 :is(.login, .signup) .content .error-list {
@@ -471,7 +511,7 @@ section {
 /* LOGIN */
 .login .content {
   gap: 0.5rem;
-  width: 500px;
+  width: 400px;
 }
 .login .content form {
   gap: 0.5rem;
@@ -480,7 +520,7 @@ section {
 /* SIGNUP */
 .signup .content {
   gap: 1rem;
-  width: 760px;
+  width: 735px;
 }
 .signup .content form {
   display: grid;
@@ -491,6 +531,7 @@ section {
   gap: 0.5rem 0.75rem;
   grid-template-columns: auto 1fr;
   grid-template-rows: 1fr auto auto;
+  width: 100%;
 }
 .signup .content form .img-profile {
   position: relative;
@@ -598,6 +639,7 @@ section,
 .login .content form,
 .short_about .content aside,
 :is(.login, .signup) .content,
+:is(.input-box, .desc-box),
 :is(.login, .signup) .content form .grid-cols div,
 .long_about .content,
 .long_about .content .challenge .analysis .column,
@@ -605,19 +647,20 @@ section,
 .products.all .content,
 .products.all .content .all-products,
 .contact-form form,
-.input-box,
-.order-info .products .product .desc,
+.order-list .order-container .order-info .products .product .desc,
 .desc-box,
 .detail-product .content .desc,
 .connects .informations,
 .cartpage .content .cart-products,
 .cartpage .content .cart-products .product-info .desc,
-.product-item .image .overlay,
 .product-item .desc,
-.order-info .products .product,
-.image-container,
+.order-list .order-container .order-info .products .product,
+.order-list,
+.order-list .order-container .order-info .desc,
+.order-list .order-container,
 .connects .desc,
-.order-info,
+.cartpage .content .address-section .address-list,
+.order-list .order-container .order-info,
 footer,
 .contact-form,
 .umkm-products,
@@ -629,6 +672,10 @@ main {
   display: flex;
   flex-direction: column;
 }
+:is(.input-box, .desc-box) {
+  gap: 0.25rem;
+}
+
 .long_about .content .challenge .analysis .column {
   justify-content: space-evenly;
   width: fit-content;
@@ -671,6 +718,27 @@ main {
   aspect-ratio: 1/1;
   border-radius: 1rem;
 }
+.long_about .content .socmed > span {
+  display: block;
+  font-size: 2rem;
+  font-weight: 500;
+  text-align: center;
+  margin: 0 auto 1rem auto;
+}
+.long_about .content .socmed .links {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+.long_about .content .socmed .links a span {
+  color: var(--warna-utama);
+}
+.long_about .content .socmed .links a:hover span {
+  text-decoration: underline;
+}
+.long_about .content .socmed .links a img {
+  width: 100%;
+  aspect-ratio: 1/1;
+}
 
 /* PRODUCTS */
 .products.all .content {
@@ -683,16 +751,21 @@ main {
   gap: 2rem;
   width: 100%;
 }
-.umkm-products {
-  margin: 3rem 0;
-}
 .product-list {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 0.75rem;
 }
-.product-list.empty {
-  display: block;
+.product-list .no-products {
+  grid-column: span 4;
+  background-color: var(--red);
+  color: var(--putih);
+  font:
+    600 1.5rem var(--font-utama),
+    sans-serif;
+  text-align: center;
+  padding: 2rem 0;
+  border-radius: 15px;
 }
 .product-item {
   position: relative;
@@ -742,20 +815,6 @@ main {
   width: 100%;
   border-radius: 1rem 1rem 0 0;
   height: 200px;
-}
-.product-item .image .overlay {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  justify-content: center;
-  height: 100%;
-  background-color: rgba(51, 51, 51, 0.3);
-  color: var(--putih);
-  border-radius: 1rem;
-  padding: 0 0.75rem;
-  opacity: 0;
-  transition: 0.5s;
 }
 .product-item .image:hover .overlay {
   opacity: 1;
@@ -869,29 +928,18 @@ main {
 }
 .product-information {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-areas: "img desc checkout";
+  grid-template-columns: repeat(3, 1fr);
   gap: 1rem;
 }
-.image-container {
-  gap: 0.5rem;
-}
-.image-container img {
+.product-information img {
+  grid-area: img;
+  width: 100%;
   aspect-ratio: 1/1;
   border-radius: 0.5rem;
 }
-.image-container > img {
-  width: 100%;
-}
-.image-container .overlays {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 0.5rem;
-}
-.image-container .overlays img {
-  width: 100%;
-}
-.image-container .overlays img.active {
-  border: 2px solid var(--warna-utama);
+.detail-product .content .desc {
+  grid-area: desc;
 }
 .detail-product .content .desc .head > span {
   font-size: 1.5rem;
@@ -926,60 +974,14 @@ main {
   background-color: #ccc;
   margin: 0.75rem 0;
 }
-.detail-product .content .desc .variants > span {
-  display: block;
-  font-weight: 600;
-}
-.detail-product .content .desc .variants > span span {
-  font-weight: 400;
-}
-.detail-product .content .desc .variants .variant-container {
-  display: flex;
-  gap: 0.3rem;
-  padding: 1rem 0 0.5rem 0;
-  overflow-x: scroll;
-}
-.detail-product .content .desc .variants .variant-container::-webkit-scrollbar {
-  height: 3px;
-}
-.detail-product
-  .content
-  .desc
-  .variants
-  .variant-container::-webkit-scrollbar-thumb {
-  background-color: #888;
-  border-radius: 4px;
-}
-.detail-product
-  .content
-  .desc
-  .variants
-  .variants::-webkit-scrollbar-thumb:hover {
-  background-color: #555;
-}
-.detail-product .content .desc .variants .variant-container span.active,
-.detail-product .content .desc .tabs .tab-container span.active {
-  color: var(--warna-utama);
-}
-.detail-product .content .desc .variants .variant-container span {
-  font-size: 0.75rem;
-  border: 2px solid #ccc;
-  border-radius: 0.5rem;
-  padding: 0.5rem 1rem;
-  cursor: pointer;
-}
-.detail-product .content .desc .variants .variant-container span.active {
-  background-color: rgba(128, 0, 0, 0.1);
-  font-weight: 600;
-  font-family: var(--font-utama), sans-serif;
-  border: 2px solid var(--warna-utama);
-}
-.detail-product .content .desc .description {
-  margin: 0.75rem 0 0 0;
+.detail-product .content .checkout {
+  grid-area: checkout;
 }
 .detail-product .content .checkout > span {
-  font-size: 1.1rem;
+  display: inline-block;
+  font-size: 1.25rem;
   font-weight: 700;
+  margin: 0 0 0.5rem 0;
 }
 .detail-product .content .checkout > p {
   font-size: 1.25rem;
@@ -995,47 +997,61 @@ main {
   align-items: center;
   gap: 0.5rem;
 }
-.order-info .products {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  grid-template-rows: auto;
-  gap: 1rem;
-  margin: 1.5rem 0 2rem 0;
+
+/* ORDER INFO */
+.order-list {
+  gap: 2rem;
 }
-.order-info .products .product img {
+.order-list .order-container {
+  gap: 1rem;
+}
+.order-list .order-container .order-info {
+  gap: 1.5rem;
+}
+.order-list .order-container .order-info .desc {
+}
+.order-list .order-container .order-info .products {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1rem;
+}
+.order-list .order-container .order-info .products .product img {
   width: 100%;
   height: 100%;
-  aspect-ratio: 16/9;
   border-radius: 10px 10px 0 0;
+  aspect-ratio: 1/1;
 }
-.order-info .products .product .desc {
+.order-list .order-container .order-info .products .product .desc {
   background-color: var(--warna-utama);
   color: var(--putih);
   padding: 0.75rem 1rem;
   border-radius: 0 0 10px 10px;
   margin: -4px 0 0 0;
 }
-.order-info .products .product .desc .order-product-name {
-  font-size: 1.25rem;
-  font-weight: 600;
-}
-.order-info .products .product .desc .order-name-variant {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin: 0 0 0.5rem 0;
-}
-.order-info
+.order-list
+  .order-container
+  .order-info
   .products
   .product
   .desc
-  .order-name-variant
-  span:last-of-type
-  span::after {
-  background-color: var(--warna-utama);
+  .product-name {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+.order-list
+  .order-container
+  .order-info
+  .products
+  .product
+  .desc
+  :is(.product-price, .total) {
+  font-size: 1.25rem;
+  font-weight: 500;
 }
 .detail-product .content .checkout .product-amount .counter,
-.order-info
+.order-list
+  .order-container
+  .order-info
   .ordered-products
   .products-container
   .product
@@ -1048,7 +1064,9 @@ main {
   border-radius: 0.5rem;
 }
 .detail-product .content .checkout .product-amount .counter :is(input, button),
-.order-info
+.order-list
+  .order-container
+  .order-info
   .ordered-products
   .products-container
   .product
@@ -1064,6 +1082,20 @@ main {
   border: none;
   padding: 0;
 }
+.order-list .order-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.order-list .order-summary button {
+  background-color: var(--warna-utama);
+  color: var(--putih);
+  font-size: 1.25rem;
+  padding: 0.5rem 0.75rem;
+  border: 2px solid var(--warna-utama);
+  border-radius: 10px;
+}
+
 .detail-product .content .checkout .product-amount .stock {
   display: flex;
   gap: 0.3rem;
@@ -1076,7 +1108,7 @@ main {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 1rem 0 0.75rem 0;
+  margin: 1rem 0 0.5rem 0;
 }
 .detail-product .content .checkout .total span:last-of-type {
   font-size: 1.1rem;
@@ -1120,36 +1152,34 @@ main {
 }
 
 /* UMKM PROFILE */
-.detail-content,
-.umkm-content {
-  gap: 2rem;
-}
-.umkm-info {
-  display: grid;
-  grid-template-columns: auto 1fr;
+.detail-content {
   gap: 2rem;
 }
 .umkm-info .desc .head span {
-  background-color: var(--red);
-  color: var(--putih);
-  text-transform: capitalize;
-  padding: 0.5rem 0.75rem;
-  border-radius: 10px;
+  color: var(--red);
 }
 .umkm-info .desc .head span.active {
-  background-color: var(--green);
+  color: var(--green);
 }
-.umkm-info .desc p {
-  font-size: 1.25rem;
-  text-align: justify;
-}
+
 /* CARTPAGE */
 .cartpage .content {
+  position: relative;
   max-width: 95%;
+}
+.cartpage
+  .content
+  .popup-prompt
+  .popup-box
+  .btn-container
+  button:first-of-type {
+  background-color: var(--abuabu);
+  border: 2px solid var(--abuabu);
 }
 .cartpage .content > .desc {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   background-color: var(--warna-utama);
   color: var(--putih);
   padding: 2rem;
@@ -1181,13 +1211,11 @@ main {
 }
 .cartpage .content > .desc label input:checked ~ .checkbox {
   background-color: var(--putih);
-  color: var(--warna-utama);
 }
 .cartpage .content .spanBtn {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 1rem 0 0 0;
 }
 .cartpage .content .spanBtn > span {
   font-size: 1.25rem;
@@ -1197,13 +1225,24 @@ main {
   font-weight: 500;
 }
 .cartpage .content .cart-products {
-  gap: 0.3rem;
   border: 2px solid #ddd;
   border-top: none;
 }
+.cartpage .content .cart-products .no-products {
+  color: var(--red);
+  text-align: center;
+  font-size: 1.5rem;
+  padding: 2rem;
+}
 .cartpage .content .cart-products .product-info {
-  display: flex;
-  padding: 1rem 2rem 1rem 0;
+  display: grid;
+  grid-template-areas: "checkbox img desc stock quantity total form";
+  grid-template-columns: repeat(6, auto);
+  width: 100%;
+  justify-items: center;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.25rem;
 }
 .cartpage .content .cart-products .product-info:nth-child(even) {
   border-top: 2px solid #ddd;
@@ -1214,15 +1253,12 @@ main {
 }
 .cartpage .content .cart-products .product-info label {
   position: relative;
-  margin: 0 1.5rem;
+  grid-area: checkbox;
 }
 .cartpage .content .cart-products .product-info label .checkbox {
   position: absolute;
   top: 50%;
-  left: -50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  left: calc(-50% + 19px);
   width: 25px;
   height: 25px;
   background-color: transparent;
@@ -1241,71 +1277,43 @@ main {
   background-color: var(--warna-utama);
   color: var(--putih);
 }
-.cartpage .content .cart-products .product-info .purchase-details {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-}
-.cartpage .content .cart-products .product-info .purchase-details img {
+.cartpage .content .cart-products .product-info img {
+  grid-area: img;
   width: 100px;
   border-radius: 5px;
   aspect-ratio: 1/1;
 }
-.cartpage .content .cart-products .product-info .purchase-details .stock {
+.cartpage .content .cart-products .product-info .desc {
+  grid-area: desc;
+}
+.cartpage .content .cart-products .product-info .stock {
+  grid-area: stock;
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
-.cartpage
-  .content
-  .cart-products
-  .product-info
-  .purchase-details
-  .desc
-  > span:first-of-type {
+.cartpage .content .cart-products .product-info .stock .circle {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background-color: var(--abuabu);
+}
+.cartpage .content .cart-products .product-info .desc > span:first-of-type {
   color: var(--warna-utama);
   margin: 0 0 0.5rem 0;
 }
 .cartpage .content > .desc span span,
-.cartpage
-  .content
-  .cart-products
-  .product-info
-  .purchase-details
-  .desc
-  span
-  span {
+.cartpage .content .cart-products .product-info .desc span span {
   font-weight: 700;
 }
-.cartpage
-  .content
-  .cart-products
-  .product-info
-  .purchase-details
-  .stock
-  i.stocked {
-  color: var(--green);
+.cartpage .content .cart-products .product-info .stock .circle.stocked {
+  background-color: var(--green);
 }
-.cartpage
-  .content
-  .cart-products
-  .product-info
-  .purchase-details
-  .stock
-  i.almost_run_out {
-  color: var(--warna-utama);
+.cartpage .content .cart-products .product-info .stock .circle.almost_run_out {
+  background-color: var(--red);
 }
-.cartpage
-  .content
-  .cart-products
-  .product-info
-  .purchase-details
-  .stock
-  i.run_out {
-  color: var(--red);
-}
-.cartpage .content .cart-products .product-info .purchase-details .quantity {
+.cartpage .content .cart-products .product-info .quantity {
+  grid-area: quantity;
   display: flex;
   align-items: center;
   gap: 0.8rem;
@@ -1313,24 +1321,104 @@ main {
   border: 2px solid var(--abuabu);
   border-radius: 20px;
 }
+.cartpage .content .cart-products .product-info .quantity button {
+  display: flex;
+  background-color: transparent;
+  border: none;
+}
+.cartpage .content .cart-products .product-info .quantity button:last-of-type {
+  color: var(--warna-utama);
+}
+.cartpage .content .cart-products .product-info .total-price {
+  grid-area: total;
+  font-weight: 600;
+}
+.cartpage .content .cart-products .product-info form {
+  grid-area: form;
+}
+.cartpage .content .cart-products .product-info form button {
+  display: flex;
+  align-items: center;
+  background-color: transparent;
+  color: var(--red);
+  border: none;
+}
+.cartpage .content .address-section {
+  margin: 1.5rem 0 2rem 0;
+}
+.cartpage .content .address-section h2 {
+  color: var(--warna-utama);
+}
+.cartpage .content .address-section .address-form {
+  margin: 0.75rem 0 0 0;
+}
+.cartpage .content .address-section .address-form .inputs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+}
+.cartpage .content .address-section .address-form button {
+  width: 100%;
+  background-color: var(--warna-utama);
+  color: var(--putih);
+  font-size: 1.25rem;
+  margin: 0.75rem 0 0 0;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 10px;
+}
+.cartpage .content .address-section .address-list {
+  gap: 0.5rem;
+}
+.cartpage .content .address-section .address-list .address-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+.cartpage .content .address-section .address-list .address-item .btn-container {
+  display: flex;
+  align-items: center;
+}
 .cartpage
   .content
-  .cart-products
-  .product-info
-  .purchase-details
-  .quantity
+  .address-section
+  .address-list
+  .address-item
+  .btn-container
   button {
-  background-color: transparent;
+  color: var(--putih);
+  padding: 0.5rem 0.75rem;
   border: none;
 }
 .cartpage
   .content
-  .cart-products
-  .product-info
-  .purchase-details
-  .quantity
-  button:last-of-type {
-  color: var(--warna-utama);
+  .address-section
+  .address-list
+  .address-item
+  .btn-container
+  > button {
+  background-color: var(--green);
+  border-radius: 10px 0 0 10px;
+}
+.cartpage
+  .content
+  .address-section
+  .address-list
+  .address-item
+  .btn-container
+  form
+  button {
+  background-color: var(--red);
+  border-radius: 0 10px 10px 0;
+}
+.cartpage .content .address-section > button {
+  background-color: var(--warna-utama);
+  color: var(--putih);
+  font-size: 1.25rem;
+  padding: 0.5rem 0.75rem;
+  border: none;
+  border-radius: 10px;
 }
 .cartpage .content > span {
   display: block;
@@ -1342,30 +1430,25 @@ main {
 .cartpage .content > span span {
   font-weight: 500;
 }
-.cartpage .content .btn-container {
+.cartpage .content .spanBtn .btn-container {
   display: flex;
-  justify-content: flex-end;
+  align-items: center;
   gap: 1rem;
 }
-.cartpage .content .btn-container :is(a, form button) {
+.cartpage .content .spanBtn .btn-container :is(a, button) {
   font-size: 1.25rem;
   font-weight: 500;
-  padding: 0.8rem 1.5rem;
-  border-radius: 10px;
 }
-.cartpage .content .btn-container a {
+.cartpage .content .spanBtn .btn-container a {
   color: var(--warna-utama);
   text-decoration: underline;
 }
-.cartpage .content .btn-container form button {
+.cartpage .content .spanBtn .btn-container button {
   background-color: var(--warna-utama);
   color: var(--putih);
-  border: 2px solid var(--warna-utama);
-  transition: 0.3s;
-}
-.cartpage .content .btn-container form button:hover {
-  background-color: transparent;
-  color: var(--warna-utama);
+  padding: 1rem 1.5rem;
+  border: none;
+  border-radius: 10px;
 }
 
 /* ORDER PAGE */
@@ -1413,9 +1496,6 @@ main {
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 0.5rem 1rem;
 }
-.popup .popup-content .address-input .inputs .input-box {
-  margin: 0;
-}
 .popup .popup-content .address-input .inputs .input-box input {
   font-size: 1rem;
   padding: 0.5rem 1rem;
@@ -1445,12 +1525,9 @@ main {
   color: var(--warna-utama);
   font-size: 1.5rem;
 }
-.popup .popup-content .delivery-input .input-box {
-  margin: 0 0 0.75rem 0;
-}
 
-.order-info .user-address,
-.order-info .checkout {
+.order-list .order-container .order-info .user-address,
+.order-list .order-container .order-info .checkout {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -1459,7 +1536,9 @@ main {
   border-radius: 10px;
   box-shadow: 0px 4px 8px rgba(51, 51, 51, 0.1);
 }
-.order-info
+.order-list
+  .order-container
+  .order-info
   .ordered-products
   .products-container
   .product
@@ -1467,7 +1546,9 @@ main {
   .delivery-info {
   gap: 0.5rem;
 }
-.order-info
+.order-list
+  .order-container
+  .order-info
   .ordered-products
   .products-container
   .product
@@ -1477,54 +1558,90 @@ main {
   span {
   font-weight: 600;
 }
-.order-info .user-address:hover,
-.order-info .ordered-products .products-container .product:hover {
+.order-list .order-container .order-info .user-address:hover,
+.order-list
+  .order-container
+  .order-info
+  .ordered-products
+  .products-container
+  .product:hover {
   box-shadow: 0px 8px 12px rgba(51, 51, 51, 0.1);
   transition: 0.3s;
 }
-.order-info .user-address span:first-of-type {
+.order-list .order-container .order-info .user-address span:first-of-type {
   color: var(--warna-utama);
   font-size: 1.25rem;
   font-weight: 600;
   margin: 0 0 0.25rem 0;
 }
-.order-info .user-address p {
+.order-list .order-container .order-info .user-address p {
   color: var(--abuabu);
 }
-.order-info .user-address i,
-.order-info .ordered-products .products-container .product .delivery-option i {
+.order-list .order-container .order-info .user-address i,
+.order-list
+  .order-container
+  .order-info
+  .ordered-products
+  .products-container
+  .product
+  .delivery-option
+  i {
   font-size: 2rem;
 }
-.order-info .user-address i {
+.order-list .order-container .order-info .user-address i {
   color: var(--warna-utama);
 }
-.order-info .ordered-products {
+.order-list .order-container .order-info .ordered-products {
   margin: 1.5rem 0 2rem 0;
 }
-.order-info .ordered-products h2 {
+.order-list .order-container .order-info .ordered-products h2 {
   margin: 0 0 1.5rem 0;
 }
-.order-info .ordered-products .products-container {
+.order-list .order-container .order-info .ordered-products .products-container {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
 }
-.order-info .ordered-products .products-container .product {
+.order-list
+  .order-container
+  .order-info
+  .ordered-products
+  .products-container
+  .product {
   gap: 0.5rem;
   box-shadow: 0px 4px 8px rgba(51, 51, 51, 0.1);
   border-radius: 10px;
 }
-.order-info .ordered-products .products-container .product .head > a {
+.order-list
+  .order-container
+  .order-info
+  .ordered-products
+  .products-container
+  .product
+  .head
+  > a {
   display: inline-block;
   color: var(--warna-utama);
   font-size: 1.5rem;
   font-weight: 600;
   margin: 0 0 0.5rem 0;
 }
-.order-info .ordered-products .products-container .product .head {
+.order-list
+  .order-container
+  .order-info
+  .ordered-products
+  .products-container
+  .product
+  .head {
   padding: 1rem 1.5rem;
 }
-.order-info .ordered-products .products-container .product .delivery-option {
+.order-list
+  .order-container
+  .order-info
+  .ordered-products
+  .products-container
+  .product
+  .delivery-option {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -1534,17 +1651,34 @@ main {
   padding: 1rem 1.5rem;
   border-radius: 0 0 10px 10px;
 }
-.order-info .ordered-products .products-container .product .head .info {
+.order-list
+  .order-container
+  .order-info
+  .ordered-products
+  .products-container
+  .product
+  .head
+  .info {
   display: grid;
   grid-template-columns: 30% 1fr;
   gap: 1rem;
 }
-.order-info .ordered-products .products-container .product .head .info img {
+.order-list
+  .order-container
+  .order-info
+  .ordered-products
+  .products-container
+  .product
+  .head
+  .info
+  img {
   width: 100%;
   aspect-ratio: 1/1;
   border-radius: 10px;
 }
-.order-info
+.order-list
+  .order-container
+  .order-info
   .ordered-products
   .products-container
   .product
@@ -1555,7 +1689,9 @@ main {
   color: var(--warna-utama);
   font-size: 1.25rem;
 }
-.order-info
+.order-list
+  .order-container
+  .order-info
   .ordered-products
   .products-container
   .product
@@ -1567,7 +1703,9 @@ main {
   font-size: 1rem;
   margin: 0 0 0.5rem 0;
 }
-.order-info
+.order-list
+  .order-container
+  .order-info
   .ordered-products
   .products-container
   .product
@@ -1579,7 +1717,9 @@ main {
   justify-content: space-between;
   align-items: center;
 }
-.order-info
+.order-list
+  .order-container
+  .order-info
   .ordered-products
   .products-container
   .product
@@ -1593,7 +1733,9 @@ main {
   align-items: center;
   gap: 0.25rem;
 }
-.order-info
+.order-list
+  .order-container
+  .order-info
   .ordered-products
   .products-container
   .product
@@ -1606,7 +1748,9 @@ main {
   color: var(--abuabu);
   text-decoration: line-through;
 }
-.order-info
+.order-list
+  .order-container
+  .order-info
   .ordered-products
   .products-container
   .product
@@ -1622,24 +1766,26 @@ main {
   padding: 0.25rem;
   border-radius: 5px;
 }
-.order-info .order-summary {
+.order-list .order-container .order-info .order-summary {
   display: flex;
   justify-content: space-between;
 }
-.order-info :is(.order-summary, .payment-method) {
+.order-list .order-container .order-info :is(.order-summary, .payment-method) {
   background-color: var(--warna-utama);
   color: var(--putih);
   padding: 1rem 1.5rem;
   border-radius: 10px;
   box-shadow: 0px 4px 8px rgba(51, 51, 51, 0.1);
 }
-.order-info .order-summary :is(strong, button) {
+.order-list .order-container .order-info .order-summary :is(strong, button) {
   background-color: transparent;
   color: var(--putih);
   font-size: 1rem;
   border: none;
 }
-.order-info
+.order-list
+  .order-container
+  .order-info
   .order-summary
   :is(
     > span,
@@ -1652,7 +1798,9 @@ main {
   ) {
   font-weight: 600;
 }
-.order-info
+.order-list
+  .order-container
+  .order-info
   .order-summary
   :is(
     .subtotals
@@ -1663,21 +1811,25 @@ main {
   ) {
   font-weight: 500;
 }
-.order-info .order-summary > span,
-.order-info .payment-method > span {
+.order-list .order-container .order-info .order-summary > span,
+.order-list .order-container .order-info .payment-method > span {
   font-size: 1.5rem;
 }
-.order-info .order-summary > span,
-.order-info
+.order-list .order-container .order-info .order-summary > span,
+.order-list
+  .order-container
+  .order-info
   .order-summary
   :is(span, .subtotal-price, .shipping-price, .shipping-discount) {
   font-weight: 600;
 }
-.order-info .order-summary .subtotals {
+.order-list .order-container .order-info .order-summary .subtotals {
   margin: 0.75rem 0 0 0;
   padding: 0 0 1rem 0;
 }
-.order-info
+.order-list
+  .order-container
+  .order-info
   .order-summary
   :is(
     .subtotals
@@ -1692,17 +1844,37 @@ main {
   justify-content: space-between;
   align-items: center;
 }
-.order-info .order-summary .subtotals .shipping-subtotal {
+.order-list
+  .order-container
+  .order-info
+  .order-summary
+  .subtotals
+  .shipping-subtotal {
   gap: 0.25rem;
   margin: 0.25rem 0 0 0;
 }
-.order-info .order-summary .subtotals .shipping-subtotal .sub-total > span {
+.order-list
+  .order-container
+  .order-info
+  .order-summary
+  .subtotals
+  .shipping-subtotal
+  .sub-total
+  > span {
   gap: 0.5rem;
 }
-.order-info .order-summary .subtotals .shipping-subtotal .shipping-details {
+.order-list
+  .order-container
+  .order-info
+  .order-summary
+  .subtotals
+  .shipping-subtotal
+  .shipping-details {
   margin: 0 0 0 1rem;
 }
-.order-info
+.order-list
+  .order-container
+  .order-info
   .order-summary
   .subtotals
   .shipping-subtotal
@@ -1711,36 +1883,48 @@ main {
   span {
   font-size: 0.9rem;
 }
-.order-info .order-summary .total {
+.order-list .order-container .order-info .order-summary .total {
   font-weight: 700;
   padding: 1rem 0 0 0;
   border-top: 2px solid var(--putih);
 }
-.order-info .order-summary .total span {
+.order-list .order-container .order-info .order-summary .total span {
   font-size: 1.25rem;
 }
-.order-info .payment-method {
+.order-list .order-container .order-info .payment-method {
   margin: 0.5rem 0;
 }
-.order-info .payment-method .methods {
+.order-list .order-container .order-info .payment-method .methods {
   gap: 0.5rem;
   margin: 0.75rem 0 0 0;
 }
-.order-info .payment-method .methods :is(label, label .method-info) {
+.order-list
+  .order-container
+  .order-info
+  .payment-method
+  .methods
+  :is(label, label .method-info) {
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
-.order-info .payment-method .methods label {
+.order-list .order-container .order-info .payment-method .methods label {
   justify-content: space-between;
 }
-.order-info .payment-method .methods label .method-info img {
+.order-list
+  .order-container
+  .order-info
+  .payment-method
+  .methods
+  label
+  .method-info
+  img {
   height: 35px;
   background-color: var(--putih);
   padding: 0.5rem;
   border-radius: 5px;
 }
-.order-info .checkout.fixed {
+.order-list .order-container .order-info .checkout.fixed {
   position: fixed;
   bottom: 0;
   left: 0;
@@ -1749,17 +1933,17 @@ main {
   padding: 1rem 1.5rem;
   box-shadow: 0px -4px 8px rgba(51, 51, 51, 0.1);
 }
-.order-info .checkout span {
+.order-list .order-container .order-info .checkout span {
   color: var(--warna-utama);
   font-weight: 600;
 }
-.order-info .checkout .total span:first-of-type {
+.order-list .order-container .order-info .checkout .total span:first-of-type {
   color: var(--hitam);
 }
-.order-info .checkout .total span span {
+.order-list .order-container .order-info .checkout .total span span {
   font-weight: 400;
 }
-.order-info .checkout button {
+.order-list .order-container .order-info .checkout button {
   background-color: var(--warna-utama);
   color: var(--putih);
   font-size: 1.25rem;
@@ -1768,7 +1952,7 @@ main {
   border: 2px solid var(--warna-utama);
   border-radius: 10px;
 }
-.order-info .checkout button:hover {
+.order-list .order-container .order-info .checkout button:hover {
   background-color: var(--putih);
   color: var(--warna-utama);
 }
@@ -1810,9 +1994,6 @@ main {
 .connects .informations .row i {
   font-size: 2rem;
 }
-.input-box:nth-child(2) {
-  margin: 0.5rem 0;
-}
 :is(.login, .signup) .content form .grid-cols div .helptext {
   font-size: 0.75rem;
 }
@@ -1834,9 +2015,8 @@ main {
 .contact-form form {
   gap: 0.5rem;
 }
-.contact-form form .input-box {
-  gap: 0.5rem;
-  margin: 0;
+.contact-form form .desc-box textarea {
+  min-height: 150px;
 }
 .contact-form form button {
   display: flex;
@@ -1862,17 +2042,12 @@ main {
 }
 
 /* PROFILE */
+.umkm-info,
 .profile .content .details {
   display: grid;
   grid-template-columns: auto 1fr;
   gap: 1.5rem;
   margin: 0 auto 3rem auto;
-}
-.profile .content .details .desc {
-  grid-area: desc;
-  gap: 1rem;
-  height: fit-content;
-  margin: 0 0 1rem 0;
 }
 .profile .content .details .desc .head,
 .umkm-info .desc .head {
@@ -1903,28 +2078,32 @@ main {
   background-color: var(--putih);
   color: var(--warna-utama);
 }
-.profile .content .details .desc span,
-.umkm-info .desc span {
-  width: fit-content;
+:is(.profile .content .details, .umkm-info) .desc span {
   font-size: 1.5rem;
   font-weight: 500;
 }
-.profile .content .details .desc span.underline-text,
-.umkm-info .desc span.underline-text {
+:is(.profile .content .details, .umkm-info) .desc span.underline-text {
   font-size: 1.25rem;
 }
 :is(.profile .content .details, .umkm-info) .desc .col {
   gap: 0.75rem;
   margin: 0.5rem 0 1.5rem 0;
 }
-.profile .content .details .desc .col .row {
+:is(.profile .content .details, .umkm-info) .desc .col .row {
   gap: 0.5rem;
 }
-.profile .content .details .desc .col .row:last-of-type {
+:is(.profile .content .details, .umkm-info) .desc .col .row:last-of-type {
   align-items: flex-start;
 }
 .profile .content .details .message-box {
-  grid-area: message;
+  gap: 0.5rem;
+  margin: 1rem 0 0 0;
+}
+.profile .content .details .message-box span {
+  font-size: 1rem;
+}
+.profile .content .details .message-box span.success {
+  color: var(--green);
 }
 .profile .content .details #input_username {
   width: 300px;
@@ -2008,12 +2187,7 @@ main {
   font-size: 2rem;
   font-weight: 600;
 }
-.profile .content .details .img-box {
-  position: relative;
-  width: fit-content;
-}
-.profile .content .details .img-box img,
-.umkm-info img {
+:is(.profile .content .details, .umkm-info) img {
   width: 400px;
   height: 400px;
   border-radius: 20px;
@@ -2059,11 +2233,6 @@ main {
   background-color: var(--putih);
   color: var(--warna-utama);
 }
-.profile .content .edit-profile form .input-box {
-  position: relative;
-  gap: 0.5rem;
-  margin: 0;
-}
 .profile .content .edit-profile form .input-box select ~ i {
   position: absolute;
   top: 66px;
@@ -2083,6 +2252,7 @@ main {
   border-radius: 0.5rem;
   transition: background-color 0.3s ease;
 }
+
 .edit-profile form .main-details {
   margin: 1rem 0;
 }
@@ -2111,10 +2281,6 @@ main {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 0.5rem;
-}
-.edit-profile form .main-details .input-box {
-  position: relative;
-  margin: 0;
 }
 .edit-profile form .main-details .desc-box textarea {
   height: 150px;
@@ -2185,7 +2351,10 @@ main {
   height: 200px;
 }
 
-.product-form .content h1 {
+.product-form .content {
+  position: relative;
+}
+.product-form .content > h1 {
   text-align: center;
   margin: 1rem 0 3rem 0;
 }
@@ -2193,7 +2362,7 @@ main {
   display: grid;
   grid-template-areas: "img-box inputs textarea";
   grid-template-columns: 308px 1fr 1fr;
-  grid-template-rows: 308px;
+  grid-template-rows: 1fr;
   gap: 1rem;
 }
 .product-form .content form .main-details .inputs {
@@ -2202,29 +2371,14 @@ main {
   flex-direction: column;
   gap: 0.5rem;
 }
-.product-form .content form .main-details .inputs .input-box {
-  position: relative;
-  gap: 0.5rem;
-  margin: 0;
-}
-.product-form .content form .variant-container {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  margin: 2rem 0 1rem 0;
-}
-
 .product-form .content form .main-details .img-box {
   grid-area: img-box;
+  aspect-ratio: 1/1;
 }
 .product-form .content form .main-details .desc-box {
   grid-area: textarea;
 }
 
-.product-form .content form .variant-container .head {
-  display: flex;
-  justify-content: space-between;
-}
 .product-form .content form .variants h2 {
   margin: 0 0 1.5rem 0;
 }
@@ -2258,10 +2412,6 @@ main {
 }
 .product-form .content form .variants .variant button:hover {
   color: var(--putih);
-}
-.product-form .content form .variants .variant .input-box {
-  gap: 0.5rem;
-  margin: 0;
 }
 .product-form .content form .variants .variant .input-box label {
   color: var(--putih);
@@ -2318,19 +2468,17 @@ main {
   align-items: center;
   gap: 0.5rem;
 }
-.product-form .content form > button {
-  width: 100%;
-  font-size: 1.5rem;
-}
-.product-form .content form :is(span, button) {
+.product-form .content form button {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 0.5rem;
+  width: 100%;
   background-color: var(--warna-utama);
   color: var(--putih);
   font-size: 1.25rem;
   font-weight: 600;
+  margin: 1rem 0 0 0;
   padding: 0.5rem 1rem;
   border: 2px solid var(--warna-utama);
   border-radius: 10px;
@@ -2431,12 +2579,12 @@ footer .contact .row {
     gap: 2rem;
   }
 
+  .umkm-info,
   .profile .content .details {
     width: 700px;
     margin: 0 auto 2.5rem auto;
   }
-  .profile .content .details .img-box img,
-  .umkm-info img {
+  :is(.profile .content .details, .umkm-info) img {
     width: 300px;
     height: 300px;
   }
@@ -2447,13 +2595,15 @@ footer .contact .row {
   :is(.profile .content .details, .umkm-info) .desc .col {
     gap: 0.5rem;
   }
-  .profile .content .details .desc span,
-  .umkm-info .desc span {
+  :is(.profile .content .details, .umkm-info) .desc span {
     font-size: 1.25rem;
   }
-  .profile .content .details .desc span.underline-text,
-  .umkm-info .desc span.underline-text {
+  :is(.profile .content .details, .umkm-info) .desc span.underline-text {
     font-size: 1rem;
+  }
+
+  .product-item .desc .btn-container {
+    gap: 0.5rem;
   }
 
   .product-form .content form .main-details {
@@ -2476,12 +2626,12 @@ footer .contact .row {
     aspect-ratio: 1/1;
   }
 
-  .products.all h2 {
-    font-size: 2.5rem;
+  .product-item .desc .btn-container a {
+    font-size: 0.75rem;
   }
 
-  .product-list {
-    grid-template-columns: repeat(3, 1fr);
+  .products.all h2 {
+    font-size: 2.5rem;
   }
 }
 @media (max-width: 768px) {
@@ -2504,7 +2654,7 @@ footer .contact .row {
   }
 
   select ~ svg {
-    top: 44px;
+    top: 40px;
     width: 15px !important;
     height: 15px !important;
   }
@@ -2515,11 +2665,6 @@ footer .contact .row {
 
   .back-btn {
     font-size: 1rem;
-  }
-
-  .no-products {
-    font-size: 1.25rem;
-    padding: 1.5rem 0;
   }
 
   h1,
@@ -2540,8 +2685,17 @@ footer .contact .row {
     font-size: 1rem;
     padding: 0.5rem;
   }
+  :is(.login, .signup) .content form .input-box svg {
+    top: calc(50% + 4px);
+    width: 15px;
+    height: 15px;
+  }
   :is(.login, .signup) .content .error-list span {
     font-size: 0.75rem;
+  }
+
+  .login .content {
+    width: 350px;
   }
 
   .signup .content {
@@ -2593,8 +2747,9 @@ footer .contact .row {
   .short_about .content img {
     height: 200px;
   }
-  .product-list {
-    grid-template-columns: repeat(2, 1fr);
+  .product-list .no-products {
+    font-size: 1.25rem;
+    padding: 1.5rem;
   }
   .products.all h2 {
     font-size: 2rem;
@@ -2673,37 +2828,37 @@ footer .contact .row {
     gap: 0.75rem;
     font-size: 1rem;
   }
-  .cartpage .content .cart-products .product-info {
-    padding: 1rem 1rem 1rem 0;
+  .cartpage .content .cart-products .no-products {
+    font-size: 1.25rem;
+    padding: 1.5rem;
   }
-  .cartpage .content .cart-products .product-info .purchase-details img {
+  .cartpage .content .cart-products .product-info {
+    padding: 0.75rem 1rem;
+  }
+  .cartpage .content .cart-products .product-info img {
     width: 75px;
   }
-  .cartpage
-    .content
-    .cart-products
-    .product-info
-    .purchase-details
-    .desc
-    > span:first-of-type {
-    margin: 0 0 0.3rem 0;
+  .cartpage .content .cart-products .product-info .stock {
+    gap: 0.25rem;
+  }
+  .cartpage .content .cart-products .product-info .desc > span:first-of-type {
+    margin: 0 0 0.25rem 0;
   }
   .cartpage .content .cart-products .product-info :is(span, button) {
-    font-size: 0.9rem;
-  }
-  .cartpage .content .cart-products .product-info label {
-    margin: 0 1rem;
+    font-size: 0.75rem;
   }
   .cartpage .content > .desc label .checkbox,
   .cartpage .content .cart-products .product-info label .checkbox {
-    left: 0;
     width: 20px;
     height: 20px;
-    transform: translate(-25%, -50%);
   }
-  .cartpage .content .cart-products .product-info .purchase-details .quantity {
+  .cartpage .content .cart-products .product-info .quantity {
     gap: 0.5rem;
-    padding: 0.3rem 0.5rem;
+    padding: 0.25rem 0.5rem;
+  }
+  .cartpage .content .cart-products .product-info .quantity svg {
+    width: 15px;
+    height: 15px;
   }
   .cartpage .content .checkout {
     margin: 0.75rem 0 0 0;
@@ -2714,22 +2869,49 @@ footer .contact .row {
   .cartpage .content .checkout .btn-container {
     gap: 0.75rem;
   }
+  .cartpage .content .spanBtn .btn-container :is(a, form button),
   .cartpage .content .checkout .btn-container a {
     font-size: 1rem;
     padding: 0.5rem 1.25rem;
   }
+  .cartpage .content .spanBtn .btn-container {
+    gap: 0.75rem;
+  }
+  .cartpage .content .spanBtn .btn-container a {
+    padding: 0.5rem 0 !important;
+  }
+  .cartpage .content .spanBtn > span {
+    font-size: 1rem;
+  }
+  .cartpage .content .address-section .address-form .inputs {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .cartpage .content .address-section .address-form button {
+    font-size: 1rem;
+  }
+  .cartpage .content .address-section {
+    margin: 1rem 0 1.5rem 0;
+  }
+  .cartpage
+    .content
+    .address-section
+    .address-list
+    .address-item
+    .full-address {
+    font-size: 0.75rem;
+  }
 
+  .umkm-info,
   .profile .content .details {
     width: 500px;
     max-width: 100%;
     gap: 1rem;
     margin: 0 auto 2rem auto;
   }
-  .profile .content .details .desc span.underline-text {
+  :is(.profile .content .details, .umkm-info) .desc span.underline-text {
     font-size: 0.75rem;
   }
-  .profile .content .details .img-box img,
-  .umkm-info img {
+  :is(.profile .content .details, .umkm-info) img {
     width: 200px;
     height: 200px;
   }
@@ -2737,8 +2919,7 @@ footer .contact .row {
   .umkm-info .desc .head h1 {
     font-size: 2rem;
   }
-  .profile .content .details .desc span,
-  .umkm-info .desc span,
+  :is(.profile .content .details, .umkm-info) .desc span,
   .profile .content .details #editBtn,
   .profile .content .my-products .head a {
     font-size: 1rem;
@@ -2747,7 +2928,6 @@ footer .contact .row {
     padding: 0 1rem;
   }
   .product-item .desc .btn-container {
-    gap: 0.5rem;
     margin: 0.75rem 0 0 0;
   }
   :is(.profile .content .details, .umkm-info) .desc .col {
@@ -2775,9 +2955,7 @@ footer .contact .row {
   .edit-profile form .main-details .inputs {
     grid-template-columns: 1fr;
   }
-  :is(.login, .signup) .content form .input-box,
   .edit-profile form .main-details .inputs,
-  .profile .content .edit-profile form .input-box,
   :is(.edit-profile, .product-form .content) form .main-details .desc-box {
     gap: 0.25rem;
   }
@@ -2803,11 +2981,15 @@ footer .contact .row {
     font-size: 0.75rem;
   }
 
+  .product-form .content h1 {
+    margin: 1rem 0 2.5rem 0;
+  }
   .product-form .content form .main-details {
     gap: 0.75rem;
   }
-  .product-form .content form :is(span, button) {
+  .product-form .content form button {
     font-size: 1rem;
+    margin: 0.75rem 0 0 0;
   }
   .product-form .content form .variants {
     gap: 0.75rem;
@@ -2820,14 +3002,40 @@ footer .contact .row {
     font-size: 0.75rem;
     padding: 0 0.75rem;
   }
-  .product-form .content form .main-details .inputs :is(.input-box, .desc-box),
-  .product-form
-    .content
-    form
-    .variants
-    .variant
-    :is(.input-box, .variant-inputs) {
+  .product-form .content form .variants .variant .variant-inputs {
     gap: 0.25rem;
+  }
+
+  .product-information {
+    grid-template-areas:
+      "img desc"
+      "checkout checkout";
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto 1fr;
+    gap: 0.75rem;
+  }
+  .product-information img {
+    width: 250px;
+    height: 250px;
+  }
+  .detail-product .content .desc .head > span {
+    font-size: 1.25rem;
+  }
+  .detail-product .content .desc .price {
+    font-size: 1.5rem;
+  }
+  .detail-product .content .checkout > span {
+    margin: 0 0 0.25rem 0;
+  }
+  .detail-product .content .checkout > p {
+    font-size: 1rem;
+  }
+  .detail-product .content .checkout .total {
+    margin: 0.75rem 0 0.5rem 0;
+  }
+  .umkm-products,
+  .other-products {
+    gap: 1.5rem;
   }
 
   .delete-product .content p,
@@ -2862,11 +3070,6 @@ footer .contact .row {
     margin: 0 0 0.5rem 0;
   }
 
-  .no-products {
-    font-size: 1rem;
-    padding: 1.25rem 0;
-  }
-
   section {
     gap: 2rem;
   }
@@ -2876,7 +3079,7 @@ footer .contact .row {
   }
 
   select ~ svg {
-    top: 39px;
+    top: 35px;
   }
 
   h1,
@@ -2888,20 +3091,30 @@ footer .contact .row {
     font-size: 1.5rem;
   }
 
-  :is(.login, .signup) .content > span {
-    margin: 0.3rem 0 0 0;
-  }
   :is(.login, .signup) .content form button {
-    font-size: 1rem;
+    font-size: 0.75rem;
     padding: 0.5rem 0;
+  }
+  :is(.login, .signup) .content form .input-box svg {
+    top: calc(50% + 2px);
   }
   :is(.login, .signup) .content .error-list {
     top: calc(100% + 0.75rem);
   }
 
+  .login .content {
+    width: 300px;
+  }
+  .login .content > span {
+    font-size: 0.75rem;
+  }
+
   .signup .content {
     width: 400px;
     gap: 0.5rem;
+  }
+  .signup .content > span {
+    margin: 0.3rem 0 0 0;
   }
   .signup .content form {
     grid-template-areas:
@@ -2919,7 +3132,6 @@ footer .contact .row {
   .login-btn,
   .signup-btn,
   .short_about .content aside span,
-  .product-item .image .overlay,
   .button-lihat-produk {
     font-size: 0.75rem;
   }
@@ -2961,6 +3173,10 @@ footer .contact .row {
   .product-list {
     gap: 0.5rem;
   }
+  .product-list .no-products {
+    font-size: 1rem;
+    padding: 1.25rem;
+  }
   .products.all h2 {
     font-size: 1.5rem;
   }
@@ -2975,7 +3191,7 @@ footer .contact .row {
   }
   .product-item .desc p {
     font-size: 0.5rem;
-    margin: 0.3rem 0;
+    margin: 0.25rem 0;
   }
   .button-lihat-produk {
     margin: 1.5rem 0 0 0;
@@ -3037,6 +3253,14 @@ footer .contact .row {
     gap: 1.5rem;
   }
 
+  .product-form .content h1 {
+    margin: 0.75rem 0 2rem 0;
+  }
+  .product-form .content form {
+    max-width: 100%;
+    width: 400px;
+    margin: 0 auto;
+  }
   .product-form .content form .variants {
     gap: 0.5rem;
   }
@@ -3044,11 +3268,18 @@ footer .contact .row {
     padding: 0.75rem;
   }
   .product-form .content form .main-details {
+    grid-template-areas:
+      "img-box"
+      "inputs"
+      "textarea";
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(3, auto);
     gap: 0.5rem 0.75rem;
   }
   .product-form .content form :is(span, button) {
     gap: 0.25rem;
     font-size: 0.75rem;
+    margin: 0.5rem 0 0 0;
     padding: 0.5rem 0.75rem;
   }
 
@@ -3092,25 +3323,36 @@ footer .contact .row {
   .cartpage .content > .desc {
     padding: 1.5rem 1rem;
   }
+  .cartpage .content .cart-products .no-products {
+    font-size: 1rem;
+    padding: 1.25rem;
+  }
+  .cartpage .content > .desc label {
+    gap: 0.5rem;
+  }
   .cartpage .content > .desc :is(span, label),
   .cartpage .content .cart-products .product-info :is(span, button) {
     font-size: 0.75rem;
   }
-  .cartpage .content .cart-products .product-info .purchase-details img {
+  .cartpage .content .cart-products .product-info img {
     width: 50px;
     height: 50px;
   }
-  .cartpage .content .cart-products .product-info .purchase-details .stock {
+  .cartpage .content .cart-products .product-info .stock {
     gap: 0.3rem;
   }
-  .cartpage .content .cart-products .product-info label {
-    margin: 0 0.75rem;
+  .cartpage .content .cart-products .product-info form button svg {
+    width: 15px;
+    height: 15px;
+  }
+  .cartpage .content .cart-products .product-info .stock .circle {
+    width: 10px;
+    height: 10px;
   }
   .cartpage .content > .desc label .checkbox,
   .cartpage .content .cart-products .product-info label .checkbox {
     width: 15px;
     height: 15px;
-    transform: translate(-10%, -50%);
   }
   .cartpage .content .checkout {
     margin: 0.5rem 0 0 0;
@@ -3126,35 +3368,64 @@ footer .contact .row {
   }
   .cartpage .content .checkout .btn-container a {
     font-size: 0.9rem;
-    padding: 0.3rem 0.75rem;
+    padding: 0.25rem 0.75rem;
+  }
+  .cartpage .content .spanBtn .btn-container {
+    gap: 0.5rem;
+  }
+  .cartpage .content .spanBtn .btn-container a {
+    padding: 0.25rem 0 !important;
+  }
+  .cartpage .content .spanBtn .btn-container :is(a, form button) {
+    font-size: 0.75rem;
+    padding: 0.25rem 1rem;
+  }
+  .cartpage .content .spanBtn > span {
+    font-size: 0.75rem;
+  }
+  .cartpage .content .address-section .address-form button {
+    font-size: 0.75rem;
+  }
+  .cartpage .content .address-section {
+    margin: 0.75rem 0 1.25rem 0;
+  }
+  .cartpage
+    .content
+    .address-section
+    .address-list
+    .address-item
+    .btn-container
+    button {
+    font-size: 0.75rem;
   }
 
+  .umkm-info,
   .profile .content .details {
     gap: 0.75rem;
     width: 400px;
     margin: 0 auto 1.5rem auto;
   }
-  .profile .content .details .desc .col .row {
+  :is(.profile .content .details, .umkm-info) .desc .col .row {
     gap: 0.25rem;
   }
   .profile .content .details .desc .head h1,
   .umkm-info .desc .head h1 {
     font-size: 1.5rem;
   }
-  .profile .content .details .desc span,
-  .umkm-info .desc span,
+  :is(.profile .content .details, .umkm-info) .desc span,
   .profile .content .my-products .head a,
-  .umkm-info .desc span.underline-text,
-  .product-item .desc .btn-container a {
+  .umkm-info .desc span.underline-text {
     font-size: 0.75rem !important;
   }
-  .profile .content .details .desc span.underline-text {
+  :is(.profile .content .details, .umkm-info) .desc span.underline-text {
     font-size: 0.5rem !important;
   }
   .product-item .desc .btn-container {
     gap: 0.25rem;
+    margin: 0.5rem 0 0 0;
   }
   .product-item .desc .btn-container a {
+    font-size: 0.5rem;
     padding: 0.25rem 0.5rem;
   }
   .profile .content .details #editBtn {
@@ -3173,6 +3444,7 @@ footer .contact .row {
     .img-box
     svg {
     width: 25px;
+    height: 25px;
   }
   .profile .content .edit-profile form {
     padding: 1rem 1.5rem;
@@ -3185,8 +3457,7 @@ footer .contact .row {
     margin: 0.5rem 0;
   }
 
-  .profile .content .details .img-box img,
-  .umkm-info img {
+  :is(.profile .content .details, .umkm-info) img {
     width: 150px;
     height: 150px;
   }
@@ -3209,6 +3480,14 @@ footer .contact .row {
     height: 15px;
   }
 
+  .product-information {
+    gap: 0.75rem 0.5rem;
+  }
+  .product-information img {
+    width: 150px;
+    height: 150px;
+  }
+
   .delete-product .content p {
     font-size: 0.75rem;
     margin: 0.25rem 0 1.25rem 0;
@@ -3216,6 +3495,41 @@ footer .contact .row {
   .delete-product .content form :is(button, a) {
     font-size: 0.75rem;
     padding: 0.5rem 1rem;
+  }
+  .detail-product .content .desc .head > span,
+  .detail-product .content .checkout .total span:last-of-type {
+    font-size: 1rem;
+  }
+  .detail-product .content .desc .category {
+    font-size: 0.75rem;
+    margin: 0.25rem;
+  }
+  .detail-product .content .desc .price {
+    font-size: 1.25rem;
+  }
+  .detail-product .content .desc .line,
+  .detail-product .content .checkout .line,
+  .detail-product .content .checkout .total {
+    margin: 0.5rem 0;
+  }
+  .detail-product .content .checkout > span,
+  .detail-product
+    .content
+    .checkout
+    .product-amount
+    .counter
+    :is(input, button) {
+    font-size: 1rem;
+  }
+  .detail-product .content .checkout > p,
+  .detail-product .content .checkout .product-amount .stock,
+  .detail-product .content .checkout .total .subTotal,
+  .detail-product .content .checkout .btns :is(button, a) {
+    font-size: 0.75rem;
+  }
+  .umkm-products,
+  .other-products {
+    gap: 1.25rem;
   }
 
   footer {
@@ -3247,9 +3561,11 @@ footer .contact .row {
     padding: 2rem 0;
   }
 
-  .no-products {
-    font-size: 0.75rem;
-    padding: 1rem 0;
+  .signup .content form .grid-cols {
+    grid-template-columns: 1fr;
+  }
+  .signup .content form .grid-cols div:first-of-type {
+    grid-column: auto;
   }
 
   .main-header {
@@ -3292,8 +3608,19 @@ footer .contact .row {
     width: 15px;
     height: 15px;
   }
+  .product-list .no-products {
+    font-size: 0.75rem;
+    padding: 1rem;
+  }
   .products.all .product-list {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .product-form .content h1 {
+    margin: 0.5rem 0 1.5rem 0;
+  }
+  .product-form .content form {
+    width: 300px;
   }
 
   .edit-profile form .main-details .desc-box textarea {

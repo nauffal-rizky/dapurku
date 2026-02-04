@@ -4,6 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dapur UMKM</title>
+
+    <link rel="icon" type="image/x-icon" href="/static/icon/favicon.ico" />
     <link rel="stylesheet" href="/static/css/main.css" />
   </head>
   <body>
@@ -59,7 +61,6 @@
       <!--  -->
       {% if page == "front" or page == "products" %}
       <div class="jumbotron">
-        {% if page == "front" %}
         <div class="texts">
           <h1>Selamat datang di Dapurku</h1>
           <span
@@ -73,46 +74,6 @@
             banyak pelanggan, dan mengembangkan usaha secara berkelanjutan.
           </p>
         </div>
-        {% elif page == "products" %}
-        <div class="recc">
-          <div class="detail-product">
-            <button>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                class="svg-25"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M7.72 12.53a.75.75 0 0 1 0-1.06l7.5-7.5a.75.75 0 1 1 1.06 1.06L9.31 12l6.97 6.97a.75.75 0 1 1-1.06 1.06l-7.5-7.5Z"
-                  clip-rule="evenodd"
-                />
-              </svg>
-            </button>
-            <button>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                class="svg-25"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z"
-                  clip-rule="evenodd"
-                />
-              </svg>
-            </button>
-
-            <span>Recommendation Product</span>
-            <span class="price">Rp 999,00</span>
-            <p>{% lorem 1 b random %}</p>
-            <a href="#" class="btn">Lihat Detail</a>
-          </div>
-          <img src="/static/img/food.jpg" alt="foodImg" class="product-image" />
-        </div>
-        {% endif %}
       </div>
       {% endif %}
     </header>

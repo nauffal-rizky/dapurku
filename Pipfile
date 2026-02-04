@@ -12,6 +12,7 @@ pillow = "*"
 pymysql = "*"
 cryptography = "*"
 django = "*"
+midtransclient = "*"
 
 [dev-packages]
 

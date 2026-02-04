@@ -31,6 +31,24 @@ class CustomUser(AbstractUser):
   def __str__(self):
     return self.username
 
+class UserAddress(models.Model):
+  user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='addresses')
+  street = models.CharField(max_length=255)
+  house_no = models.CharField(max_length=50, blank=True)
+  rtrw = models.CharField(max_length=20, blank=True)
+  kelurahan = models.CharField(max_length=100)
+  kecamatan = models.CharField(max_length=100)
+  city = models.CharField(max_length=100)
+  province = models.CharField(max_length=100)
+  postal_code = models.CharField(max_length=10)
+  is_default = models.BooleanField(default=False)  # For selecting a primary address
+
+  def __str__(self):
+    return f"{self.street}, {self.city}, {self.province}"
+
+  class Meta:
+    unique_together = ('user', 'is_default')  # Ensure only one default per user (optional)
+
 class Product(models.Model):
   CATEGORY_CHOICES = [
     ('makanan', 'Makanan'),
@@ -39,11 +57,11 @@ class Product(models.Model):
     ('lainnya', 'Lainnya'),
   ]
 
-  name = models.CharField(max_length=100)
-  description = models.TextField(blank=True)
+  name = models.CharField(max_length=50)
+  description = models.TextField(blank=False)
   price = models.DecimalField(max_digits=10, decimal_places=2)
-  stock = models.PositiveIntegerField(default=0, editable=False)
-  image = models.ImageField(upload_to='product_images/', blank=True, null=True)
+  stock = models.PositiveIntegerField(default=1, editable=True)
+  image = models.ImageField(upload_to='product_images/', blank=False)
   category = models.CharField(max_length=50, choices=CATEGORY_CHOICES)
   is_available = models.BooleanField(default=True)
 
@@ -63,32 +81,13 @@ class Product(models.Model):
     self.stock = total_stock
     self.save(update_fields=['stock'])
 
-class ProductVariant(models.Model):
-  product = models.ForeignKey(
-    Product,
-    on_delete=models.CASCADE,
-    related_name="variants"
-  )
-  name = models.CharField(max_length=100)
-  additional_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
-  stock = models.PositiveIntegerField(default=0)
-
-  def __str__(self):
-    return f"{self.product.name} - {self.name}"
-
-  def save(self, *args, **kwargs):
-    super().save(*args, **kwargs)
-    self.product.update_stock()
-
-  def delete(self, *args, **kwargs):
-    super().delete(*args, **kwargs)
-    self.product.update_stock()
-
 class Order(models.Model):
   user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+  address = models.ForeignKey('UserAddress', on_delete=models.SET_NULL, null=True, blank=True)  # NEW: Link to selected address
   total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
   created_at = models.DateTimeField(auto_now_add=True)
   status = models.CharField(max_length=20, default="Pending")
+  midtrans_transaction_id = models.CharField(max_length=100, blank=True, null=True)  # NEW: For tracking MidTrans txn
 
   def __str__(self):
     return f"Order #{self.id} by {self.user.username}"
@@ -96,7 +95,6 @@ class Order(models.Model):
 class OrderItem(models.Model):
   order = models.ForeignKey(Order, related_name="items", on_delete=models.CASCADE)
   product = models.ForeignKey(Product, on_delete=models.CASCADE)
-  variant = models.ForeignKey(ProductVariant, null=True, blank=True, on_delete=models.SET_NULL)
   quantity = models.PositiveIntegerField(default=1)
   price = models.DecimalField(max_digits=10, decimal_places=2)
 
@@ -114,19 +112,13 @@ class Cart(models.Model):
     on_delete=models.CASCADE,
     related_name="cart_items"
   )
-  variant = models.ForeignKey(
-    ProductVariant,
-    on_delete=models.SET_NULL,
-    null=True, blank=True,
-    related_name="cart_items"
-  )
   quantity = models.PositiveIntegerField(default=1)
 
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
 
   class Meta:
-    unique_together = ("user", "product", "variant")  # 1 user ga bisa duplikat produk yg sama + variant
+    unique_together = ("user", "product")  # 1 user ga bisa duplikat produk yg sama + variant
 
   def __str__(self):
     return f"{self.user.username} - {self.product.name} ({self.quantity})"
@@ -134,6 +126,4 @@ class Cart(models.Model):
   @property
   def total_price(self):
     base_price = self.product.price
-    if self.variant:
-      base_price += self.variant.additional_price
     return base_price * self.quantity
