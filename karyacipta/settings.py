@@ -146,12 +146,18 @@ MEDIA_ROOT = BASE_DIR / "media"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
-# ========================
-# MIDTRANS PAYMENT GATEWAY
-# ========================
-MIDTRANS_SERVER_KEY = os.getenv('MIDTRANS_SERVER_KEY')  # From MidTrans dashboard
-MIDTRANS_CLIENT_KEY = os.getenv('MIDTRANS_CLIENT_KEY')
-MIDTRANS_IS_PRODUCTION = False  # Set to True for live
+# XENDIT PAYMENT GATEWAY
+XENDIT_SECRET_KEY = config('XENDIT_SECRET_KEY')
+XENDIT_PUBLIC_KEY = config('XENDIT_PUBLIC_KEY')
+XENDIT_IS_PRODUCTION = config('XENDIT_IS_PRODUCTION', default=False, cast=bool)
+
+# Validate keys
+if not XENDIT_SECRET_KEY or not XENDIT_PUBLIC_KEY:
+    if XENDIT_IS_PRODUCTION:
+        raise ValueError("XENDIT_SECRET_KEY and XENDIT_PUBLIC_KEY must be set in production.")
+    else:
+        import warnings
+        warnings.warn("Xendit keys are not set. Payment integration will fail.")
 
 # ========================
 # EMAIL CONFIGURATION 

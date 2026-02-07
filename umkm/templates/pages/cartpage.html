@@ -1,7 +1,7 @@
-{% extends '../layout/base.html' %}{% block content %}
+{% extends '../layout/base.html' %} {% block content %}
 <section class="cartpage">
   <article class="content">
-    <!-- UPDATE ADDRESS POPUP -->
+    <!-- UPDATE ADDRESS POPUP (outside main form) -->
     <div class="popup-prompt hidden">
       <div class="popup-box">
         <svg
@@ -127,8 +127,8 @@
           clip-rule="evenodd"
         />
       </svg>
-      Kembali ke halaman depan</a
-    >
+      Kembali ke halaman depan
+    </a>
 
     <!-- HEADER -->
     <div class="desc">
@@ -136,8 +136,8 @@
         >Ada <span class="amount">sekian</span> produk di keranjang belanja
         Anda</span
       >
-      <label class="select-all"
-        ><input type="checkbox" name="" />
+      <label class="select-all">
+        <input type="checkbox" name="" />
         <div class="checkbox">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -152,89 +152,96 @@
             />
           </svg>
         </div>
-        Pilih semua</label
-      >
+        Pilih semua
+      </label>
     </div>
 
-    <!-- PRODUCTS -->
-    <div class="cart-products">
-      {% for item in cart_items %}
-      <div class="product-info">
-        <input type="hidden" name="cart_item_id" value="{{ item.id }}" />
-
-        <label>
-          <input
-            type="checkbox"
-            name="selected_items"
-            value="{{ item.id }}"
-            checked
+    <!-- MAIN FORM: Only for order creation (products, address selection, and submission) -->
+    <form
+      action="{% url 'create_order' %}"
+      method="POST"
+      id="create-order-form"
+    >
+      {% csrf_token %}
+      <!-- PRODUCTS -->
+      <div class="cart-products">
+        {% for item in cart_items %}
+        <div class="product-info">
+          <input type="hidden" name="cart_item_id" value="{{ item.id }}" />
+          <label>
+            <input
+              type="checkbox"
+              name="selected_items"
+              value="{{ item.id }}"
+              checked
+            />
+            <div class="checkbox">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                class="size-6"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M19.916 4.626a.75.75 0 0 1 .208 1.04l-9 13.5a.75.75 0 0 1-1.154.114l-6-6a.75.75 0 0 1 1.06-1.06l5.353 5.353 8.493-12.74a.75.75 0 0 1 1.04-.207Z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </div>
+          </label>
+          {% if item.product.image %}
+          <img
+            src="{{ item.product.image.url }}"
+            alt="{{ item.product.name }}"
           />
-          <div class="checkbox">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              class="size-6"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M19.916 4.626a.75.75 0 0 1 .208 1.04l-9 13.5a.75.75 0 0 1-1.154.114l-6-6a.75.75 0 0 1 1.06-1.06l5.353 5.353 8.493-12.74a.75.75 0 0 1 1.04-.207Z"
-                clip-rule="evenodd"
-              />
-            </svg>
+          {% else %}
+          <img src="/static/img/1.jpg" alt="default image" />
+          {% endif %}
+          <div class="desc">
+            <span>{{ item.product.name }}</span>
+            <span>{{ item.product.price|floatformat:0 }}/pcs</span>
           </div>
-        </label>
-
-        {% if item.product.image %}
-        <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" />
-        {% else %}
-        <img src="/static/img/1.jpg" alt="default image" />
-        {% endif %}
-
-        <div class="desc">
-          <span>{{ item.product.name }}</span>
-          <span>{{ item.product.price|floatformat:0 }}/pcs</span>
-        </div>
-        <div class="stock">
-          <div class="circle"></div>
-          <span>Stok: {{ item.product.stock }}</span>
-        </div>
-        <div class="quantity">
-          <button>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              class="svg-20"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M4.25 12a.75.75 0 0 1 .75-.75h14a.75.75 0 0 1 0 1.5H5a.75.75 0 0 1-.75-.75Z"
-                clip-rule="evenodd"
-              />
-            </svg>
-          </button>
-          <span>{{ item.quantity }}</span>
-          <button>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              class="svg-20"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M12 3.75a.75.75 0 0 1 .75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5a.75.75 0 0 1 .75-.75Z"
-                clip-rule="evenodd"
-              />
-            </svg>
-          </button>
-        </div>
-        <span class="total-price">Rp {{ item.total_price|floatformat:0 }}</span>
-        <!-- DELETE BUTTON -->
-        <form action="{% url 'delete_cart_item' item.id %}" method="POST">
-          {% csrf_token %}
-          <button type="submit">
+          <div class="stock">
+            <div class="circle"></div>
+            <span>Stok: {{ item.product.stock }}</span>
+          </div>
+          <div class="quantity">
+            <button type="button" class="minus-btn">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                class="svg-20"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M4.25 12a.75.75 0 0 1 .75-.75h14a.75.75 0 0 1 0 1.5H5a.75.75 0 0 1-.75-.75Z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </button>
+            <span>{{ item.quantity }}</span>
+            <button type="button" class="plus-btn">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                class="svg-20"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M12 3.75a.75.75 0 0 1 .75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5a.75.75 0 0 1 .75-.75Z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </button>
+          </div>
+          <span class="total-price"
+            >Rp {{ item.total_price|floatformat:0 }}</span
+          >
+          <!-- DELETE BUTTON -->
+          <button type="button" class="delete-btn" data-item-id="{{ item.id }}">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -248,48 +255,99 @@
               />
             </svg>
           </button>
-        </form>
+        </div>
+        {% empty %}
+        <p class="no-products">Keranjang belanja Anda kosong.</p>
+        {% endfor %}
       </div>
-      {% empty %}
-      <p class="no-products">Keranjang belanja Anda kosong.</p>
-      {% endfor %}
-    </div>
 
-    <!-- ADDRESS SECTION (if address exists) -->
+      <!-- ADDRESS SELECTION (inside main form) -->
+      <div class="address-selection">
+        <h2>Pilih Alamat Pengiriman:</h2>
+        {% if user.addresses.exists %}
+        <div class="address-options">
+          {% for addr in addresses %}
+          <label class="address-option">
+            <input
+              type="radio"
+              name="selected_address"
+              value="{{ addr.id }}"
+              required
+            />
+            <div class="address-details">
+              <span
+                >{{ addr.street }}, {{ addr.house_no }}, {{ addr.rtrw }}, {{
+                addr.kelurahan }}, {{ addr.kecamatan }}, {{ addr.city }}, {{
+                addr.province }}, {{ addr.postal_code }}</span
+              >
+            </div>
+          </label>
+          {% endfor %}
+        </div>
+        {% else %}
+        <p class="no-address">
+          Anda belum memiliki alamat.
+          <a href="#add-address">Tambahkan alamat</a> terlebih dahulu.
+        </p>
+        {% endif %}
+      </div>
+
+      <!-- SUBTOTAL & BUTTONS (inside main form) -->
+      <div class="spanBtn">
+        <span>Sub Total: <span class="subtotal underline-text">0</span></span>
+        <div class="btn-container">
+          <a href="{% url 'products' %}">Kembali belanja</a>
+          <button
+            type="submit"
+            class="pesan-btn"
+            {%
+            if
+            not
+            user.addresses.exists
+            %}disabled{%
+            endif
+            %}
+          >
+            Pesan
+          </button>
+        </div>
+      </div>
+    </form>
+
+    <!-- ADDRESS SECTION (outside main form, for management only) -->
     <div class="address-section">
-      <h2>Alamat Pengiriman:</h2>
+      <h2 id="add-address">Kelola Alamat Pengiriman:</h2>
       {% if user.addresses.exists %}
       <div class="address-list">
         {% for addr in addresses %}
         <div class="address-item">
           <div class="full-address">
-            <span id="lblStreet">{{ addr.street }}</span>,
-            <span id="lblHouseNo">{{ addr.house_no }}</span>,
-            <span id="lblRtRw">{{ addr.rtrw }}</span>,
-            <span id="lblKelurahan">{{ addr.kelurahan }}</span>,
-            <span id="lblKecamatan">{{ addr.kecamatan }}</span>,
-            <span id="lblCity">{{ addr.city }}</span>,
-            <span id="lblProvince">{{ addr.province }}</span>,
-            <span id="lblPostalCode">{{ addr.postal_code }}</span>
+            <span id="lblStreet{{ addr.id }}">{{ addr.street }}</span>,
+            <span id="lblHouseNo{{ addr.id }}">{{ addr.house_no }}</span>,
+            <span id="lblRtRw{{ addr.id }}">{{ addr.rtrw }}</span>,
+            <span id="lblKelurahan{{ addr.id }}">{{ addr.kelurahan }}</span>,
+            <span id="lblKecamatan{{ addr.id }}">{{ addr.kecamatan }}</span>,
+            <span id="lblCity{{ addr.id }}">{{ addr.city }}</span>,
+            <span id="lblProvince{{ addr.id }}">{{ addr.province }}</span>,
+            <span id="lblPostalCode{{ addr.id }}">{{ addr.postal_code }}</span>
           </div>
           <div class="btn-container">
             <button type="button" class="update-btn" data-id="{{ addr.id }}">
               Ubah
             </button>
-            <form action="{% url 'delete_address' addr.id %}" method="POST">
-              {% csrf_token %}
-              <button
-                type="submit"
-                onclick="return confirm('Hapus alamat ini?');"
-              >
-                Hapus
-              </button>
-            </form>
+            <button
+              type="button"
+              class="delete-addr-btn"
+              data-addr-id="{{ addr.id }}"
+            >
+              Hapus
+            </button>
           </div>
         </div>
         {% endfor %}
       </div>
       {% else %}
+      <!-- ADD NEW ADDRESS FORM (outside main form) -->
       <form class="address-form" method="POST" action="{% url 'add_address' %}">
         {% csrf_token %}
         <div class="inputs">
@@ -353,22 +411,6 @@
       {% endif %}
     </div>
 
-    <!-- SUBTOTAL & BUTTONS -->
-    <div class="spanBtn">
-      <span>Sub Total: <span class="subtotal underline-text">0</span></span>
-      <form
-        action="{% url 'create_order' %}"
-        method="POST"
-        class="btn-container"
-      >
-        {% csrf_token %}
-        <a href="{% url 'products' %}">Kembali belanja</a>
-        <button type="submit" class="pesan-btn">Pesan</button>
-      </form>
-    </div>
-
-    <!-- ADDRESS SECTION (if address don't exists) -->
-
     <!-- ERROR MANAGEMENT -->
     {% if messages %}
     <div class="error-list">
@@ -405,7 +447,6 @@
 
     itemCheckboxes.forEach((checkbox) => {
       checkbox.checked = true;
-
       checkbox.addEventListener("change", () => {
         if (!checkbox.checked) {
           selectAllCheckbox.checked = false;
@@ -421,58 +462,65 @@
     /* QUANTITY */
     const quantitySpans = document.querySelectorAll(".quantity span");
     const totalPriceSpans = document.querySelectorAll(".total-price");
+    const unitPriceSpans = document.querySelectorAll(
+      ".desc span:nth-of-type(2)",
+    ); // Fixed selector to match your HTML
+
     /* FORMAT RUPIAH */
     totalPriceSpans.forEach((span) => {
-      const priceText = span.textContent.replace("Rp ", "");
+      const priceText = span.textContent.replace("Rp ", "").replace(/\./g, "");
       const priceValue = parseInt(priceText);
       span.textContent = `Rp ${priceValue.toLocaleString("id-ID")}`;
     });
-    const unitPriceSpans = document.querySelectorAll(
-      ".purchase-details .desc span:nth-of-type(2)",
-    );
 
-    /* FORMAT RUPIAH */
     unitPriceSpans.forEach((span) => {
-      const priceText = span.textContent.replace("/pcs", "");
+      const priceText = span.textContent.replace("/pcs", "").replace(/\./g, "");
       const priceValue = parseInt(priceText);
       span.textContent = `${priceValue.toLocaleString("id-ID")}/pcs`;
     });
+
     const subtotalSpan = document.querySelector(".subtotal");
 
-    /* +- Btns */
+    /* +- BTNS */
     const minusButtons = document.querySelectorAll(
       ".quantity button:first-of-type",
     );
     minusButtons.forEach((button, index) => {
       button.addEventListener("click", () => {
         let quantity = parseInt(quantitySpans[index].textContent);
-
-        if (quantity == 1) return;
-
+        if (quantity <= 1) return;
         quantity--;
-
         quantitySpans[index].textContent = quantity;
 
-        // Inside the plus/minus event listeners, after updating quantitySpans[index]
-        fetch(`/update-cart-item/${item.id}/`, {
-          // You'll need a new URL/view for this
+        // Get the item ID from the hidden input
+        const itemId = button
+          .closest(".product-info")
+          .querySelector('input[name="cart_item_id"]').value;
+
+        // Update via AJAX
+        fetch(`/update-cart-item/${itemId}/`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "X-CSRFToken": "{{ csrf_token }}", // Add CSRF token
+            "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]")
+              .value,
           },
           body: JSON.stringify({ quantity: quantity }),
+        }).then((response) => {
+          if (!response.ok) {
+            console.error("Failed to update quantity");
+            // Optionally revert quantity on error
+          }
         });
 
+        // Update total price
         const unitPriceText = unitPriceSpans[index].textContent
-          .replace("Harga satuan: Rp ", "")
-          .replace(/\./g, "");
+          .replace(/\./g, "")
+          .replace("/pcs", "");
         const unitPrice = parseInt(unitPriceText);
         const totalPrice = unitPrice * quantity;
-        totalPriceSpans[index].textContent = `Rp ${totalPrice.toLocaleString(
-          "id-ID",
-        )}`;
-        console.log(totalPriceSpans[index]);
+        totalPriceSpans[index].textContent =
+          `Rp ${totalPrice.toLocaleString("id-ID")}`;
         updateSubtotal();
       });
     });
@@ -484,28 +532,37 @@
       button.addEventListener("click", () => {
         let quantity = parseInt(quantitySpans[index].textContent);
         quantity++;
-
         quantitySpans[index].textContent = quantity;
 
-        // Inside the plus/minus event listeners, after updating quantitySpans[index]
-        fetch(`/update-cart-item/${item.id}/`, {
-          // You'll need a new URL/view for this
+        // Get the item ID from the hidden input
+        const itemId = button
+          .closest(".product-info")
+          .querySelector('input[name="cart_item_id"]').value;
+
+        // Update via AJAX
+        fetch(`/update-cart-item/${itemId}/`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "X-CSRFToken": "{{ csrf_token }}", // Add CSRF token
+            "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]")
+              .value,
           },
           body: JSON.stringify({ quantity: quantity }),
+        }).then((response) => {
+          if (!response.ok) {
+            console.error("Failed to update quantity");
+            // Optionally revert quantity on error
+          }
         });
 
+        // Update total price
         const unitPriceText = unitPriceSpans[index].textContent
-          .replace("Harga satuan: Rp ", "")
-          .replace(/\./g, "");
+          .replace(/\./g, "")
+          .replace("/pcs", "");
         const unitPrice = parseInt(unitPriceText);
         const totalPrice = unitPrice * quantity;
-        totalPriceSpans[index].textContent = `Rp ${totalPrice.toLocaleString(
-          "id-ID",
-        )}`;
+        totalPriceSpans[index].textContent =
+          `Rp ${totalPrice.toLocaleString("id-ID")}`;
         updateSubtotal();
       });
     });
@@ -519,9 +576,8 @@
           .replace(/\./g, "");
         subtotal += parseInt(priceText);
       });
-      subtotalSpan.textContent = `Rp${subtotal.toLocaleString("id-ID")}`;
+      subtotalSpan.textContent = `Rp ${subtotal.toLocaleString("id-ID")}`;
     };
-
     updateSubtotal();
 
     /* STOCK */
@@ -530,7 +586,6 @@
       const stockText = stock.textContent.replace("Stok: ", "");
       const stockValue = parseInt(stockText);
       const circle = stock.querySelector(".circle");
-
       if (stockValue <= 5) {
         circle.classList.add("almost_run_out");
       } else {
@@ -538,7 +593,38 @@
       }
     });
 
-    /* UPDATE ADDRESS */
+    /* DELETE BUTTONS (NEW: Handle via AJAX) */
+    document.querySelectorAll(".delete-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const itemId = btn.dataset.itemId;
+        if (confirm("Hapus item ini dari keranjang?")) {
+          fetch(`/delete-cart-item/${itemId}/`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-CSRFToken": document.querySelector(
+                "[name=csrfmiddlewaretoken]",
+              ).value,
+            },
+          }).then((response) => {
+            if (response.ok) {
+              // Remove the product from DOM
+              btn.closest(".product-info").remove();
+              // Update product count and subtotal
+              const updatedProducts = document.querySelectorAll(
+                ".cart-products .product-info",
+              );
+              amount.textContent = updatedProducts.length;
+              updateSubtotal();
+            } else {
+              alert("Gagal menghapus item.");
+            }
+          });
+        }
+      });
+    });
+
+    /* UPDATE ADDRESS (unchanged) */
     const inputStreet = document.getElementById("inputStreet");
     const inputHouseNo = document.getElementById("inputHouseNo");
     const inputRtRw = document.getElementById("inputRtRw");
@@ -580,6 +666,92 @@
       .querySelector(".popup-prompt .popup-box svg")
       .addEventListener("click", () => {
         popup.classList.add("hidden");
+      });
+
+    /* DELETE ADDRESS BUTTONS (NEW: Handle via AJAX) */
+    document.querySelectorAll(".delete-addr-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const addrId = btn.dataset.addrId;
+        if (confirm("Hapus alamat ini?")) {
+          fetch(`/delete_address/${addrId}/`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-CSRFToken": document.querySelector(
+                "[name=csrfmiddlewaretoken]",
+              ).value,
+            },
+          }).then((response) => {
+            if (response.ok) {
+              // Remove the address from DOM
+              btn.closest(".address-item").remove();
+              // Optionally, show a success message or reload if no addresses left
+            } else {
+              alert("Gagal menghapus alamat.");
+            }
+          });
+        }
+      });
+    });
+
+    /* FORM SUBMIT (enhanced with optional embeddable Xendit form) */
+    const form = document.querySelector(
+      'form[action="{% url "create_order" %}"]',
+    );
+    const checkboxes = document.querySelectorAll(
+      'input[name="selected_items"]',
+    );
+    const addressRadios = document.querySelectorAll(
+      'input[name="selected_address"]',
+    );
+
+    form.addEventListener("submit", function (event) {
+      const isAnyChecked = Array.from(checkboxes).some((cb) => cb.checked);
+      const isAddressSelected = Array.from(addressRadios).some(
+        (radio) => radio.checked,
+      );
+
+      if (!isAnyChecked || !isAddressSelected) {
+        event.preventDefault();
+        if (!isAnyChecked) {
+          alert("Pilih setidaknya satu produk untuk dipesan.");
+        } else if (!isAddressSelected) {
+          alert("Pilih alamat pengiriman.");
+        }
+        return false;
+      }
+
+      // **Changed/Added: Optional embeddable Xendit form for inline payments (safer, no redirect)**
+      // If you added the <script> tag in <head>, enable this for a better UX.
+      // Otherwise, skip and let Django handle the redirect (easier).
+      event.preventDefault();  // Prevent default submit to handle via JS
+      const formData = new FormData(form);
+      fetch(form.action, {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+        },
+      })
+      .then(response => response.json())  // Assume Django returns JSON with invoice_url
+      .then(data => {
+        if (data.invoice_url) {
+          // For hosted checkout: window.location.href = data.invoice_url;
+          // For embeddable (safer): Use Xendit SDK to show inline form
+          Xendit.setPublishableKey('{{ settings.XENDIT_PUBLIC_KEY }}');  // Pass from Django context
+          // Example: Create a payment element (customize per Xendit docs)
+          const paymentElement = Xendit.createPaymentElement({
+            amount: data.amount,  // From Django response
+            // Add other options like customer details
+          });
+          paymentElement.mount('#payment-container');  // Add <div id="payment-container"></div> in HTML if using this
+        } else {
+          alert('Error: ' + data.error);
+        }
+      })
+      .catch(error => {
+        console.error('Payment error:', error);
+        alert('Gagal memproses pembayaran.');
       });
   });
 </script>

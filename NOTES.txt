@@ -3,11 +3,17 @@
 2. Make a .env file that contains:
     SECRET_KEY=django-insecure-t-5to3(+(0h$lu_sm&hetnyvt!nnm^wv#js#=6euqclneyh524 (type `` to generate randomize SECRET_KEY)
     DEBUG=True
+
     DB_NAME=dapurku_db
     DB_USER=root
     DB_PASSWORD=N@uff@l2oo5
     DB_HOST=localhost
     DB_PORT=3306
+
+    XENDIT_SECRET_KEY=xnd_development_OQqmIWEBRHyIHyOsh2pbAkJCPSrzOyKEzWlGyFA775ZjKjrsTnyyjidcy40
+    XENDIT_PUBLIC_KEY=xnd_public_development_BNZ4arSRAIxuqXEIt3IhOJNlEqSx9iToLfxl0NZhCpVLwbnqk8G5LCXz1Hg2_
+    XENDIT_IS_PRODUCTION=False
+    
 3. pipenv shell
 4. python manage.py runserver / pipenv run python manage.py runserver
 
@@ -25,10 +31,8 @@ mummiew - annanendra020422
 
 
 |===================== To-do List =====================|
-- Buat hapus cart product jadi menggunakan AJAX
-- Buat ubah address jadi menggunakan AJAX
-- Buat hapus address jadi menggunakan AJAX
-- Masukkan email dapurku di settings.py
+- Buat akun gmail khusus dapurku
+- Lanjutkan cart payment gateway buggeu
 - Sambungkan Contact page dengan email dapurku
 
 - Hosting
@@ -48,110 +52,3 @@ mummiew - annanendra020422
 - Manajemen Pesanan (Analisis di profile, notif ke pembeli, log histori)
 - Manajemen Pemasaran (produk bisa di share ke sosmed)
 - Modul Analisis Data Penjualan
-
-How to integrate my contact page to my email, so users who visit my website can contact me via email?
-
-Below is my `contact.html` code:
-{% extends '../layout/base.html' %} {% block content %}
-<section class="contact">
-  <article class="content">
-    <div class="connects">
-      <div class="desc">
-        <span>Hubungi Kami!</span>
-        <span>
-          Kami sangat senang mendengar kabar dari Anda! Baik itu pertanyaan,
-          masukan, atau sekadar ingin menyapa, tim kami siap untuk terhubung.
-          Jangan ragu untuk menghubungi kami kapan saja—kami selalu senang
-          mendukung, mendengarkan, dan berkembang bersama. Suara Anda berarti
-          bagi kami, dan kami antusias membangun hubungan yang bermakna dengan
-          Anda. Mari tetap terhubung!
-        </span>
-      </div>
-      <div class="informations">
-        <div class="row">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            class="svg-20"
-          >
-            <path
-              d="M1.5 8.67v8.58a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3V8.67l-8.928 5.493a3 3 0 0 1-3.144 0L1.5 8.67Z"
-            />
-            <path
-              d="M22.5 6.908V6.75a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3v.158l9.714 5.978a1.5 1.5 0 0 0 1.572 0L22.5 6.908Z"
-            />
-          </svg>
-
-          <div class="col">
-            <span>E-mail</span>
-            <span>contact@dapurku.store</span>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="contact-form">
-      <span>Pertanyaan atau Masukan?</span>
-      <form action="">
-        <div class="input-box">
-          <label for="nama-input">Nama</label>
-          <input
-            type="text"
-            id="nama-input"
-            autocomplete="off"
-            placeholder="Masukkan nama..."
-            required
-          />
-        </div>
-        <div class="input-box">
-          <label for="email-input">E-mail</label>
-          <input
-            type="email"
-            id="email-input"
-            autocomplete="off"
-            placeholder="Masukkan e-mail..."
-            required
-          />
-        </div>
-        <div class="desc-box">
-          <label for="message-input">Pesan</label>
-          <textarea
-            id="message-input"
-            placeholder="Tulis pesan..."
-            required
-          ></textarea>
-        </div>
-        <button>
-          Submit<svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            class="svg-20"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M13.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L11.69 12 4.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z"
-              clip-rule="evenodd"
-            />
-            <path
-              fill-rule="evenodd"
-              d="M19.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 1 1-1.06-1.06L17.69 12l-6.97-6.97a.75.75 0 0 1 1.06-1.06l7.5 7.5Z"
-              clip-rule="evenodd"
-            />
-          </svg>
-        </button>
-      </form>
-    </div>
-  </article>
-</section>
-{% endblock %}
-
-Below is my `views.py` code:
-@login_required(login_url = 'login')
-def contactPage(request):
-  page = "contact"
-  
-  contents = {'page': page, 'plain_page': page in plain_pages}
-  return render(request, './pages/contact.html', contents)
-
-Give step-by-step on how to hosting my Django + JavaScript project

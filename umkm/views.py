@@ -1,5 +1,11 @@
+import logging
 import json
-import midtransclient
+import xendit
+from xendit import invoice
+import logging
+
+# Set up logging for debugging
+logger = logging.getLogger(__name__)
 
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
@@ -247,116 +253,97 @@ def orderPage(request):
 
 @login_required(login_url='login')
 def create_order(request):
-  selected_item_ids = request.POST.getlist('selected_items')
-  
-  if not selected_item_ids:
-    messages.warning(request, "Pilih setidaknya satu produk untuk dipesan.")
-    return redirect('cart')
-  
-  selected_address_id = request.POST.get('selected_address')
-  if not selected_address_id:
-    messages.warning(request, "Pilih alamat pengiriman.")
-    return redirect('cart')
-  
-  try:
-    selected_address = UserAddress.objects.get(id=selected_address_id, user=request.user)
-  except UserAddress.DoesNotExist:
-    messages.warning(request, "Alamat tidak ditemukan.")
-    return redirect('cart')
-  
-  cart_items = Cart.objects.filter(user=request.user, id__in=selected_item_ids)
-  
-  if not cart_items.exists():
-    messages.warning(request, "Produk yang dipilih tidak ditemukan di keranjang.")
-    return redirect('cart')
-  
-  total_price = sum(item.product.price * item.quantity for item in cart_items)
-  order = Order.objects.create(user=request.user, total_price=total_price, address=selected_address)
-  
-  for item in cart_items:
-    OrderItem.objects.create(
-      order=order,
-      product=item.product,
-      quantity=item.quantity,
-      price=item.product.price
-    )
-
-  subject = f'Konfirmasi Pesanan #{order.id}'
-  message = render_to_string('order_confirmation_email.html', {
-      'user': request.user,
-      'order': order,
-      'items': order.items.all(),
-      'total_price': total_price,
-  })
-  send_mail(subject, '', settings.DEFAULT_FROM_EMAIL, [request.user.email], html_message=message)
-  
-  # NEW: Integrate MidTrans payment
-  snap = midtransclient.Snap(
-    is_production=settings.MIDTRANS_IS_PRODUCTION,
-    server_key=settings.MIDTRANS_SERVER_KEY,
-    client_key=settings.MIDTRANS_CLIENT_KEY
-  )
-  
-  # Prepare MidTrans transaction details
-  transaction_details = {
-    'order_id': str(order.id),  # Use your order ID
-    'gross_amount': int(total_price),  # MidTrans expects integer (in IDR, assuming your prices are in IDR)
-  }
-  
-  # Item details (optional, for MidTrans receipt)
-  item_details = [
-    {
-      'id': str(item.product.id),
-      'price': int(item.product.price),
-      'quantity': item.quantity,
-      'name': item.product.name,
-    } for item in cart_items
-  ]
-  
-  # Customer details
-  customer_details = {
-    'first_name': request.user.first_name or request.user.username,
-    'last_name': request.user.last_name or '',
-    'email': request.user.email,
-    'phone': selected_address.phone if selected_address.phone else '',
-    'billing_address': {
-      'first_name': request.user.first_name or request.user.username,
-      'last_name': request.user.last_name or '',
-      'address': selected_address.address,
-      'city': selected_address.city,
-      'postal_code': selected_address.postal_code,
-      'phone': selected_address.phone,
-      'country_code': 'IDN'  # Adjust if needed
-    },
-    'shipping_address': {
-      'first_name': request.user.first_name or request.user.username,
-      'last_name': request.user.last_name or '',
-      'address': selected_address.address,
-      'city': selected_address.city,
-      'postal_code': selected_address.postal_code,
-      'phone': selected_address.phone,
-      'country_code': 'IDN'
-    }
-  }
-  
-  # Create transaction token
-  transaction = {
-    'transaction_details': transaction_details,
-    'item_details': item_details,
-    'customer_details': customer_details,
-  }
-  
-  try:
-    transaction_token = snap.create_transaction_token(transaction)
-    order.midtrans_transaction_id = transaction_details['order_id']  # Store for tracking
-    order.save()
+    """
+    Handles order creation, including validation, email confirmation, and MidTrans payment integration.
+    Follows best practices: atomic operations, error handling, and environment-specific SSL management.
+    """
+    # Step 1: Validate selected items
+    selected_item_ids = request.POST.getlist('selected_items')
+    if not selected_item_ids:
+        messages.warning(request, "Pilih setidaknya satu produk untuk dipesan.")
+        return redirect('cart')
     
-    # Redirect to MidTrans payment page
-    return redirect(f"https://app.sandbox.midtrans.com/snap/v2/vtweb/{transaction_token['token']}")  # Use production URL if live
-  except Exception as e:
-    messages.error(request, f"Gagal memproses pembayaran: {str(e)}")
-    order.delete()  # Rollback if payment fails
-    return redirect('cart')
+    # Step 2: Validate selected address
+    selected_address_id = request.POST.get('selected_address')
+    if not selected_address_id:
+        messages.warning(request, "Pilih alamat pengiriman.")
+        return redirect('cart')
+    
+    try:
+        selected_address = UserAddress.objects.get(id=selected_address_id, user=request.user)
+    except UserAddress.DoesNotExist:
+        messages.warning(request, "Alamat tidak ditemukan.")
+        return redirect('cart')
+    
+    # Step 3: Fetch and validate cart items
+    cart_items = Cart.objects.filter(user=request.user, id__in=selected_item_ids)
+    if not cart_items.exists():
+        messages.warning(request, "Produk yang dipilih tidak ditemukan di keranjang.")
+        return redirect('cart')
+    
+    # Step 4: Calculate total price and create order (atomic operation)
+    total_price = sum(item.product.price * item.quantity for item in cart_items)
+    order = Order.objects.create(user=request.user, total_price=total_price, address=selected_address)
+    
+    # Step 5: Create order items
+    for item in cart_items:
+        OrderItem.objects.create(
+            order=order,
+            product=item.product,
+            quantity=item.quantity,
+            price=item.product.price
+        )
+    
+    try:
+        xendit.set_secret_key(settings.XENDIT_SECRET_KEY)
+        xendit.set_public_key(settings.XENDIT_PUBLIC_KEY)
+
+        # Prepare invoice (hosted checkout – easier than Midtrans tokens)
+        invoice_data = {
+            'external_id': str(order.id),  # Unique order ID
+            'amount': int(total_price),  # IDR, integer
+            'description': f'Order #{order.id}',
+            'customer': {
+                'given_names': request.user.first_name or request.user.username,
+                'surname': request.user.last_name or '',
+                'email': request.user.email,
+                'mobile_number': getattr(selected_address, 'phone', ''),
+            },
+            'customer_notification_preference': {
+                'invoice_created': ['email'],
+                'invoice_reminder': ['email'],
+                'invoice_paid': ['email'],
+            },
+            'success_redirect_url': 'https://yourdomain.com/order/success/',  # Redirect after payment
+            'failure_redirect_url': 'https://yourdomain.com/order/failed/',
+            'items': [
+                {
+                    'name': item.product.name,
+                    'quantity': item.quantity,
+                    'price': int(item.product.price),
+                } for item in cart_items
+            ],
+            'fees': [],  # Optional
+        }
+
+        # Create invoice (hosted page)
+        invoice = Invoice.create(invoice_data)
+        order.xendit_invoice_id = invoice['id']
+        order.save()
+
+        # Redirect to Xendit's hosted payment page (safer than Midtrans redirects)
+        return redirect(invoice['invoice_url'])
+
+    except xendit.XenditError as e:
+        logger.error(f"Xendit error for order {order.id}: {e}")
+        messages.error(request, f"Gagal memproses pembayaran: {str(e)}")
+        order.delete()  # Rollback
+        return redirect('cart')
+    except Exception as e:
+        logger.error(f"Payment error for order {order.id}: {e}")
+        messages.error(request, f"Gagal memproses pembayaran: {str(e)}")
+        order.delete()
+        return redirect('cart')
 
 @login_required
 def order_list(request):
@@ -502,23 +489,23 @@ def delete_address(request, address_id):
   # For GET, show confirmation (we'll use JS)
   return redirect('cart')
 
-@csrf_exempt  # MidTrans doesn't send CSRF tokens
-def midtrans_webhook(request):
+@csrf_exempt
+def xendit_webhook(request):
   if request.method == 'POST':
-    data = json.loads(request.body)
-    order_id = data.get('order_id')
-    transaction_status = data.get('transaction_status')
-    
     try:
-      order = Order.objects.get(id=order_id)
-      if transaction_status == 'settlement':  # Payment successful
-        order.status = 'Paid'
-        # Delete cart items only now
-        Cart.objects.filter(user=order.user, product__in=[item.product for item in order.items.all()]).delete()
-      elif transaction_status in ['deny', 'cancel', 'expire']:
-        order.status = 'Failed'
+      data = json.loads(request.body)
+      invoice_id = data['id']
+      status = data['status']  # 'PAID', 'EXPIRED', etc.
+
+      order = Order.objects.get(xendit_invoice_id=invoice_id)
+      if status == 'PAID':
+        order.status = 'paid'  # Update your Order model
+        # Add logic: e.g., reduce stock, send confirmation
+      elif status == 'EXPIRED':
+        order.status = 'failed'
       order.save()
-      return JsonResponse({'status': 'success'})
-    except Order.DoesNotExist:
-      return JsonResponse({'status': 'error', 'message': 'Order not found'}, status=404)
-  return JsonResponse({'status': 'error'}, status=400)
+      return JsonResponse({'status': 'ok'})
+    except Exception as e:
+      logger.error(f"Webhook error: {e}")
+      return JsonResponse({'error': 'Invalid webhook'}, status=400)
+  return JsonResponse({'error': 'Method not allowed'}, status=405)

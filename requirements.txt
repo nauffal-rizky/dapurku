@@ -5,3 +5,4 @@ PyMySQL==1.1.2
 python-decouple==3.8
 sqlparse==0.5.3
 tzdata==2025.2
+xendit-python==7.0.0
