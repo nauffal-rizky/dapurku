@@ -15,13 +15,9 @@ from django.conf import settings
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect
 
-from django.views.generic import CreateView, UpdateView, DeleteView, DetailView
-from django.views.generic.list import ListView
-
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 # umkm/views.py
 from django.contrib.auth.decorators import login_required
@@ -254,8 +250,8 @@ def orderPage(request):
 @login_required(login_url='login')
 def create_order(request):
     """
-    Handles order creation, including validation, email confirmation, and MidTrans payment integration.
-    Follows best practices: atomic operations, error handling, and environment-specific SSL management.
+    Handles order creation, including validation, email confirmation, and Xendit payment integration.
+    Follows best practices: atomic operations, error handling, environment-specific SSL management, and secure API key handling.
     """
     # Step 1: Validate selected items
     selected_item_ids = request.POST.getlist('selected_items')
@@ -283,37 +279,40 @@ def create_order(request):
     
     # Step 4: Calculate total price and create order (atomic operation)
     total_price = sum(item.product.price * item.quantity for item in cart_items)
-    order = Order.objects.create(user=request.user, total_price=total_price, address=selected_address)
     
-    # Step 5: Create order items
-    for item in cart_items:
-        OrderItem.objects.create(
-            order=order,
-            product=item.product,
-            quantity=item.quantity,
-            price=item.product.price
-        )
+    # Use Django's transaction.atomic to ensure atomicity (best practice for database operations)
+    from django.db import transaction
+    with transaction.atomic():
+        order = Order.objects.create(user=request.user, total_price=total_price, address=selected_address)
+        
+        # Step 5: Create order items
+        for item in cart_items:
+            OrderItem.objects.create(
+                order=order,
+                product=item.product,
+                quantity=item.quantity,
+                price=item.product.price
+            )
     
     try:
-        xendit.set_secret_key(settings.XENDIT_SECRET_KEY)
-        xendit.set_public_key(settings.XENDIT_PUBLIC_KEY)
-
-        # Prepare invoice (hosted checkout – easier than Midtrans tokens)
+        # Best practice: Set API key securely (avoid hardcoding; use environment variables or Django settings)
+        # Note: Xendit Python SDK uses xendit.api_key for authentication. Public key is not required for server-side operations.
+        import xendit
+        xendit.api_key = settings.XENDIT_SECRET_KEY  # Correct way to set the API key in Xendit SDK
+        
+        # Note: Customer creation is optional for invoices. To avoid SDK version compatibility issues (e.g., missing 'xendit.customer' module),
+        # we simplify by not creating a customer and relying on 'payer_email' for the invoice. This is sufficient for basic payment flows
+        # and aligns with Xendit docs where 'customer_id' is optional. If you need customer management, upgrade to a compatible SDK version
+        # and re-add customer creation after testing.
+        
+        # Prepare invoice (hosted checkout – easier and more secure than Midtrans tokens)
         invoice_data = {
             'external_id': str(order.id),  # Unique order ID
             'amount': int(total_price),  # IDR, integer
+            'payer_email': request.user.email,  # REQUIRED: Used for notifications and payment association
             'description': f'Order #{order.id}',
-            'customer': {
-                'given_names': request.user.first_name or request.user.username,
-                'surname': request.user.last_name or '',
-                'email': request.user.email,
-                'mobile_number': getattr(selected_address, 'phone', ''),
-            },
-            'customer_notification_preference': {
-                'invoice_created': ['email'],
-                'invoice_reminder': ['email'],
-                'invoice_paid': ['email'],
-            },
+            # Fix: Removed 'customer_notification_preference' as it's not supported in the current SDK version (causing the unexpected keyword argument error).
+            # This field is optional per Xendit API docs; notifications can still be handled via 'payer_email'. If needed, upgrade SDK and re-add after testing.
             'success_redirect_url': 'https://yourdomain.com/order/success/',  # Redirect after payment
             'failure_redirect_url': 'https://yourdomain.com/order/failed/',
             'items': [
@@ -325,23 +324,30 @@ def create_order(request):
             ],
             'fees': [],  # Optional
         }
-
+        
+        # Validate required fields before API call (best practice)
+        if not invoice_data['payer_email']:
+            raise ValueError("Email pengguna diperlukan untuk pembayaran.")
+        
         # Create invoice (hosted page)
-        invoice = Invoice.create(invoice_data)
+        from xendit import Invoice
+        invoice = Invoice.create(**invoice_data)
         order.xendit_invoice_id = invoice['id']
         order.save()
-
+        
         # Redirect to Xendit's hosted payment page (safer than Midtrans redirects)
         return redirect(invoice['invoice_url'])
-
+    
     except xendit.XenditError as e:
         logger.error(f"Xendit error for order {order.id}: {e}")
         messages.error(request, f"Gagal memproses pembayaran: {str(e)}")
-        order.delete()  # Rollback
+        # Rollback: Delete order and items (since transaction.atomic ensures consistency)
+        order.delete()
         return redirect('cart')
     except Exception as e:
         logger.error(f"Payment error for order {order.id}: {e}")
         messages.error(request, f"Gagal memproses pembayaran: {str(e)}")
+        # Rollback: Delete order and items
         order.delete()
         return redirect('cart')
 
