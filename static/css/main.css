@@ -1118,26 +1118,16 @@ main {
   font-size: 1.1rem;
   font-weight: 700;
 }
-.detail-product .content .checkout .btns {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  align-items: center;
-  gap: 0.3rem;
-}
-.detail-product .content .checkout .btns :is(button, a) {
+.detail-product .content .checkout button {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: transparent;
-  color: var(--warna-utama);
-  font-size: 1rem;
-  padding: 0.5rem 0;
-  border: 2px solid var(--warna-utama);
-  border-radius: 0.5rem;
-}
-.detail-product .content .checkout .btns button.active {
   background-color: var(--warna-utama);
   color: var(--putih);
+  font-size: 1rem;
+  padding: 0.5rem 0.75rem;
+  border: 2px solid var(--warna-utama);
+  border-radius: 0.5rem;
 }
 .detail-product .content .checkout .tab-container {
   display: grid;
@@ -1482,7 +1472,12 @@ main {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
+  align-items: start;
   margin: 1.5rem 0 0 0;
+}
+.order-list .content .orders .order-item {
+  border-radius: 10px;
+  box-shadow: 1px 1px 2px rgba(85, 85, 85, 0.5);
 }
 .order-list .content .orders .order-item .desc {
   display: grid;
@@ -1490,13 +1485,15 @@ main {
     "idName idName"
     "createdAt createdAt"
     "quantity quantity"
-    "price totalPrice";
-  box-shadow: 1px 1px 2px rgba(85, 85, 85, 0.5);
-  padding: 0.75rem 1.25rem;
+    "price totalPrice"
+    "whatsapp whatsapp";
+  align-items: center;
+  padding: 0.25rem 1.25rem 0.5rem 1.25rem;
 }
 .order-list .content .orders .order-item img {
   width: 100%;
   aspect-ratio: 1/1;
+  border-radius: 10px 10px 0 0;
 }
 .order-list .content .orders .order-item .desc > span:first-of-type {
   grid-area: idName;
@@ -1512,12 +1509,19 @@ main {
 }
 .order-list .content .orders .order-item .desc :is(.price, .totalPrice) {
   font-size: 1.25rem;
+  text-align: center;
 }
 .order-list .content .orders .order-item .desc .price {
   grid-area: price;
 }
 .order-list .content .orders .order-item .desc .total-price {
   grid-area: totalPrice;
+}
+.order-list .content .orders .order-item .desc .whatsapp {
+  grid-area: whatsapp;
+  color: var(--green);
+  text-align: right;
+  margin: 1rem 0 0 0;
 }
 
 /* CONTACT PAGE */
@@ -2223,6 +2227,11 @@ footer .contact .row {
   .products.all h2 {
     font-size: 2.5rem;
   }
+
+  .order-list .content .orders .order-item .desc > span:first-of-type {
+    font-size: 1.25rem;
+    margin: 0 0 0.25rem 0;
+  }
 }
 @media (max-width: 768px) {
   section {
@@ -2646,8 +2655,27 @@ footer .contact .row {
   .cartpage .content .address-selection > span {
     font-size: 1.25rem;
   }
-  .cartpage .content .address-selection .address-option a {
+  .cartpage .content .address-selection .address-option a,
+  .order-list .content > span {
     font-size: 0.75rem;
+  }
+
+  .order-list .content .orders {
+    margin: 1.25rem 0 0 0;
+  }
+  .order-list .content .orders .order-item .desc {
+    padding: 0.25rem 1rem 0.5rem 1rem;
+  }
+  .order-list .content .orders .order-item .desc > span:first-of-type,
+  .order-list .content .orders .order-item .desc :is(.price, .totalPrice) {
+    font-size: 1rem;
+  }
+  .order-list .content .orders .order-item .desc > span:last-of-type,
+  .order-list .content .orders .order-item .desc .quantity {
+    font-size: 0.75rem;
+  }
+  .order-list .content .orders .order-item .desc .quantity {
+    margin: 0.25rem 0 0.5rem 0;
   }
 
   footer {
@@ -3139,7 +3167,7 @@ footer .contact .row {
   .detail-product .content .checkout > p,
   .detail-product .content .checkout .product-amount .stock,
   .detail-product .content .checkout .total .subTotal,
-  .detail-product .content .checkout .btns :is(button, a),
+  .detail-product .content .checkout button,
   .manage-address .content form button {
     font-size: 0.75rem;
   }
@@ -3160,6 +3188,34 @@ footer .contact .row {
   .cartpage .content .address-selection .address-option a {
     font-size: 0.5rem;
     padding: 0.25rem 0.5rem;
+  }
+
+  .order-list .content .orders {
+    grid-template-columns: 1fr;
+    margin: 1rem 0 0 0;
+  }
+  .order-list .content .orders .order-item {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+  }
+  .order-list .content .orders .order-item img {
+    height: 100%;
+    border-radius: 10px 0 0 10px;
+  }
+  .order-list .content .orders .order-item .desc {
+    padding: 0.5rem 0.75rem;
+  }
+  .order-list .content .orders .order-item .desc > span:first-of-type,
+  .order-list .content .orders .order-item .desc :is(.price, .totalPrice) {
+    font-size: 0.75rem;
+    margin: 0;
+  }
+  .order-list .content .orders .order-item .desc > span:last-of-type,
+  .order-list .content .orders .order-item .desc .quantity {
+    font-size: 0.5rem;
+  }
+  .order-list .content .orders .order-item .desc .quantity {
+    margin: 0.25rem 0;
   }
 
   footer {

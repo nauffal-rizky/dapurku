@@ -88,23 +88,10 @@
           <form method="POST" action="{% url 'add_to_cart' product.id %}">
             {% csrf_token %}
 
-            <!-- hidden variant (kalau ada) -->
-            {% if product.variants.exists %}
-            <input
-              type="hidden"
-              name="variant_id"
-              id="variant_id"
-              value="{{ product.variants.first.id }}"
-            />
-            {% endif %}
-
             <!-- hidden quantity -->
             <input type="hidden" name="quantity" id="quantity" value="1" />
 
-            <div class="btns">
-              <button type="submit" class="active">+ Keranjang</button>
-              <a href="{% url 'order' %}">Beli</a>
-            </div>
+            <button type="submit">+ Keranjang</button>
           </form>
           {% endif %}
         </div>
