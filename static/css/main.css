@@ -652,6 +652,7 @@ section,
 .detail-product .content .desc,
 .connects .informations,
 .cartpage .content .cart-products,
+.cartpage .content .address-selection,
 .cartpage .content .cart-products .product-info .desc,
 .product-item .desc,
 .order-list .order-container .order-info .products .product,
@@ -662,6 +663,8 @@ section,
 .cartpage .content .address-section .address-list,
 .order-list .order-container .order-info,
 footer,
+.manage-address .content,
+.manage-address .content form,
 .contact-form,
 .umkm-products,
 .detail-content,
@@ -755,6 +758,7 @@ main {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 0.75rem;
+  align-items: start;
 }
 .product-list .no-products {
   grid-column: span 4;
@@ -1236,7 +1240,7 @@ main {
 }
 .cartpage .content .cart-products .product-info {
   display: grid;
-  grid-template-areas: "checkbox img desc stock quantity total form";
+  grid-template-areas: "checkbox img desc stock quantity total deleteBtn";
   grid-template-columns: repeat(6, auto);
   width: 100%;
   justify-items: center;
@@ -1258,7 +1262,7 @@ main {
 .cartpage .content .cart-products .product-info label .checkbox {
   position: absolute;
   top: 50%;
-  left: calc(-50% + 19px);
+  left: calc(-50% + 10px);
   width: 25px;
   height: 25px;
   background-color: transparent;
@@ -1333,92 +1337,37 @@ main {
   grid-area: total;
   font-weight: 600;
 }
-.cartpage .content .cart-products .product-info form {
-  grid-area: form;
-}
-.cartpage .content .cart-products .product-info form button {
+.cartpage .content .cart-products .product-info button {
+  grid-area: deleteBtn;
   display: flex;
   align-items: center;
   background-color: transparent;
   color: var(--red);
   border: none;
 }
-.cartpage .content .address-section {
+.cartpage .content .address-selection {
+  gap: 0.5rem;
   margin: 1.5rem 0 2rem 0;
 }
-.cartpage .content .address-section h2 {
+.cartpage .content .address-selection > span {
   color: var(--warna-utama);
+  font-size: 1.5rem;
 }
-.cartpage .content .address-section .address-form {
-  margin: 0.75rem 0 0 0;
-}
-.cartpage .content .address-section .address-form .inputs {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0.5rem;
-}
-.cartpage .content .address-section .address-form button {
-  width: 100%;
-  background-color: var(--warna-utama);
-  color: var(--putih);
-  font-size: 1.25rem;
-  margin: 0.75rem 0 0 0;
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 10px;
-}
-.cartpage .content .address-section .address-list {
-  gap: 0.5rem;
-}
-.cartpage .content .address-section .address-list .address-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 0.5rem;
-}
-.cartpage .content .address-section .address-list .address-item .btn-container {
+.cartpage .content .address-selection .address-option {
   display: flex;
   align-items: center;
+  gap: 0.75rem;
 }
-.cartpage
-  .content
-  .address-section
-  .address-list
-  .address-item
-  .btn-container
-  button {
-  color: var(--putih);
-  padding: 0.5rem 0.75rem;
-  border: none;
-}
-.cartpage
-  .content
-  .address-section
-  .address-list
-  .address-item
-  .btn-container
-  > button {
+.cartpage .content .address-selection .address-option a {
   background-color: var(--green);
-  border-radius: 10px 0 0 10px;
-}
-.cartpage
-  .content
-  .address-section
-  .address-list
-  .address-item
-  .btn-container
-  form
-  button {
-  background-color: var(--red);
-  border-radius: 0 10px 10px 0;
-}
-.cartpage .content .address-section > button {
-  background-color: var(--warna-utama);
   color: var(--putih);
-  font-size: 1.25rem;
+  font-size: 1rem;
   padding: 0.5rem 0.75rem;
   border: none;
   border-radius: 10px;
+}
+.cartpage .content .address-selection .no-address a {
+  color: var(--warna-utama);
 }
 .cartpage .content > span {
   display: block;
@@ -1439,11 +1388,11 @@ main {
   font-size: 1.25rem;
   font-weight: 500;
 }
-.cartpage .content .spanBtn .btn-container a {
+.cartpage .content .spanBtn .btn-container a:first-of-type {
   color: var(--warna-utama);
   text-decoration: underline;
 }
-.cartpage .content .spanBtn .btn-container button {
+.cartpage .content .spanBtn .btn-container a:last-of-type {
   background-color: var(--warna-utama);
   color: var(--putih);
   padding: 1rem 1.5rem;
@@ -1451,7 +1400,6 @@ main {
   border-radius: 10px;
 }
 
-/* ORDER PAGE */
 .popup {
   position: fixed;
   top: 0;
@@ -1526,435 +1474,50 @@ main {
   font-size: 1.5rem;
 }
 
-.order-list .order-container .order-info .user-address,
-.order-list .order-container .order-info .checkout {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1.5rem;
-  padding: 1rem 1.5rem;
-  border-radius: 10px;
-  box-shadow: 0px 4px 8px rgba(51, 51, 51, 0.1);
-}
-.order-list
-  .order-container
-  .order-info
-  .ordered-products
-  .products-container
-  .product
-  .delivery-option
-  .delivery-info {
-  gap: 0.5rem;
-}
-.order-list
-  .order-container
-  .order-info
-  .ordered-products
-  .products-container
-  .product
-  .delivery-option
-  .delivery-info
-  span
-  span {
-  font-weight: 600;
-}
-.order-list .order-container .order-info .user-address:hover,
-.order-list
-  .order-container
-  .order-info
-  .ordered-products
-  .products-container
-  .product:hover {
-  box-shadow: 0px 8px 12px rgba(51, 51, 51, 0.1);
-  transition: 0.3s;
-}
-.order-list .order-container .order-info .user-address span:first-of-type {
-  color: var(--warna-utama);
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin: 0 0 0.25rem 0;
-}
-.order-list .order-container .order-info .user-address p {
-  color: var(--abuabu);
-}
-.order-list .order-container .order-info .user-address i,
-.order-list
-  .order-container
-  .order-info
-  .ordered-products
-  .products-container
-  .product
-  .delivery-option
-  i {
-  font-size: 2rem;
-}
-.order-list .order-container .order-info .user-address i {
+/* ORDER PAGE */
+.order-list .content h1 {
   color: var(--warna-utama);
 }
-.order-list .order-container .order-info .ordered-products {
-  margin: 1.5rem 0 2rem 0;
-}
-.order-list .order-container .order-info .ordered-products h2 {
-  margin: 0 0 1.5rem 0;
-}
-.order-list .order-container .order-info .ordered-products .products-container {
+.order-list .content .orders {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
+  margin: 1.5rem 0 0 0;
 }
-.order-list
-  .order-container
-  .order-info
-  .ordered-products
-  .products-container
-  .product {
-  gap: 0.5rem;
-  box-shadow: 0px 4px 8px rgba(51, 51, 51, 0.1);
-  border-radius: 10px;
-}
-.order-list
-  .order-container
-  .order-info
-  .ordered-products
-  .products-container
-  .product
-  .head
-  > a {
-  display: inline-block;
-  color: var(--warna-utama);
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin: 0 0 0.5rem 0;
-}
-.order-list
-  .order-container
-  .order-info
-  .ordered-products
-  .products-container
-  .product
-  .head {
-  padding: 1rem 1.5rem;
-}
-.order-list
-  .order-container
-  .order-info
-  .ordered-products
-  .products-container
-  .product
-  .delivery-option {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1.5rem;
-  background-color: var(--warna-utama);
-  color: var(--putih);
-  padding: 1rem 1.5rem;
-  border-radius: 0 0 10px 10px;
-}
-.order-list
-  .order-container
-  .order-info
-  .ordered-products
-  .products-container
-  .product
-  .head
-  .info {
+.order-list .content .orders .order-item .desc {
   display: grid;
-  grid-template-columns: 30% 1fr;
-  gap: 1rem;
+  grid-template-areas:
+    "idName idName"
+    "createdAt createdAt"
+    "quantity quantity"
+    "price totalPrice";
+  box-shadow: 1px 1px 2px rgba(85, 85, 85, 0.5);
+  padding: 0.75rem 1.25rem;
 }
-.order-list
-  .order-container
-  .order-info
-  .ordered-products
-  .products-container
-  .product
-  .head
-  .info
-  img {
+.order-list .content .orders .order-item img {
   width: 100%;
   aspect-ratio: 1/1;
-  border-radius: 10px;
 }
-.order-list
-  .order-container
-  .order-info
-  .ordered-products
-  .products-container
-  .product
-  .head
-  .info
-  .desc
-  > a {
+.order-list .content .orders .order-item .desc > span:first-of-type {
+  grid-area: idName;
   color: var(--warna-utama);
-  font-size: 1.25rem;
-}
-.order-list
-  .order-container
-  .order-info
-  .ordered-products
-  .products-container
-  .product
-  .head
-  .info
-  .desc
-  > span:last-of-type {
-  color: var(--abuabu);
-  font-size: 1rem;
-  margin: 0 0 0.5rem 0;
-}
-.order-list
-  .order-container
-  .order-info
-  .ordered-products
-  .products-container
-  .product
-  .head
-  .info
-  .desc
-  .price-counter {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.order-list
-  .order-container
-  .order-info
-  .ordered-products
-  .products-container
-  .product
-  .head
-  .info
-  .desc
-  .price-counter
-  .price
-  .discount {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-}
-.order-list
-  .order-container
-  .order-info
-  .ordered-products
-  .products-container
-  .product
-  .head
-  .info
-  .desc
-  .price-counter
-  .discount
-  p {
-  color: var(--abuabu);
-  text-decoration: line-through;
-}
-.order-list
-  .order-container
-  .order-info
-  .ordered-products
-  .products-container
-  .product
-  .head
-  .info
-  .desc
-  .price-counter
-  .discount
-  .percent {
-  background-color: var(--warna-utama);
-  color: var(--putih);
-  font-size: 0.75rem;
-  padding: 0.25rem;
-  border-radius: 5px;
-}
-.order-list .order-container .order-info .order-summary {
-  display: flex;
-  justify-content: space-between;
-}
-.order-list .order-container .order-info :is(.order-summary, .payment-method) {
-  background-color: var(--warna-utama);
-  color: var(--putih);
-  padding: 1rem 1.5rem;
-  border-radius: 10px;
-  box-shadow: 0px 4px 8px rgba(51, 51, 51, 0.1);
-}
-.order-list .order-container .order-info .order-summary :is(strong, button) {
-  background-color: transparent;
-  color: var(--putih);
-  font-size: 1rem;
-  border: none;
-}
-.order-list
-  .order-container
-  .order-info
-  .order-summary
-  :is(
-    > span,
-    .subtotals
-      :is(
-        .product-subtotal span:first-of-type,
-        .shipping-subtotal span:first-of-type
-      ),
-    .total span:first-of-type
-  ) {
-  font-weight: 600;
-}
-.order-list
-  .order-container
-  .order-info
-  .order-summary
-  :is(
-    .subtotals
-      :is(
-        .product-subtotal span:first-of-type,
-        .shipping-subtotal span:first-of-type
-      )
-  ) {
-  font-weight: 500;
-}
-.order-list .order-container .order-info .order-summary > span,
-.order-list .order-container .order-info .payment-method > span {
   font-size: 1.5rem;
 }
-.order-list .order-container .order-info .order-summary > span,
-.order-list
-  .order-container
-  .order-info
-  .order-summary
-  :is(span, .subtotal-price, .shipping-price, .shipping-discount) {
-  font-weight: 600;
+.order-list .content .orders .order-item .desc > span:last-of-type {
+  grid-area: createdAt;
 }
-.order-list .order-container .order-info .order-summary .subtotals {
-  margin: 0.75rem 0 0 0;
-  padding: 0 0 1rem 0;
+.order-list .content .orders .order-item .desc .quantity {
+  grid-area: quantity;
+  margin: 0.5rem 0 0.75rem 0;
 }
-.order-list
-  .order-container
-  .order-info
-  .order-summary
-  :is(
-    .subtotals
-      :is(
-        .product-subtotal,
-        .shipping-subtotal
-          :is(.sub-total, .sub-total > span, .shipping-details .row)
-      ),
-    .total
-  ) {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.order-list
-  .order-container
-  .order-info
-  .order-summary
-  .subtotals
-  .shipping-subtotal {
-  gap: 0.25rem;
-  margin: 0.25rem 0 0 0;
-}
-.order-list
-  .order-container
-  .order-info
-  .order-summary
-  .subtotals
-  .shipping-subtotal
-  .sub-total
-  > span {
-  gap: 0.5rem;
-}
-.order-list
-  .order-container
-  .order-info
-  .order-summary
-  .subtotals
-  .shipping-subtotal
-  .shipping-details {
-  margin: 0 0 0 1rem;
-}
-.order-list
-  .order-container
-  .order-info
-  .order-summary
-  .subtotals
-  .shipping-subtotal
-  .shipping-details
-  .row
-  span {
-  font-size: 0.9rem;
-}
-.order-list .order-container .order-info .order-summary .total {
-  font-weight: 700;
-  padding: 1rem 0 0 0;
-  border-top: 2px solid var(--putih);
-}
-.order-list .order-container .order-info .order-summary .total span {
+.order-list .content .orders .order-item .desc :is(.price, .totalPrice) {
   font-size: 1.25rem;
 }
-.order-list .order-container .order-info .payment-method {
-  margin: 0.5rem 0;
+.order-list .content .orders .order-item .desc .price {
+  grid-area: price;
 }
-.order-list .order-container .order-info .payment-method .methods {
-  gap: 0.5rem;
-  margin: 0.75rem 0 0 0;
-}
-.order-list
-  .order-container
-  .order-info
-  .payment-method
-  .methods
-  :is(label, label .method-info) {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-.order-list .order-container .order-info .payment-method .methods label {
-  justify-content: space-between;
-}
-.order-list
-  .order-container
-  .order-info
-  .payment-method
-  .methods
-  label
-  .method-info
-  img {
-  height: 35px;
-  background-color: var(--putih);
-  padding: 0.5rem;
-  border-radius: 5px;
-}
-.order-list .order-container .order-info .checkout.fixed {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  background-color: var(--putih);
-  padding: 1rem 1.5rem;
-  box-shadow: 0px -4px 8px rgba(51, 51, 51, 0.1);
-}
-.order-list .order-container .order-info .checkout span {
-  color: var(--warna-utama);
-  font-weight: 600;
-}
-.order-list .order-container .order-info .checkout .total span:first-of-type {
-  color: var(--hitam);
-}
-.order-list .order-container .order-info .checkout .total span span {
-  font-weight: 400;
-}
-.order-list .order-container .order-info .checkout button {
-  background-color: var(--warna-utama);
-  color: var(--putih);
-  font-size: 1.25rem;
-  font-weight: 500;
-  padding: 0.5rem 0.75rem;
-  border: 2px solid var(--warna-utama);
-  border-radius: 10px;
-}
-.order-list .order-container .order-info .checkout button:hover {
-  background-color: var(--putih);
-  color: var(--warna-utama);
+.order-list .content .orders .order-item .desc .total-price {
+  grid-area: totalPrice;
 }
 
 /* CONTACT PAGE */
@@ -2209,10 +1772,18 @@ main {
 :is(.profile .content .edit-profile, .product-form .content)
   form
   .img-box
+  label
   input {
   width: 0;
   height: fit-content;
   opacity: 0;
+}
+:is(.profile .content .edit-profile, .product-form .content)
+  form
+  .img-box
+  label
+  a {
+  display: none;
 }
 .signup .content form .img-profile .img-profile-edit svg,
 :is(.profile .content .edit-profile, .product-form .content) form .img-box svg {
@@ -2518,6 +2089,25 @@ main {
 }
 .delete-product .content form a {
   color: var(--warna-utama);
+}
+
+.manage-address .content {
+  gap: 1rem;
+}
+.manage-address .content h1 {
+  color: var(--warna-utama);
+  text-align: center;
+}
+.manage-address .content form {
+  gap: 0.5rem;
+}
+.manage-address .content form button {
+  background-color: var(--warna-utama);
+  color: var(--putih);
+  font-size: 1.25rem;
+  padding: 0.5rem 0.75rem;
+  border: none;
+  border-radius: 10px;
 }
 
 /* FOOTER */
@@ -2847,6 +2437,9 @@ footer .contact .row {
   .cartpage .content .cart-products .product-info :is(span, button) {
     font-size: 0.75rem;
   }
+  .cartpage .content .cart-products .product-info label .checkbox {
+    left: calc(-50% + 13px);
+  }
   .cartpage .content > .desc label .checkbox,
   .cartpage .content .cart-products .product-info label .checkbox {
     width: 20px;
@@ -2889,7 +2482,7 @@ footer .contact .row {
   .cartpage .content .address-section .address-form button {
     font-size: 1rem;
   }
-  .cartpage .content .address-section {
+  .cartpage .content .address-selection {
     margin: 1rem 0 1.5rem 0;
   }
   .cartpage
@@ -3039,11 +2632,22 @@ footer .contact .row {
   }
 
   .delete-product .content p,
-  .delete-product .content form :is(button, a) {
+  .delete-product .content form :is(button, a),
+  .manage-address .content form button {
     font-size: 1rem;
   }
   .delete-product .content form {
     gap: 1rem;
+  }
+
+  .manage-address .content {
+    gap: 0.75rem;
+  }
+  .cartpage .content .address-selection > span {
+    font-size: 1.25rem;
+  }
+  .cartpage .content .address-selection .address-option a {
+    font-size: 0.75rem;
   }
 
   footer {
@@ -3330,9 +2934,16 @@ footer .contact .row {
   .cartpage .content > .desc label {
     gap: 0.5rem;
   }
+  .cartpage .content .cart-products .product-info {
+    padding: 0.5rem 0.75rem;
+  }
   .cartpage .content > .desc :is(span, label),
   .cartpage .content .cart-products .product-info :is(span, button) {
     font-size: 0.75rem;
+  }
+  .cartpage .content .cart-products .product-info button svg {
+    width: 15px;
+    height: 15px;
   }
   .cartpage .content .cart-products .product-info img {
     width: 50px;
@@ -3348,6 +2959,9 @@ footer .contact .row {
   .cartpage .content .cart-products .product-info .stock .circle {
     width: 10px;
     height: 10px;
+  }
+  .cartpage .content .cart-products .product-info label .checkbox {
+    left: calc(-50% + 3px);
   }
   .cartpage .content > .desc label .checkbox,
   .cartpage .content .cart-products .product-info label .checkbox {
@@ -3386,8 +3000,9 @@ footer .contact .row {
   .cartpage .content .address-section .address-form button {
     font-size: 0.75rem;
   }
-  .cartpage .content .address-section {
+  .cartpage .content .address-selection {
     margin: 0.75rem 0 1.25rem 0;
+    gap: 0.25rem;
   }
   .cartpage
     .content
@@ -3524,12 +3139,27 @@ footer .contact .row {
   .detail-product .content .checkout > p,
   .detail-product .content .checkout .product-amount .stock,
   .detail-product .content .checkout .total .subTotal,
-  .detail-product .content .checkout .btns :is(button, a) {
+  .detail-product .content .checkout .btns :is(button, a),
+  .manage-address .content form button {
     font-size: 0.75rem;
   }
   .umkm-products,
   .other-products {
     gap: 1.25rem;
+  }
+
+  .manage-address .content {
+    gap: 0.5rem;
+  }
+  .cartpage .content .address-selection > span {
+    font-size: 1rem;
+  }
+  .cartpage .content .address-selection .address-option .address-details {
+    font-size: 0.75rem;
+  }
+  .cartpage .content .address-selection .address-option a {
+    font-size: 0.5rem;
+    padding: 0.25rem 0.5rem;
   }
 
   footer {
@@ -3635,5 +3265,19 @@ footer .contact .row {
     grid-template-columns: 1fr;
     grid-template-rows: 1fr auto;
     justify-items: end;
+  }
+
+  .cartpage .content .cart-products .product-info span {
+    font-size: 0.5rem;
+  }
+  .cartpage .content .cart-products .product-info svg {
+    width: 12.5px !important;
+    height: 12.5px !important;
+  }
+  .cartpage .content .address-selection > span {
+    font-size: 0.75rem;
+  }
+  .cartpage .content .address-selection .address-option .address-details {
+    font-size: 0.5rem;
   }
 }

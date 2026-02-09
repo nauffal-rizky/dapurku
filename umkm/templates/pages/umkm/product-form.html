@@ -139,6 +139,14 @@
     confirmBtn.addEventListener("click", () => {
       promptPopup.classList.add("hidden");
     });
+
+    /* CLEARING ANY TEXT INSIDE IMG LABEL ELEMENT */
+    const imgLabel = document.querySelector(".img-box label");
+    imgLabel.childNodes.forEach((node) => {
+      if (node.nodeType === Node.TEXT_NODE) {
+        node.textContent = "";
+      }
+    });
   });
 </script>
 {% endblock %}

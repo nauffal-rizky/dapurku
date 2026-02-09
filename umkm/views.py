@@ -47,7 +47,9 @@ plain_pages = [
   "edit_product",
   "delete_product",
   "cart",
-  "order",
+  "add_address",
+  "update_address",
+  "order_list",
 ]
 
 def loginPage(request):
@@ -247,119 +249,17 @@ def orderPage(request):
   }
   return render(request, "./pages/order.html", context)
 
-@login_required(login_url='login')
-def create_order(request):
-    """
-    Handles order creation, including validation, email confirmation, and Xendit payment integration.
-    Follows best practices: atomic operations, error handling, environment-specific SSL management, and secure API key handling.
-    """
-    # Step 1: Validate selected items
-    selected_item_ids = request.POST.getlist('selected_items')
-    if not selected_item_ids:
-        messages.warning(request, "Pilih setidaknya satu produk untuk dipesan.")
-        return redirect('cart')
-    
-    # Step 2: Validate selected address
-    selected_address_id = request.POST.get('selected_address')
-    if not selected_address_id:
-        messages.warning(request, "Pilih alamat pengiriman.")
-        return redirect('cart')
-    
-    try:
-        selected_address = UserAddress.objects.get(id=selected_address_id, user=request.user)
-    except UserAddress.DoesNotExist:
-        messages.warning(request, "Alamat tidak ditemukan.")
-        return redirect('cart')
-    
-    # Step 3: Fetch and validate cart items
-    cart_items = Cart.objects.filter(user=request.user, id__in=selected_item_ids)
-    if not cart_items.exists():
-        messages.warning(request, "Produk yang dipilih tidak ditemukan di keranjang.")
-        return redirect('cart')
-    
-    # Step 4: Calculate total price and create order (atomic operation)
-    total_price = sum(item.product.price * item.quantity for item in cart_items)
-    
-    # Use Django's transaction.atomic to ensure atomicity (best practice for database operations)
-    from django.db import transaction
-    with transaction.atomic():
-        order = Order.objects.create(user=request.user, total_price=total_price, address=selected_address)
-        
-        # Step 5: Create order items
-        for item in cart_items:
-            OrderItem.objects.create(
-                order=order,
-                product=item.product,
-                quantity=item.quantity,
-                price=item.product.price
-            )
-    
-    try:
-        # Best practice: Set API key securely (avoid hardcoding; use environment variables or Django settings)
-        # Note: Xendit Python SDK uses xendit.api_key for authentication. Public key is not required for server-side operations.
-        import xendit
-        xendit.api_key = settings.XENDIT_SECRET_KEY  # Correct way to set the API key in Xendit SDK
-        
-        # Note: Customer creation is optional for invoices. To avoid SDK version compatibility issues (e.g., missing 'xendit.customer' module),
-        # we simplify by not creating a customer and relying on 'payer_email' for the invoice. This is sufficient for basic payment flows
-        # and aligns with Xendit docs where 'customer_id' is optional. If you need customer management, upgrade to a compatible SDK version
-        # and re-add customer creation after testing.
-        
-        # Prepare invoice (hosted checkout – easier and more secure than Midtrans tokens)
-        invoice_data = {
-            'external_id': str(order.id),  # Unique order ID
-            'amount': int(total_price),  # IDR, integer
-            'payer_email': request.user.email,  # REQUIRED: Used for notifications and payment association
-            'description': f'Order #{order.id}',
-            # Fix: Removed 'customer_notification_preference' as it's not supported in the current SDK version (causing the unexpected keyword argument error).
-            # This field is optional per Xendit API docs; notifications can still be handled via 'payer_email'. If needed, upgrade SDK and re-add after testing.
-            'success_redirect_url': 'https://yourdomain.com/order/success/',  # Redirect after payment
-            'failure_redirect_url': 'https://yourdomain.com/order/failed/',
-            'items': [
-                {
-                    'name': item.product.name,
-                    'quantity': item.quantity,
-                    'price': int(item.product.price),
-                } for item in cart_items
-            ],
-            'fees': [],  # Optional
-        }
-        
-        # Validate required fields before API call (best practice)
-        if not invoice_data['payer_email']:
-            raise ValueError("Email pengguna diperlukan untuk pembayaran.")
-        
-        # Create invoice (hosted page)
-        from xendit import Invoice
-        invoice = Invoice.create(**invoice_data)
-        order.xendit_invoice_id = invoice['id']
-        order.save()
-        
-        # Redirect to Xendit's hosted payment page (safer than Midtrans redirects)
-        return redirect(invoice['invoice_url'])
-    
-    except xendit.XenditError as e:
-        logger.error(f"Xendit error for order {order.id}: {e}")
-        messages.error(request, f"Gagal memproses pembayaran: {str(e)}")
-        # Rollback: Delete order and items (since transaction.atomic ensures consistency)
-        order.delete()
-        return redirect('cart')
-    except Exception as e:
-        logger.error(f"Payment error for order {order.id}: {e}")
-        messages.error(request, f"Gagal memproses pembayaran: {str(e)}")
-        # Rollback: Delete order and items
-        order.delete()
-        return redirect('cart')
-
 @login_required
 def order_list(request):
-  orders = Order.objects.filter(user=request.user).order_by('-created_at')
-  return render(request, 'order_list.html', {'orders': orders})
+  page = "order_list"
+  orders = Cart.objects.filter(user=request.user)
 
-@login_required
-def order_detail(request, order_id):
-  order = get_object_or_404(Order, id=order_id, user=request.user)
-  return render(request, 'order_detail.html', {'order': order})
+  context = {
+    'page': page,
+    'plain_page': page in plain_pages,
+    'orders': orders,
+  }
+  return render(request, './pages/order_list.html', context)
 
 @login_required(login_url = 'login')
 def cartPage(request):
@@ -447,56 +347,78 @@ def contactPage(request):
   return render(request, './pages/contact.html', contents)
 
 @login_required
-def add_address(request):
+def manage_address(request, address_id=None):
+  # Determine if this is an add or update operation
+  if address_id:
+    address = get_object_or_404(UserAddress, id=address_id, user=request.user)  # Ensure ownership
+    page = "update_address"
+  else:
+    address = None
+    page = "add_address"
+  
   if request.method == 'POST':
-    # Save the address
-    UserAddress.objects.create(
-      user=request.user,
-      street=request.POST['street'],
-      house_no=request.POST.get('house_no', ''),
-      rtrw=request.POST.get('rtrw', ''),
-      kelurahan=request.POST['kelurahan'],
-      kecamatan=request.POST['kecamatan'],
-      city=request.POST['city'],
-      province=request.POST['province'],
-      postal_code=request.POST['postal_code'],
-      is_default=not UserAddress.objects.filter(user=request.user).exists()  # Make first one default
-    )
-    messages.success(request, "Alamat berhasil ditambahkan!")
+    # Extract form data
+    street = request.POST.get('street')
+    house_no = request.POST.get('house_no')
+    rtrw = request.POST.get('rtrw')
+    kelurahan = request.POST.get('kelurahan')
+    kecamatan = request.POST.get('kecamatan')
+    city = request.POST.get('city')
+    province = request.POST.get('province')
+    postal_code = request.POST.get('postal_code')
+    
+    # Validate: Ensure all fields are filled
+    if not all([street, house_no, rtrw, kelurahan, kecamatan, city, province, postal_code]):
+        messages.error(request, "Semua field harus diisi.")
+        # Re-render the form with existing data to avoid losing input
+        contents = {
+            'page': page,
+            'address': address,
+            'plain_page': page in plain_pages,  # Assuming plain_pages is defined elsewhere
+            'action_url': f'/address/manage/{address.id}/' if address else '/address/manage/',
+            'form_data': request.POST,  # Pass POST data back to pre-fill on error
+        }
+        return render(request, 'pages/manage-address.html', contents)
+    
+    if address:
+        # Update existing address
+        address.street = street
+        address.house_no = house_no
+        address.rtrw = rtrw
+        address.kelurahan = kelurahan
+        address.kecamatan = kecamatan
+        address.city = city
+        address.province = province
+        address.postal_code = postal_code
+        address.save()
+        messages.success(request, "Alamat berhasil diperbarui!")
+    else:
+        # Create new address
+        UserAddress.objects.create(
+            user=request.user,
+            street=street,
+            house_no=house_no,
+            rtrw=rtrw,
+            kelurahan=kelurahan,
+            kecamatan=kecamatan,
+            city=city,
+            province=province,
+            postal_code=postal_code
+        )
+        messages.success(request, "Alamat berhasil ditambahkan!")
+    
     return redirect('cart')
-  return redirect('cart')
+  
+  # For GET requests, render the form
+  contents = {
+      'page': page,
+      'address': address,
+      'plain_page': page in plain_pages,  # Assuming plain_pages is defined elsewhere
+      'action_url': f'/address/manage/{address.id}/' if address else '/address/manage/',
+      'form_data': None,  # No pre-fill on initial load
+  }
+  return render(request, 'pages/manage-address.html', contents)
 
-@login_required
-def update_address(request, address_id):
-  address = get_object_or_404(UserAddress, id=address_id, user=request.user)  # Ensure ownership
-  if request.method == 'POST':
-    # Update fields from POST data
-    address.street = request.POST.get('street', address.street)
-    address.house_no = request.POST.get('house_no', address.house_no)
-    address.rtrw = request.POST.get('rtrw', address.rtrw)
-    address.kelurahan = request.POST.get('kelurahan', address.kelurahan)
-    address.kecamatan = request.POST.get('kecamatan', address.kecamatan)
-    address.city = request.POST.get('city', address.city)
-    address.province = request.POST.get('province', address.province)
-    address.postal_code = request.POST.get('postal_code', address.postal_code)
-    address.save()
-    messages.success(request, "Alamat berhasil diperbarui!")
-    return redirect('cart')
-  # For GET, render a form (we'll handle via JS popup)
-  return redirect('cart')
-
-@login_required
-def delete_address(request, address_id):
-  address = get_object_or_404(UserAddress, id=address_id, user=request.user)
-  if request.method == 'POST':
-    address.delete()
-    messages.success(request, "Alamat berhasil dihapus!")
-    return redirect('cart')
-  # For GET, show confirmation (we'll use JS)
-  return redirect('cart')
-
-@csrf_exempt
-def xendit_webhook(request):
   if request.method == 'POST':
     try:
       data = json.loads(request.body)

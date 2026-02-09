@@ -1,0 +1,111 @@
+<!-- ADD & EDIT ADDRESS -->
+{% extends "../layout/base.html" %} {% block content %}
+<section class="manage-address">
+  <article class="content">
+    <!-- BACK BUTTON -->
+    <a href="{% url 'cart' %}" class="back-btn">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        class="svg-25"
+      >
+        <path
+          fill-rule="evenodd"
+          d="M7.28 7.72a.75.75 0 0 1 0 1.06l-2.47 2.47H21a.75.75 0 0 1 0 1.5H4.81l2.47 2.47a.75.75 0 1 1-1.06 1.06l-3.75-3.75a.75.75 0 0 1 0-1.06l3.75-3.75a.75.75 0 0 1 1.06 0Z"
+          clip-rule="evenodd"
+        />
+      </svg>
+      Kembali ke halaman keranjang
+    </a>
+
+    <h1>{% if address %}Edit Alamat{% else %}Tambah Alamat Baru{% endif %}</h1>
+    <form method="POST" action="{{ action_url }}">
+      {% csrf_token %}
+      <div class="input-box">
+        <label for="street">Alamat Jalan</label>
+        <input
+          type="text"
+          id="street"
+          name="street"
+          value="{% if form_data %}{{ form_data.street }}{% elif address %}{{ address.street }}{% endif %}"
+          required
+        />
+      </div>
+      <div class="input-box">
+        <label for="house_no">Nomor Rumah</label>
+        <input
+          type="text"
+          id="house_no"
+          name="house_no"
+          value="{% if form_data %}{{ form_data.house_no }}{% elif address %}{{ address.house_no }}{% endif %}"
+          required
+        />
+      </div>
+      <div class="input-box">
+        <label for="rtrw">RT/RW</label>
+        <input
+          type="text"
+          id="rtrw"
+          name="rtrw"
+          value="{% if form_data %}{{ form_data.rtrw }}{% elif address %}{{ address.rtrw }}{% endif %}"
+          required
+        />
+      </div>
+      <div class="input-box">
+        <label for="kelurahan">Kelurahan</label>
+        <input
+          type="text"
+          id="kelurahan"
+          name="kelurahan"
+          value="{% if form_data %}{{ form_data.kelurahan }}{% elif address %}{{ address.kelurahan }}{% endif %}"
+          required
+        />
+      </div>
+      <div class="input-box">
+        <label for="kecamatan">Kecamatan</label>
+        <input
+          type="text"
+          id="kecamatan"
+          name="kecamatan"
+          value="{% if form_data %}{{ form_data.kecamatan }}{% elif address %}{{ address.kecamatan }}{% endif %}"
+          required
+        />
+      </div>
+      <div class="input-box">
+        <label for="city">Kota</label>
+        <input
+          type="text"
+          id="city"
+          name="city"
+          value="{% if form_data %}{{ form_data.city }}{% elif address %}{{ address.city }}{% endif %}"
+          required
+        />
+      </div>
+      <div class="input-box">
+        <label for="province">Provinsi</label>
+        <input
+          type="text"
+          id="province"
+          name="province"
+          value="{% if form_data %}{{ form_data.province }}{% elif address %}{{ address.province }}{% endif %}"
+          required
+        />
+      </div>
+      <div class="input-box">
+        <label for="postal_code">Kode Pos</label>
+        <input
+          type="text"
+          id="postal_code"
+          name="postal_code"
+          value="{% if form_data %}{{ form_data.postal_code }}{% elif address %}{{ address.postal_code }}{% endif %}"
+          required
+        />
+      </div>
+      <button type="submit" class="btn-primary">
+        {% if address %}Perbarui Alamat{% else %}Simpan Alamat{% endif %}
+      </button>
+    </form>
+  </article>
+</section>
+{% endblock %}

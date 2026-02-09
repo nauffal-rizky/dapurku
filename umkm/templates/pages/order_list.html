@@ -1,52 +1,48 @@
 {% extends '../layout/base.html' %}{% block content %}
-<section class="order-confirmation-email">
+<section class="order-list">
   <article class="content">
-    <div class="container mt-5">
-      <h1>Daftar Pesanan Anda</h1>
-      {% if orders %}
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>ID Pesanan</th>
-            <th>Total Harga</th>
-            <th>Status</th>
-            <th>Tanggal Dibuat</th>
-            <th>ID Transaksi MidTrans</th>
-            <th>Aksi</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for order in orders %}
-          <tr>
-            <td>{{ order.id }}</td>
-            <td>Rp {{ order.total_price }}</td>
-            <td>
-              <span
-                class="badge {% if order.status == 'Paid' %}bg-success {% elif order.status == 'Pending' %}bg-warning {% else %}bg-danger{% endif %}"
-              >
-                {{ order.status }}
-              </span>
-            </td>
-            <td>{{ order.created_at|date:"d M Y, H:i" }}</td>
-            <td>{{ order.midtrans_transaction_id|default:"N/A" }}</td>
-            <td>
-              <a
-                href="{% url 'order_detail' order.id %}"
-                class="btn btn-primary btn-sm"
-                >Lihat Detail</a
-              >
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-      {% else %}
+    <h1>Daftar Pesanan Anda:</h1>
+    <span>*screenshot for evidence</span>
+    <div class="orders">
+      {% for order in orders %}
+      <div class="order-item">
+        <!-- IMG -->
+        {% if item.product.image %}
+        <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" />
+        {% else %}
+        <img src="/static/img/1.jpg" alt="default image" />
+        {% endif %}
+        <div class="desc">
+
+          <span>#{{ order.id }} - {{ order.product.name }}</span>
+          <span>{{ order.created_at }}</span>
+          <p class="quantity">Anda membeli {{ order.quantity }} produk</p>
+          <p class="price">{{ order.product.price }}/pcs</p>
+          <p class="totalPrice">Total Harga: Rp<span id="totalPrice"></span></p>
+        </div>
+      </div>
+      {% empty %}
       <p>Anda belum memiliki pesanan.</p>
-      {% endif %}
-      <a href="{% url 'cart' %}" class="btn btn-secondary"
-        >Kembali ke Keranjang</a
-      >
-    </div>
+      {% endfor %}
   </article>
 </section>
+{% endblock %} {% block script %}
+<script>
+  // Calculate and display total price for each order
+  document.addEventListener("DOMContentLoaded", function () {
+    const orderItems = document.querySelectorAll(".order-item");
+    orderItems.forEach(function (item) {
+      const priceText = item.querySelector(".price").textContent;
+      const quantityText = item.querySelector(".quantity").textContent;
+
+
+      const price = parseFloat(priceText.replace(/[^0-9.-]+/g, ""));
+      const quantityMatch = quantityText.match(/(\d+)/);
+      const quantity = quantityMatch ? parseInt(quantityMatch[1]) : 0;
+
+      const totalPrice = price * quantity;
+      item.querySelector("#totalPrice").textContent = totalPrice.toLocaleString();
+    });
+  });
+</script>
 {% endblock %}
